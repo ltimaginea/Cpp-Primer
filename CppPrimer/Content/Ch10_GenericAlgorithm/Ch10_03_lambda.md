@@ -53,7 +53,7 @@ cout << f() << endl;	// 打印 42
 
 除了显式列出我们希望使用的来自所在函数的变量之外，还可以让编译器根据lambda体中的代码来推断我们要使用哪些变量。为了指示编译器推断捕获列表，应在捕获列表中写一个&或=。&告诉编译器采用捕获引用方式，=则表示采用值捕获方式。例如，我们可以重写传递给find_if的lambda：
 
-**显式地列出lambda式所依赖的局部变量或形参是更好的软件工程实践。**
+**显式地列出lambda式所依赖的局部变量或形参是更好的软件工程实践**。
 
 如果我们希望对一部分变量采用值捕获，对其他变量采用引用捕获，可以混合使用隐式捕获和显式捕获：
 
@@ -61,7 +61,7 @@ cout << f() << endl;	// 打印 42
 
 当混合使用隐式捕获和显式捕获时，显式捕获的变量必须使用与隐式捕获不同的方式。
 
-![](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/images/chapter10/lambda_CaptureList.jpg)
+![](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Images/Chapter10/Ch10_01_lambdaCaptureList.jpg)
 
 ## 可变lambda
 
