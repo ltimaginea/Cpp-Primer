@@ -2,40 +2,38 @@
 
 ## 介绍 lambda
 
-一个lambda表达式表示一个可调用的代码单元。**我们可以将其理解为一个未命名的内联函数（即匿名函数）**。与任何函数类似，一个lambda具有一个返回类型、一个参数列表和一个函数体。但与函数不同，lambda可能定义在函数内部。一个lambda表达式具有如下形式
+一个lambda表达式表示一个可调用的代码单元。我们可以将其理解为一个未命名的内联函数（**匿名函数**）。与任何函数类似，一个lambda具有一个返回类型、一个参数列表和一个函数体。但与函数不同，lambda可能定义在函数内部。一个lambda表达式具有如下形式
 
 ```c++
 [capture list] (parameter list) -> return type { function body }
 ```
 
-其中，capture list（捕获列表）是一个lambda所在函数中定义的局部变量的列表（通常为空）；return type、parameter list和function body与任何普通函数一样，分别表示返回类型、参数列表和函数体。但是，与普通函数不同，lambda必须使用尾置返回来指定返回类型。 我们可以忽略参数列表和返回类型，但必须永远包含捕获列表和函数体
+其中，capture list（捕获列表）是一个lambda所在函数中定义的局部变量的列表（通常为空）；return type、parameter list和function body与任何普通函数一样，分别表示返回类型、参数列表和函数体。但是，与普通函数不同，lambda必须使用尾置返回来指定返回类型。 
 
-```c++
-// 闭包是lambda式创建的运行期对象，根据不同的捕获模式，闭包会持有数据的副本或引用
-auto f = [] { return 42; };		// 闭包的类型不能被指名，但可用 auto 提及
-```
+我们可以忽略参数列表和返回类型，但必须永远包含捕获列表和函数体。在lambda中忽略括号和参数列表等价于指定一个空参数列表。如果忽略返回类型，lambda根据函数体中的代码推断出返回类型。如果函数体只是一个return语句，则返回类型从返回的表达式的类型推断而来。否则，返回类型为void。
 
-此例中，我们定义了一个可调用对象f，它不接受参数，返回42。 
-
-lambda的调用方式与普通函数的调用方式相同，都是使用调用运算符： 
-
-```c++
-cout << f() << endl;	// 打印 42
-```
-
-在lambda中忽略括号和参数列表等价于指定一个空参数列表。在此例中，当调用f时，参数列表是空的。如果忽略返回类型，lambda根据函数体中的代码推断出返回类型。如果函数体只是一个return语句，则返回类型从返回的表达式的类型推断而来。否则，返回类型为void。
+lambda是函数对象。当我们编写了一个lambda后，编译器将该表达式翻译成一个未命名类的未命名对象（**匿名函数对象**）。在lambda表达式产生的类中含有一个重载的函数调用运算符。当使用auto定义一个用lambda初始化的变量时，即定义了一个从lambda生成的类型的对象。
 
 自C++ 14起，lambda可以拥有默认参数。
+
+```c++
+void biggies(vector<string>& words, string::size_type size)
+{
+    ElimDups(words);
+    stable_sort(words.begin(), words.end(), [](const string& a, const string& b) {return a.size() < b.size(); });
+    auto it = find_if(words.begin(), words.end(), [size](const string& str) {return str.size() >= size; });
+    auto cnt = words.end() - it;
+    for_each(it, words.end(), [](const string& str) {cout << str << " "; });
+}
+```
+
+
 
 ## 捕获列表
 
 **虽然一个lambda可以出现在一个函数中，使用其局部变量，但它只能使用那些明确指明的变量**。一个lambda通过将局部变量包含在其捕获列表中来指出将会使用这些变量。捕获列表指引lambda在其内部包含访问局部变量所需的信息。
 
 捕获列表只用于局部非static变量，lambda可以直接使用局部static变量和在它所在函数之外声明的名字。
-
-**lambda是函数对象。当我们编写了一个lambda后，编译器将该表达式翻译成一个未命名类的未命名对象（匿名对象）**。在lambda表达式产生的类中含有一个重载的函数调用运算符。
-
-当使用auto定义一个用lambda初始化的变量时，定义了一个从lambda生成的类型的对象。
 
 ### 值捕获
 
