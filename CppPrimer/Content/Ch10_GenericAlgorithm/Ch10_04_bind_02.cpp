@@ -7,6 +7,14 @@
 
 using namespace std;
 
+bool CheckSize(const string& str, string::size_type size)
+{
+    if (str.size() >= size)
+        return true;
+    else
+        return false;
+}
+
 ostream& Print(ostream& os, const string& str, char ch)
 {
     return os << str << ch;
@@ -25,10 +33,10 @@ void Biggies(vector<string>& words, string::size_type size)
 {
     ElimDups(words);
     stable_sort(words.begin(), words.end(), [](const string& a, const string& b) {return a.size() < b.size(); });
-    auto it = find_if(words.begin(), words.end(), [size](const string& str) {return str.size() >= size; });
-    auto cnt = words.end() - it;
-
+    
     using namespace std::placeholders;
+    auto it = find_if(words.begin(), words.end(), bind(CheckSize, _1, size));
+    auto cnt = words.end() - it;
     for_each(it, words.end(), bind(Print, ref(cout), _1, ' '));
 }
 
