@@ -5,7 +5,6 @@
 #include <functional>
 
 using namespace std;
-using namespace std::placeholders;
 
 int add(int i, int j)
 {
