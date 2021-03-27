@@ -16,7 +16,7 @@ int(int, int)
 
 ## function 介绍
 
-类模板 `std::function` 是通用多态函数封装器。 `std::function` 的实例能存储、复制及调用任何[*可调用* *(Callable)* ](https://zh.cppreference.com/w/cpp/named_req/Callable)*目标*——函数、 [lambda 表达式](https://zh.cppreference.com/w/cpp/language/lambda)、 [bind 表达式](https://zh.cppreference.com/w/cpp/utility/functional/bind)或其他函数对象，还有指向成员函数指针和指向数据成员指针。
+类模板 `std::function` 是通用多态函数包装器。 `std::function` 的实例能存储、复制及调用任何[*可调用* *(Callable)* ](https://zh.cppreference.com/w/cpp/named_req/Callable)*目标*——函数、 [lambda 表达式](https://zh.cppreference.com/w/cpp/language/lambda)、 [bind 表达式](https://zh.cppreference.com/w/cpp/utility/functional/bind)或其他函数对象，还有指向成员函数指针和指向数据成员指针。
 
 ``std::function``定义在functional头文件中。``std::function``是一个类模板，和我们使用过的其他模板一样，当创建一个具体的function类型时我们必须提供额外的信息。所谓额外的信息是指该``std::function``类型能够表示的对象的调用形式。参考其他模板，我们在一对尖括号内指定类型： 
 
