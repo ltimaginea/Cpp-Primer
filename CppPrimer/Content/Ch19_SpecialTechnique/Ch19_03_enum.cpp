@@ -39,6 +39,15 @@ int main()
 	// 不能直接赋值给整型，需要显式类型转换
 	int j = static_cast<int>(peppers::yellow);
 
+	enum values :unsigned long long
+	{
+		charTyp = 255,
+		shortTyp = 65535,
+		intTyp = 65535,
+		longTyp = 4294967295UL,
+		long_longTyp = 18446744073709551615ULL
+	};
+
 	// 不限定作用域的枚举类型的前置声明，其必须指定成员类型
 	enum intValues :unsigned long long;
 	// 限定作用域的枚举类型的前置声明，可以使用默认成员类型 int
@@ -51,6 +60,3 @@ int main()
 
 	return 0;
 }
-
-// tips: 
-//   1. Lambda 表达式实际上是一个匿名函数。
