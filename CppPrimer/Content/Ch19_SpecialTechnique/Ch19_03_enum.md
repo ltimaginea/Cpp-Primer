@@ -1,4 +1,4 @@
-# ***enum 枚举类型***
+# ***enum***
 
 ## 枚举介绍
 
@@ -8,16 +8,7 @@ C++包含两种枚举：**限定作用域的枚举类型**和**不限定作用�
 
 C++11新标准引入了限定作用域的枚举类型（scoped enumeration）。定义限定作用域的枚举类型的一般形式是：首先是关键字 `enum class` （或者等价地使用 `enum struct` ），随后是枚举类型名字以及用花括号括起来的以逗号分隔的枚举成员（enumerator）列表，最后是一个分号。限定作用域的枚举必须有名称，不能匿名。
 
-定义不限定作用域的枚举类型（unscoped enumeration）时省略掉关键字 `class` （或 `struct` ），枚举类型的名字是可选的。如果 `enum` 是匿名的，则我们只能在定义该 `enum` 时定义它的对象。和类的定义类似，我们需要在 `enum` 定义的右侧花括号和最后的分号之间提供逗号分隔的声明列表。
-
-```cpp
-// 限定作用域的枚举类型
-enum class open_modes { input, output, append };
-// 不限定作用域的枚举类型
-enum color { red, yellow, green };
-// 匿名，不限定作用域的枚举类型，同时在末尾定义它的对象 prec
-enum { intPrec = 6, floatPrec = -8, doublePrec, other = 6 } prec;		// 枚举值依次为 6,-8,-7,6
-```
+定义不限定作用域的枚举类型（unscoped enumeration）时省略掉关键字 `class` （或 `struct` ），枚举类型的名字是可选的。如果 `enum` 是匿名的，则我们只能在定义该 `enum` 时定义它的对象。和匿名类的定义类似，我们需要在 `enum` 定义的右侧花括号和最后的分号之间提供逗号分隔的声明列表。
 
 ## 枚举成员
 
@@ -28,3 +19,80 @@ enum { intPrec = 6, floatPrec = -8, doublePrec, other = 6 } prec;		// 枚举值�
 **枚举成员值不一定唯一。如果我们没有显式地提供初始值，则当前枚举成员的值等于之前枚举成员的值加1**。 
 
 枚举成员是 `const` ，因此在初始化枚举成员时提供的初始值必须是常量表达式。也就是说，每个枚举成员本身就是一条常量表达式，我们可以在任何需要常量表达式的地方使用枚举成员。例如，我们可以定义枚举类型的 `constexpr` 变量。我们也可以将一个 `enum` 作为 `switch` 语句的表达式，而将枚举值作为 `case` 标签。出于同样的原因，我们还能将枚举类型作为一个非类型模板形参使用，或者在类的定义中初始化枚举类型的静态数据成员。
+
+要想初始化 `enum` 对象或者为 `enum` 对象赋值，必须使用该类型的一个枚举成员或者该类型的另一个对象。注意，即使某个整型值恰好与枚举成员的值相等，它也不能直接赋值给 `enum` 对象。
+
+一个不限定作用域的枚举类型的对象或枚举成员自动地转换成整型。因此，我们可以在任何需要整型值的地方使用它们。但是一个限定作用域的枚举类型，是**强类型**的，不能隐式地转换为整型，需进行显式强制类型转换。
+
+## 枚举类型的前置声明
+
+在C++11新标准中，我们可以在 `enum` 的名字后加上冒号以及我们想在该 `enum` 中使用的类型。
+
+如果我们没有指定 `enum` 的潜在类型，则默认情况下限定作用域的 `enum` 成员类型是 int 。对于不限定作用域的枚举类型来说，其枚举成员不存在默认类型，我们只知道成员的潜在类型足够大，肯定能够容纳枚举值。如果我们指定了枚举成员的潜在类型（包括对限定作用域的 `enum` 的隐式指定），则一旦某个枚举成员的值超出了该类型所能容纳的范围，将引发程序错误。
+
+在C++11新标准中，我们可以提前声明 `enum` 。 `enum` 的前置声明（无论隐式地还是显示地）必须指定其成员的大小。
+
+因为不限定作用域的 `enum` 未指定成员的默认大小，因此每个声明必须指定成员的大小。对于限定作用域的 `enum` 来说，我们可以不指定其成员的大小，这个值被隐式地定义成 int 。
+
+## ***Tips***
+
+- 传统的枚举存在一些问题，其中之一是两个枚举定义中的枚举量可能发生冲突。通常情况下，如果在一对大括号里声明一个名字，则该名字的可见性就被限定在括号括起来的作用域内。但这个规则不适用于C++98风格的枚举类型中定义的枚举量。这些枚举量的名字属于包含着这个枚举类型的作用域，这就意味着在此作用域内不能有其他实体取相同的名字。为避免这种问题，C++11提供了一种新枚举，其枚举量的作用域为类——限定作用域的枚举类型。C++11还提高了作用域内枚举的类型安全。在有些情况下，常规枚举将自动转换为整型，如将其赋给int变量或用于比较表达式时，但作用域内枚举不能隐式地转换为整型，需进行强制类型转换。
+
+
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+enum Tokens { INLINE = 128, VIRTUAL = 129 };
+void ff(Tokens t) { cout << t << endl; }
+void ff(int t) { cout << t << endl; }
+
+int main()
+{
+	// 限定作用域的枚举类型
+	enum class open_modes { input, output, append };
+	// 不限定作用域的枚举类型
+	enum color { red, yellow, green };
+	// 匿名，不限定作用域的枚举类型，同时在末尾定义它的对象 prec
+	enum { intPrec = 6, floatPrec = -8, doublePrec, other = 6 } prec;		// 枚举值依次为 6,-8,-7,6
+
+	// 错误！限定作用域的枚举必须有名称，不能匿名
+	// enum class { input, output = -23, append };
+
+	// 错误！重复定义了枚举成员 red, yellow, green
+	// enum stoplight { red, yellow, green };
+
+	enum class peppers { red, yellow, green };
+
+	color eyes = green;
+	// 正确！允许显式地访问枚举成员
+	color hair = color::red;
+	// 正确！使用 peppers 的 red
+	peppers p = peppers::red;
+
+	// 错误！peppers 的枚举成员 green 不在有效的作用域中；color::green 在有效的作用域中，但是类型错误
+	// peppers p2 = green;
+
+	// 错误！2 不属于枚举类型 peppers
+	// peppers p3 = 2;
+
+	int i = color::yellow;
+	// 不能直接赋值给整型，需要显式类型转换
+	int j = static_cast<int>(peppers::yellow);
+
+	// 不限定作用域的枚举类型的前置声明，其必须指定成员类型
+	enum intValues :unsigned long long;
+	// 限定作用域的枚举类型的前置声明，可以使用默认成员类型 int
+	enum class date;
+
+	Tokens curTok = INLINE;
+	ff(128);			// 精确匹配 void ff(int);
+	ff(INLINE);			// 精确匹配 void ff(Tokens);
+	ff(curTok);			// 精确匹配 void ff(Tokens);
+
+	return 0;
+}
+```
+
