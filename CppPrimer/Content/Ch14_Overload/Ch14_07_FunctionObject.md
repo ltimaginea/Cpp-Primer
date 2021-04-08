@@ -21,6 +21,6 @@ struct AbsInt
 
 AbsInt abs_obj;
 int i = -233;
-int ui = abs_obj(i);
+int ui = abs_obj(i);		// 等价于 abs_obj.operator()(i);
 ```
 
