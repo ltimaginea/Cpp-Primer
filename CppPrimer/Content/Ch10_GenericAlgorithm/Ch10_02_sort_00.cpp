@@ -3,6 +3,8 @@
 #include <array>
 #include <algorithm>
 
+#include <functional>		// greater,less
+
 using namespace std;
 
 bool cmp(string a, string b)
