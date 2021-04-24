@@ -14,7 +14,7 @@ bool cmp(node a, node b)
 	if (a.x != b.x)
 		return a.x > b.x;
 	else
-		return a.y > b.y;
+		return a.y < b.y;
 }
 
 int main()
@@ -32,7 +32,7 @@ int main()
 }
 
 /* 程序输出:
-2 2
 2 1
+2 2
 1 3
 */
