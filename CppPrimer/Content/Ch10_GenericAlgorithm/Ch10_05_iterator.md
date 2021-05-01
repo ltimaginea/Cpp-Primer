@@ -15,7 +15,5 @@
 
 `C++` 标准指明了泛型和数值算法的每个迭代器参数的最小类别。对每个迭代器参数来说，其能力必须与规定的最小类别至少相当。向算法传递一个能力更差的迭代器会产生错误。
 
-![]([Cpp-Primer/Ch10_05_IteratorCategory.jpg at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Images/Chapter10/Ch10_05_IteratorCategory.jpg))
-
 ![](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Images/Chapter10/Ch10_05_IteratorCategory.jpg)
 
