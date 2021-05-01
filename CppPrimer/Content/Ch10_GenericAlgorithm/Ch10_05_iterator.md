@@ -1,0 +1,21 @@
+# ***iterator***
+
+**迭代器** （ `iterator` ），**是用于读写容器中存放的元素的工具，作用类似于指针**。
+
+注意，容器适配器 `stack` 、 `queue` 和 `priority_queue`  没有迭代器。容器适配器有一些成员函数，可以用来对元素进行访问。
+
+每个容器类定义了一个名为iterator的类型，该类型支持迭代器概念所规定的一套操作。除了为每个容器定义的迭代器之外，标准库在头文件iterator中还定义了额外几种迭代器。这些迭代器包括以下几种： `插入迭代器` 、 `流迭代器` 、 `反向迭代器` 、 `移动迭代器` 。
+
+- 插入迭代器（ `insert iterator` ）：这些迭代器被绑定到一个容器上，可用来向容器插入元素。
+- 流迭代器（ `stream iterator` ）：这些迭代器被绑定到输入或输出流上，可用来遍历所关联的IO流。
+- 反向迭代器（ `reverse iterator` ）：这些迭代器向后而不是向前移动。除了 `forward_list` 之外的标准库容器都有反向迭代器。
+- 移动迭代器（ `move iterator` ）：这些专用的迭代器不是拷贝其中的元素，而是移动它们。
+
+据支持的操作不同，迭代器可分为五类 **迭代器类别**（ `iterator category` ）：`输入迭代器`、`输出迭代器`、`前向迭代器`、`双向迭代器` 和 `随机访问迭代器`。**除了输出迭代器之外，一个高层类别的迭代器支持低层类别迭代器的所有操作**。
+
+`C++` 标准指明了泛型和数值算法的每个迭代器参数的最小类别。对每个迭代器参数来说，其能力必须与规定的最小类别至少相当。向算法传递一个能力更差的迭代器会产生错误。
+
+![]([Cpp-Primer/Ch10_05_IteratorCategory.jpg at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Images/Chapter10/Ch10_05_IteratorCategory.jpg))
+
+![](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Images/Chapter10/Ch10_05_IteratorCategory.jpg)
+
