@@ -19,7 +19,7 @@ int main()
 	exclude.emplace("THE");
 	exclude.emplace("THE");
 
-	vector<string> vstr = { "spring" ,"summer","autumn","winter","spring" ,"summer","autumn","winter" };	// 实际只会插入前4个元素，重复的后4个不会被插入
+	vector<string> vstr = { "spring" ,"summer","autumn","winter","spring" ,"summer","autumn","winter" };
 	exclude.insert(vstr.begin(), vstr.end());
 	string word;
 	while (cin >> word)
