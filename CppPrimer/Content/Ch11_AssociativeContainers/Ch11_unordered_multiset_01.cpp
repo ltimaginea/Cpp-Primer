@@ -65,13 +65,15 @@ HasherClass hasher;
 
 int main()
 {
+	// 实参分别是桶大小和哈希函数指针
 	unordered_multiset<A, decltype(Hasher)*> s1(128, Hasher);
 	s1 = { A(2,3),A(2,3),A(-12,12),A(-12,12),A(19,-9),A(19,-9) };
 	for (const auto& s : s1)
 		cout << s << endl;
 	cout << s1.bucket_count() << endl;
 	cout << s1.max_bucket_count() << endl << endl;
-
+	
+	// 实参分别是桶大小、哈希函数指针和相等性判断运算符指针
 	unordered_multiset<A, decltype(Hasher)*, decltype(MyEqual)*> s2(42, Hasher, MyEqual);
 	s2 = { A(2,3),A(2,3),A(-12,12),A(-12,12),A(19,-9),A(19,-9) };
 	for (const auto& s : s2)
@@ -116,7 +118,8 @@ int main()
 }
 
 // tips: 
-//   0. 定义 s2 的写法为《C++ Primer》中的示例写法。
-//   1. 我们可以自定义比较操作，其可以是函数对象类，也可以是函数指针类型，或对"=="运算符经过适当重载。
-//   2. 当自定义的比较函数是成员函数时，需要把比较函数定义为const成员函数。
-//   3. 当比较操作是函数指针类型时，必须用具体的函数指针来初始化对象。
+//   1. 实参分别是桶大小、哈希函数指针和相等性判断运算符指针。
+//   2. 定义 s1和s2 的写法为《C++ Primer》中的示例写法。
+//   3. 我们可以自定义比较操作，其可以是函数对象类，也可以是函数指针类型，或对"=="运算符经过适当重载。
+//   4. 当自定义的比较函数是成员函数时，需要把比较函数定义为const成员函数。
+//   5. 当比较操作是函数指针类型时，必须用具体的函数指针来初始化对象。
