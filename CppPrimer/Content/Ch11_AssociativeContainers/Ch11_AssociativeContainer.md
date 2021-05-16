@@ -109,7 +109,7 @@ pair的first成员是一个迭代器，指向具有给定关键字的元素；se
 
 新标准定义了4个无序关联容器（unordered associative container）。这些容器不是使用比较运算符来组织元素，而是使用一个哈希函数（hash function）和关键字类型的 `==` 运算符。
 
-用来组织一个容器中元素的操作的类型也是该容器类型的一部分。为了指定使用自定义的操作，必须在定义关联容器类型时提供此操作的类型。如前所述，用尖括号指出要定义哪种类型的容器，自定义的操作类型必须在尖括号中紧跟着元素类型给出。 
+用来组织一个容器中元素的操作的类型也是该容器类型的一部分。为了指定使用自定义的操作，必须在定义关联容器类型时提供此操作的类型，即自定义的操作类型必须在尖括号中紧跟着元素类型给出。
 
 在尖括号中出现的每个类型，就仅仅是一个类型而已。当我们创建一个容器（对象）时，才会以构造函数参数的形式提供真正的比较操作（其类型必须与在尖括号中指定的类型相吻合）。
 
@@ -122,6 +122,20 @@ pair的first成员是一个迭代器，指向具有给定关键字的元素；se
 当自定义的比较操作是函数指针类型时，必须用具体的函数指针来初始化对象。
 
 当自定义的比较函数是成员函数时，需要把比较函数定义为const成员函数。
+
+```c++
+// 对"<"运算符经过适当重载
+map<A, string> m1 = { {A(2,3),"2,3"},{A(-12,12),"-12,12"},{A(19,-9),"19,-9"} };
+
+// function object class as Compare
+map<A, string, MyGreaterClass> m2 = { {A(2,3),"2,3"},{A(-12,12),"-12,12"} };
+
+// function pointer as Compare
+map<A, string, decltype(MyLess)*> m3(MyLess);
+
+using MyLessType = bool (*)(const A&, const A&);
+map<A, string, MyLessType> m4(MyLess);
+```
 
 ### 无序容器的关键字类型
 
@@ -138,6 +152,21 @@ pair的first成员是一个迭代器，指向具有给定关键字的元素；se
 当自定义的相等性判断操作是函数指针类型时，必须用具体的函数指针来初始化对象。
 
 当自定义的相等性判断操作是成员函数时，需要把成员函数定义为const成员函数。
+
+```c++
+// 实参分别是桶大小和哈希函数指针
+unordered_multiset<A, decltype(Hasher)*> s1(128, Hasher);		// 对"=="运算符经过适当重载
+s1 = { A(2,3),A(2,3),A(-12,12),A(-12,12),A(19,-9),A(19,-9) };
+
+// 实参分别是桶大小、哈希函数指针和相等性判断运算符指针
+unordered_multiset<A, decltype(Hasher)*, decltype(MyEqual)*> s2(42, Hasher, MyEqual);
+
+unordered_multiset<A, decltype(Hasher)*, MyEqualClass> s3(64, Hasher);
+
+unordered_multiset<A, HasherClass, decltype(MyEqual)*> s5(8, HasherClass(), MyEqual);
+
+unordered_multiset<A, HasherClass, MyEqualClass> s4 = { A(2,3),A(2,3) };
+```
 
 #### 管理桶
 
