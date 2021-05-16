@@ -24,7 +24,7 @@
 
 ![](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Images/Chapter11/Ch11_01_AssociativeContainerType.jpg)
 
-![](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Images/Chapter11/Ch11_01_AssociativeContainerMemberType.jpg)
+![](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Images/Chapter11/Ch11_03_AssociativeContainerMemberType.jpg)
 
 ## map
 
