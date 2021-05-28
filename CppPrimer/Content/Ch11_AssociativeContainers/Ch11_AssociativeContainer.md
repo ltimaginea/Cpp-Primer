@@ -36,9 +36,9 @@
 
 ### 下标操作
 
-**下标和 `at` 操作只适用于非const的map和unordered_map。**
+**下标 `[]` 和 `at` 操作只适用于非const的map和unordered_map。**
 
-map和unordered_map容器提供了下标运算符和一个对应的 `at` 函数。我们不能对一个multimap或一个unordered_multimap进行下标操作，因为这些容器中可能有多个值与一个关键字相关联。
+map和unordered_map容器提供了下标运算符 `[]` 和一个对应的 `at` 函数。我们不能对一个multimap或一个unordered_multimap进行下标操作，因为这些容器中可能有多个值与一个关键字相关联。
 
 类似我们用过的其他下标运算符，map下标运算符接受一个索引（即，一个关键字），获取与此关键字相关联的值。但是，与其他下标运算符不同的是，**如果关键字并不在map中，会为它创建一个元素并插入到map中，关联值将进行值初始化**。
 
