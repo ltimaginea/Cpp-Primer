@@ -19,7 +19,7 @@ int main()
 {
 	shared_ptr<int> p1;
 	shared_ptr<list<int>> p2;
-
+	// 在条件判断中使用智能指针，效果就是检测它是否为空，若它指向一个对象，则为true
 	if (!p2)
 		cout << "p2 is nullptr" << endl;
 
