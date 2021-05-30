@@ -34,6 +34,7 @@ int main()
 
 	// 通过调用release或reset将指针的所有权从一个（非const）unique_ptr转移给另一个unique
 	unique_ptr<string> p5(p2.release());
+	// reset释放了p5原来指向的内存
 	p5.reset(p4.release());
 	// 错误，p5.release()不会释放内存，而且我们丢失了指针
 	// p5.release();
