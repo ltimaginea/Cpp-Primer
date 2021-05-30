@@ -16,7 +16,7 @@ if (!p2)
 		cout << "p2 is nullptr" << endl;
 ```
 
-最安全的分配和使用动态内存的方法是调用一个名为 `make_shared` 的标准库函数。此函数在动态内存中分配一个对象并初始化它，返回指向此对象的shared_ptr。 **make_shared用其参数来构造给定类型的对象**。例如，调用make_shared<string>时传递的参数必须与string的某个构造函数相匹配，调用make_shared<int>时传递的参数必须能用来初始化一个int。
+最安全的分配和使用动态内存的方法是调用一个名为 `make_shared` 的标准库函数。此函数在动态内存中分配一个对象并初始化它，返回指向此对象的shared_ptr。 **make_shared用其参数来构造给定类型的对象**。例如，调用make_shared\<string\>时传递的参数必须与string的某个构造函数相匹配，调用make_shared\<int\>时传递的参数必须能用来初始化一个int。
 
 ```cpp
 // 42
