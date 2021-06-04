@@ -1,6 +1,6 @@
 # ***unique_ptr***
 
-[unique_ptr](https://en.cppreference.com/w/cpp/memory/unique_ptr) 提供独享所有权（exclusive ownership）的智能指针：当unique_ptr被销毁时，它指向的对象被释放。
+[unique_ptr](https://en.cppreference.com/w/cpp/memory/unique_ptr) 提供专属所有权（exclusive ownership）的智能指针：当unique_ptr被销毁时，它指向的对象被释放。
 
 初始化unique_ptr必须采用直接初始化形式。
 
