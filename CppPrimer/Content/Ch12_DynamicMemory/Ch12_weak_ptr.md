@@ -1,6 +1,6 @@
 # ***weak_ptr***
 
-[weak_ptr](https://en.cppreference.com/w/cpp/memory/weak_ptr) 一种不控制所指向对象生存期的智能指针，它指向由一个 `shared_ptr` 管理的对象。因为是弱共享，所以将一个 `weak_ptr` 绑定到一个shared_ptr不会改变shared_ptr的引用计数。一旦最后一个指向对象的shared_ptr被销毁，对象就会被释放。即使有weak_ptr指向对象，对象也还是会被释放。
+[weak_ptr](https://en.cppreference.com/w/cpp/memory/weak_ptr) 一种不控制所指向对象生存期的智能指针（弱指针），它指向由一个 `shared_ptr` 管理的对象。因为是弱共享，所以将一个 `weak_ptr` 绑定到一个shared_ptr不会改变shared_ptr的引用计数。一旦最后一个指向对象的shared_ptr被销毁，对象就会被释放。即使有weak_ptr指向对象，对象也还是会被释放。
 
 weak_ptr 不是一种独立的智能指针，而是shared_ptr的一种扩充，它用shared_ptr初始化，共享对象但不改变引用计数。
 
@@ -35,7 +35,7 @@ if (auto p = wp.lock())
 
 `reset` 将弱指针置为空。
 
-
+​     
 
 > ## [***std::weak_ptr - cppreference.com***](https://zh.cppreference.com/w/cpp/memory/weak_ptr)
 >
