@@ -20,7 +20,7 @@ weak_ptr 不能解引用，也不能用作条件判断，检查其是否为空�
 // if (wp)
 ```
 
-由于对象可能不存在，所以我们不能使用weak_ptr直接访问对象，而必须调用 `lock` 。lock 以原子操作检查weak_ptr指向的对象是否仍存在，如果存在，lock返回一个指向共享对象的shared_ptr，否则，返回一个空shared_ptr。
+由于对象可能不存在，所以我们不能使用weak_ptr直接访问对象，而必须调用 `lock` 。lock 以**原子操作**检查weak_ptr指向的对象是否仍存在，如果存在，lock返回一个指向共享对象的shared_ptr，否则，返回一个空shared_ptr。
 
 ```cpp
 if (auto p = wp.lock())
