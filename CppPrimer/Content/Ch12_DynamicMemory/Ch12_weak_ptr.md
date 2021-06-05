@@ -31,7 +31,7 @@ if (auto p = wp.lock())
 
 `use_count` 返回管理该对象的shared_ptr对象数量。非线程安全。
 
-`expired` 检查被引用的对象是否已delete，等价于若use_count为0，返回true，否则返回false。非线程安全。
+`expired` 检查失效性，即被引用的对象是否已delete，等价于如果use_count为0，返回true，否则返回false。非线程安全。
 
 `reset` 将弱指针置为空。
 
