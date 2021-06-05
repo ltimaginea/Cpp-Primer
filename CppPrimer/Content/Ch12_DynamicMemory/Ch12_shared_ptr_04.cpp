@@ -58,7 +58,6 @@ int main()
 	cout << csb.Front() << " " << csb.Back() << endl;
 	sb.Back() = "python";
 	cout << sb.Front() << " " << sb.Back() << endl;
-
 	return 0;
 }
 
