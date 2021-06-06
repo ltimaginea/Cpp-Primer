@@ -51,7 +51,7 @@ int main()
 	Foo(des);
 
 	auto del = [](int* p) { delete p; cout << "deleter" << endl; };
-	unique_ptr<int, decltype(del)> sp(new int(42), del);
+	unique_ptr<int, decltype(del)> up(new int(42), del);
 
 	return 0;
 }
