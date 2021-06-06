@@ -12,8 +12,7 @@ shared_ptr<list<int>> p2;
 在条件判断中使用智能指针，效果就是检测它是否为空，若它指向一个对象，则为true。
 
 ```cpp
-if (!p2)
-		cout << "p2 is nullptr" << endl;
+if (p2)
 ```
 
 最安全的分配和使用动态内存的方法是调用一个名为 `make_shared` 的标准库函数。此函数在动态内存中分配一个对象并初始化它，返回指向此对象的shared_ptr。 **make_shared用其参数来构造给定类型的对象**。例如，调用make_shared\<string\>时传递的参数必须与string的某个构造函数相匹配，调用make_shared\<int\>时传递的参数必须能用来初始化一个int。
@@ -55,8 +54,6 @@ auto r = make_shared<double>(6.28);
 r = q;
 ```
 
-我们可以将智能指针绑定到一个指向其他类型的资源的指针上，但是为了这样做，必须提供自己的操作来替代delete。
-
 **智能指针是异常安全的**。使用智能指针，即使程序块过早结束，智能指针类也能确保在内存不再需要时将其释放。函数的退出有两种可能，正常处理结束或者发生了异常，无论哪种情况，局部对象都会被销毁。在下面的程序中，sp是一个shared_ptr，因此sp销毁时会检查引用计数。在此例中，sp是指向这块内存的唯一指针，因此内存会被释放掉。
 
 ```cpp
@@ -77,6 +74,17 @@ void f()
 	delete p;
 }	// 内存泄漏
 ```
+
+我们可以将智能指针绑定到一个指向其他类型的资源的指针上，但是为了这样做，必须提供自己的操作来替代delete。
+
+**shared_ptr自定义删除器需要单个shared_ptr内部指针类型的参数**。
+
+```cpp
+auto del = [](int* p) { delete p; cout << "deleter" << endl; };
+shared_ptr<int> sptr(new int(42), del);
+```
+
+
 
 ## *Tips*
 
