@@ -64,4 +64,4 @@ deleter
 */
 
 // tips: 
-//   1. shared_ptr自定义删除器需要单个shared_ptr内部指针类型的参数
+//   1. unique_ptr自定义删除器需要单个unique_ptr内部指针类型的参数
