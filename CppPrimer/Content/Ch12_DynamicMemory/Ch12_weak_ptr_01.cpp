@@ -6,6 +6,7 @@
 
 using namespace std;
 
+// 前置声明类StrBlobPtr，用来解决StrBlobPtr StrBlob::Begin() const和StrBlobPtr StrBlob::End() const定义时提示的与其声明不兼容的问题 
 class StrBlobPtr;
 
 class StrBlob
