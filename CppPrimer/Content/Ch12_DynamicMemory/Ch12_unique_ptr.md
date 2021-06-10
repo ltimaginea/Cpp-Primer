@@ -65,7 +65,10 @@ unique_ptr默认情况下用delete释放它指向的对象。我们可以重载�
 
 ```cpp
 auto del = [](int* p) { delete p; cout << "deleter" << endl; };
+// unique_ptr需要在模板参数中指明删除器类型，但shared_ptr不需要
 unique_ptr<int, decltype(del)> uptr(new int(42), del);
+
+shared_ptr<int> sptr(new int(42), del);
 ```
 
 
