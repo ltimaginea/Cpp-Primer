@@ -82,6 +82,9 @@ void f()
 ```cpp
 auto del = [](int* p) { delete p; cout << "deleter" << endl; };
 shared_ptr<int> sptr(new int(42), del);
+
+// unique_ptr还需要在模板参数中指明删除器类型
+unique_ptr<int, decltype(del)> uptr(new int(42), del);
 ```
 
 
