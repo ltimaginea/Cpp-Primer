@@ -75,7 +75,9 @@ shared_ptr<int> sptr(new int(42), del);
 
 ## ***Tips***
 
-- `make_unique` 是C++14才加入标准库，在C++11中我们可以手动实现一个基础功能版 make_unique ，这个基础函数不支持数组和自定义删除器。从这个基础函数可以看出，make 函数把实参完美转发给构造函数并返回构造出的智能指针。
+- 绝对不要将同一块内存绑定到多个独立创建的unique_ptr上，否则会触发运行时错误："double freed or corruption"。shared_ptr同是。
+
+-  `make_unique` 是C++14才加入标准库，在C++11中我们可以手动实现一个基础功能版 make_unique ，这个基础函数不支持数组和自定义删除器。从这个基础函数可以看出，make 函数把实参完美转发给构造函数并返回构造出的智能指针。
 
   ```cpp
   template <typename T, typename... Ts>
