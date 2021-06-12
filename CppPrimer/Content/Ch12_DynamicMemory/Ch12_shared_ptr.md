@@ -91,5 +91,6 @@ unique_ptr<int, decltype(del)> uptr(new int(42), del);
 
 ## *Tips*
 
+- shared_ptr可以协调对象的析构，但这仅限于其自身的拷贝之间，所以要避免将同一块内存绑定到多个独立创建的shared_ptr上，否则会触发运行时错误："double freed or corruption"。unique_ptr同是。
 - 应该尽量避免混合使用普通指针和智能指针，容易出现空悬指针（dangling pointer）或造成将同一块内存绑定到多个独立创建的shared_ptr上，触发运行时错误："double freed or corruption"。
 - share_ptr在无用之后仍然保留的一种可能情况是，你将shared_ptr存放在一个容器中，随后重排了容器，从而不再需要某些元素。在这种情况下，你应该确保用erase删除那些不再需要的shared_ptr元素。
