@@ -56,9 +56,9 @@ extern double pi = 3.1416;
 - 如果用的是花括号`{}` ，即列表初始化（list initialize）对象，初始化过程会尽可能地把花括号内的值当成是元素初始值的列表来处理；当提供的值不能用来列表初始化时，会尝试进行构造（construct）对象。
 
 ```cpp
-string s0;				// 空string
+string s0;		// 空string
 string s1("hiya");
-string s2(10, 'h');		// hhhhhhhhhh
+string s2(10, 'h');	// hhhhhhhhhh
 vector<string> s3{ "a","an","the" };
 string s4 = "hiyou";
 vector<string> s5 = { "one","two","three" };
