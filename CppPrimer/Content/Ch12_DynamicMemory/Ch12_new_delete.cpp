@@ -8,6 +8,10 @@ using namespace std;
 
 int main()
 {
+	int* p0 = nullptr;
+	// 正确，释放一个空指针总是没有错误的
+	delete p0;
+	
 	// 默认初始化，*p1的值未定义
 	int* p1 = new int;
 	delete p1;
