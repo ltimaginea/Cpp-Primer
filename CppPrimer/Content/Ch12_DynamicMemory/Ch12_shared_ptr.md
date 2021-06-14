@@ -87,6 +87,31 @@ shared_ptr<int> sptr(new int(42), del);
 unique_ptr<int, decltype(del)> uptr(new int(42), del);
 ```
 
+C++11中，shared_ptr不直接支持管理动态数组，没有所谓的 `shared_ptr<T[]>` 。如果希望使用shared_ptr管理一个动态数组，必须提供自己定义的删除器，自定义删除器内部需要使用delete[]释放数组。
+
+如果未提供删除器，其代码将是未定义的。默认情况下，shared_ptr使用delete销毁它指向的对象。如果此对象是一个动态数组，对其使用delete所产生的问题与释放一个动态数组指针时忘记[]产生的问题一样。
+
+shared_ptr未定义下标运算符，而且智能指针类型不支持指针算术运算。因此，为了访问数组中的元素，必须用get获取一个内置指针，然后用它来访问数组元素。
+
+ `shared_ptr<T[]>` 作为一种知识上的了解即可，因为 `std::array` ， `std::vector` ， `std::string` 这些更好用的数据容器几乎总是比原始数组更好。
+
+```cpp
+// 为了使用shared_ptr管理一个动态数组，必须提供自己定义的删除器
+shared_ptr<int> sp(new int[10], [](int* ptr) { delete[] ptr; });
+// C++11中，shared_ptr未定义下标运算符
+for (size_t i = 0; i != 10; ++i)
+{
+	sp.get()[i] = i;
+	//*(sp.get() + i) = i;	// 同上等价
+}
+for (size_t i = 0; i != 10; ++i)
+{
+	cout << *(sp.get() + i) << " ";
+}
+// 使用我们自定义的删除器lambda释放数组，它使用 delete[]
+sp.reset();
+```
+
 
 
 ## *Tips*
