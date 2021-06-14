@@ -71,6 +71,24 @@ unique_ptr<int, decltype(del)> uptr(new int(42), del);
 shared_ptr<int> sptr(new int(42), del);
 ```
 
+为了用一个unique_ptr管理动态数组，我们必须在对象类型后面跟一对空方括号[]，即 `unique_ptr<T[]>` 。类型说明符中的方括号指出unique_ptr指向一个T类型数组。由于unique_ptr指向一个数组，当unique_ptr销毁它管理的指针时，会自动使用delete[]。
+
+当一个unique_ptr指向一个数组时，我们可以使用下标运算符来访问数组中的元素。但是，我们不能使用点和箭头成员运算符。毕竟unique_ptr指向的是一个数组而不是单个对象，因此这些运算符是无意义的。
+
+ `unique_ptr<T[]>` 作为一种知识上的了解即可，因为 `std::array` ， `std::vector` ， `std::string` 这些更好用的数据容器几乎总是比原始数组更好。
+
+```cpp
+// up指向一个包含10个未初始化int的数组
+unique_ptr<int[]> up(new int[10]);
+for (size_t i = 0; i != 10; ++i)
+{
+	// 用下标运算符来访问数组中的元素
+	up[i] = i;
+}
+// 自动用 delete[] 销毁其指针
+up.reset();
+```
+
 
 
 ## ***Tips***
