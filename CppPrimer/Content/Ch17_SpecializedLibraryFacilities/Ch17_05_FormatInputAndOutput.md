@@ -141,4 +141,7 @@ cin >> skipws;
 
 
 
-![](https://img2020.cnblogs.com/blog/2141093/202107/2141093-20210718210539557-1554004583.jpg)
+![](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Images/Chapter17/Ch17_05_FormatInputAndOutput.jpg)
+
+
+
