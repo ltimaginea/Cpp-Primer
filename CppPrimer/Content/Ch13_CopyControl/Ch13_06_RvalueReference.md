@@ -18,7 +18,7 @@
 
 左值有持久的状态，而右值要么是字面常量（除了字符串字面量），要么是在表达式求值过程中创建的临时对象。
 
-参考：[值类别 - cppreference.com](https://zh.cppreference.com/w/cpp/language/value_category) 
+参考： [值类别 - cppreference.com](https://zh.cppreference.com/w/cpp/language/value_category) 
 
 ## 右值引用
 
