@@ -16,7 +16,9 @@
 
 返回非引用类型的函数，连同算术、关系、位以及后置递增/递减运算符，都生成右值。我们可以将一个右值引用绑定到这类表达式上。我们不能将一个左值引用绑定到这类表达式上，但我们可以将一个const的左值引用绑定到这类表达式上。
 
-左值有持久的状态，而右值要么是在表达式求值过程中创建的临时对象，要么是字面常量（除了字符串字面量）。参考：[值类别 - cppreference.com](https://zh.cppreference.com/w/cpp/language/value_category)）
+左值有持久的状态，而右值要么是字面常量（除了字符串字面量），要么是在表达式求值过程中创建的临时对象。
+
+参考：[值类别 - cppreference.com](https://zh.cppreference.com/w/cpp/language/value_category) 
 
 ## 右值引用
 
