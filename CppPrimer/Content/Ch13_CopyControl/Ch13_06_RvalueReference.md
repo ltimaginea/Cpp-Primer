@@ -18,24 +18,33 @@
 
 左值有持久的状态，而右值要么是字面常量（除了字符串字面量），要么是在表达式求值过程中创建的临时对象。
 
-参考： [值类别 - cppreference.com](https://zh.cppreference.com/w/cpp/language/value_category) 
-
 ## 右值引用
 
 `右值引用 (rvalue reference)` 是C++11引入的一种新的引用类型，旨在解决非必要的拷贝和实现完美转发。当赋值运算符的右侧是一个右值时，赋值运算符左侧的对象可以去“窃取”右侧右值的资源，而不是执行单独的动态分配，从而实现移动语义。
 
-右值引用只能绑定到右值，我们通过 `&&` 而不是`&` 来获得右值引用。
+由于右值引用只能绑定到临时对象，我们得知：（1）所引用的对象将要被销毁。（2）该对象没有其他用户。这两个特性意味着：使用右值引用的代码可以自由地接管所引用的对象的资源。
 
 类似任何引用，一个右值引用也不过是某个对象的另一个名字而已。
 
-由于右值引用只能绑定到临时对象，我们得知：（1）所引用的对象将要被销毁；（2）该对象没有其他用户。这两个特性意味着：使用右值引用的代码可以自由地接管所引用的对象的资源。
+右值引用只能绑定到右值，我们通过 `&&` 而不是 `&` 来获得右值引用。
+
+```cpp
+int i = 42;
+// 正确，r 引用 i
+int& r = i;
+// 错误，不能将一个右值引用绑定到一个左值上
+// int&& rr = i;
+// 错误，i*42 是一个右值
+// int& r2 = i * 42;
+// 正确，我们可以将一个const的引用绑定到一个右值上
+const int& r3 = i * 42;
+// 正确，将rr2绑定到乘法结果上
+int&& rr2 = i * 42;
+```
 
 **变量是左值**。变量可以看作只有一个运算对象而没有运算符的表达式，虽然我们很少这样看待变量。类似其他任何表达式，变量表达式也有左值/右值属性。变量表达式都是左值。带来的结果就是，我们不能将一个右值引用绑定到一个右值引用类型的变量上，这有些令人惊讶：
 
 ```cpp
-// rr0 是左值，即使 rr0 是右值引用类型
-void Foo(int&& rr0);
-
 // 正确：字面常量是右值
 int&& rr1 = 42;
 
@@ -47,6 +56,16 @@ int&& rr2 = rr1;
 
 变量是左值，因此我们不能将一个右值引用直接绑定到一个变量上，即使这个变量是右值引用类型也不行。
 
+**编译器将命名的右值引用视为左值，将未命名的右值引用视为右值。** 当我们编写一个将右值引用作为其参数的函数时，该参数在函数体中被视为左值。编译器将命名的右值引用视为左值。
+
+```cpp
+// rr 是左值，即使 rr 是右值引用类型
+void Foo(int&& rr)
+{
+    // ...
+}
+```
+
 右值引用可用于为临时对象[延长生存期](https://zh.cppreference.com/w/cpp/language/reference_initialization#.E4.B8.B4.E6.97.B6.E9.87.8F.E7.94.9F.E5.AD.98.E6.9C.9F)（注意，到 const 的左值引用也能延长临时对象生存期，但这些对象无法因此被修改）。
 
 ## 标准库 move 函数
@@ -57,5 +76,18 @@ int&& rr2 = rr1;
 int&& rr3 = std::move(rr1);
 ```
 
-我们必须认识到，调用move就意味着承诺：除了对rr1赋值或销毁它外，我们将不再使用它。在调用move之后，我们不能对移后源对象的值做任何假设。
+我们必须认识到，调用std::move就意味着承诺：除了对 rr1 赋值或销毁它外，我们将不再使用它。在调用std::move之后，我们不能对移后源对象的值做任何假设。
 
+
+
+> ## *References*
+>
+> [值类别 - cppreference.com](https://zh.cppreference.com/w/cpp/language/value_category) 
+>
+> [Value Categories: Lvalues and Rvalues (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/lvalues-and-rvalues-visual-cpp?view=msvc-160)
+>
+> [Rvalue Reference Declarator: && | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/rvalue-reference-declarator-amp-amp?view=msvc-160)
+>
+> [How to: Define move constructors and move assignment operators (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/move-constructors-and-move-assignment-operators-cpp?view=msvc-160)
+>
+> 
