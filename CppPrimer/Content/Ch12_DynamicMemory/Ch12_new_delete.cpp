@@ -4,14 +4,15 @@
 
 #include <new>
 
-using namespace std;
+using std::string;
+using std::vector;
 
 int main()
 {
 	int* p0 = nullptr;
 	// 正确，释放一个空指针总是没有错误的
 	delete p0;
-	
+
 	// 默认初始化，*p1的值未定义
 	int* p1 = new int;
 	delete p1;
@@ -71,16 +72,34 @@ int main()
 	char* cp = new char[0];
 	delete[] cp;
 
-	size_t n = 1024 * 1024 * 1024;
+	class Widget { double d[1024 * 1024 * 1024]; /* ... */ };
+
+	try
+	{
+		// 如果分配失败，new抛出std::bad_alloc
+		Widget* ptr1 = new Widget;
+		// ...
+		delete ptr1;
+	}
+	catch (const std::bad_alloc& err)
+	{
+		std::cout << err.what() << std::endl;
+	}
+
 	// 如果分配失败，new返回一个空指针
-	int* pi1 = new int[n];	// 如果分配失败，new抛出std::bad_alloc
-	delete[] pi1;
-	// 如果分配失败，new返回一个空指针
-	int* pi2 = new (nothrow) int[n];
-	delete[] pi2;
+	Widget* ptr2 = new (std::nothrow) Widget;
+	if (ptr2 == nullptr)
+	{
+		std::cout << "new false" << std::endl;
+	}
+	else
+	{
+		// ...
+	}
+	delete ptr2;
 
 	return 0;
 }
 
 // tips: 
-//   1. 如果new分配失败，new抛出异常std::bad_alloc并返回空指针。
+//   1. 如果new分配失败，new抛出异常std::bad_alloc
