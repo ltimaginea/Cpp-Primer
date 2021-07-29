@@ -131,6 +131,7 @@ catch (const std::bad_alloc& err)
 
 // 如果分配失败，new返回一个空指针
 Widget* ptr2 = new (std::nothrow) Widget;
+// 这个if...else...的判断可能有效
 if (ptr2 == nullptr)
 {
 	std::cout << "new false" << std::endl;
@@ -142,11 +143,51 @@ else
 delete ptr2;
 ```
 
-**Nothrow new是一个颇为局限的工具，因为它只适用于内存分配；后继的构造函数调用还是可能抛出异常**。
+> *Effective C++*
+>
+> **Nothrow new是一个颇为局限的工具，因为它只适用于内存分配；后继的构造函数调用还是可能抛出异常**。
+>
+> Nothrow new对异常的强制保证性并不高。要知道，表达式 "new (std::nothrow) Widget" 发生两件事，第一，nothrow 版的 operator new被调用，用以分配足够内存给Widget对象。如果分配失败便返回nullptr指针，一如文档所言。如果分配成功，接下来 Widget构造函数会被调用，而在那一点上所有的筹码便都耗尽，因为Widget构造函数可以做它想做的任何事。它有可能又 new一些内存，而没人可以强迫它再次使用 nothrow new。因此虽然 "new (std::nothrow) Widget" 调用的operator new并不抛掷异常，但Widget构造函数却可能会。如果它真那么做，该异常会一如往常地传播。需要结论吗？结论就是：使用 nothrow new 只能保证operator new不抛掷异常，不保证像 "new (std::nothrow) Widget"这样的表达式绝不导致异常。因此你其实没有运用nothrow new的需要。
 
-Nothrow new对异常的强制保证性并不高。要知道，表达式 "new (std::nothrow) Widget" 发生两件事，第一，nothrow 版的 operator new被调用，用以分配足够内存给Widget对象。如果分配失败便返回nullptr指针，一如文档所言。如果分配成功，接下来 Widget构造函数会被调用，而在那一点上所有的筹码便都耗尽，因为Widget构造函数可以做它想做的任何事。它有可能又 new一些内存，而没人可以强迫它再次使用 nothrow new。因此虽然 "new (std::nothrow) Widget" 调用的operator new并不抛掷异常，但Widget构造函数却可能会。如果它真那么做，该异常会一如往常地传播。需要结论吗？结论就是：使用 nothrow new 只能保证operator new不抛掷异常，不保证像 "new (std::nothrow) Widget"这样的表达式绝不导致异常。因此你其实没有运用nothrow new的需要。
+## 工作机理
+
+`new expression` 和 `delete expression` 的工作机理大致如下：
+
+当我们使用一条 `new表达式` 时：
+
+```cpp
+string* ps = new string("Memory Management");
+string* arr = new string[10];
+```
+
+实际执行了三步操作。第一步，new表达式调用一个名为 `operator new` （或者 `operator new[]` ）的标准库函数。该函数分配一块足够大的、原始的、未命名的内存空间以便存储特定类型的对象（或者对象的数组）。第二步，编译器运行相应的构造函数以构造这些对象，并为其传入初始值。第三步，对象被分配了空间并构造完成，返回一个指向该对象的指针。近似的伪代码如下：
+
+```cpp
+// 分配原始内存
+void* memory = operator new(sizeof(string));
+// 调用构造函数进行初始化
+call string::string("Memory Management") on *memory;
+// 类型转换
+string* ps = static_cast<string*>(memory);
+```
 
 
+
+当我们使用一条 `delete表达式` 删除一个动态分配的对象时：
+
+```cpp
+delete ps;
+delete[] arr;
+```
+
+实际执行了两步操作。第一步，对ps所指的对象或者arr所指的数组中的元素执行对应的析构函数。第二步，编译器调用名为 `operator delete` （或者 `operator delete[]` ）的标准库函数释放内存空间。近似的伪代码如下：
+
+```cpp
+// 调用析构函数
+ps->~string();
+// 释放内存空间
+operator delete(ps);
+```
 
 
 
