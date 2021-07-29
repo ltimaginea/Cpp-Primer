@@ -108,19 +108,45 @@ delete p9;
 
 ## 内存耗尽
 
-如果程序耗光了自由空间内存，new表达式就会失败，返回一个空指针，同时它会抛出一个类型为bad_alloc的异常。我们也可以改变使用new的方式来阻止它抛出异常。如果将nothrow传递给new，我们的意图是告诉它不能抛出异常。如果这种形式的new不能分配所需内存，它会返回一个空指针。bad_alloc和nothrow都定义在头文件new中。
+如果程序耗光了自由空间内存，new不能分配所要求的内存空间，new表达式就会失败（不会有返回值），它会抛出一个类型为 `std::bad_alloc` 的异常。
+
+我们也可以改变使用new的方式来阻止它抛出异常。如果将 `std::nothrow` 传递给new，我们的意图是告诉它不能抛出异常。如果这种形式的new不能分配所需内存，它会返回一个空指针。我们称这种形式的new为 `定位new (placement new)` 。
+
+std::bad_alloc和std::nothrow都定义在头文件new中。
 
 ```cpp
-size_t n = 1024 * 1024 * 1024;
+class Widget { double d[1024 * 1024 * 1024]; /* ... */ };
+
+try
+{
+	// 如果分配失败，new抛出std::bad_alloc
+	Widget* ptr1 = new Widget;
+	// ...
+	delete ptr1;
+}
+catch (const std::bad_alloc& err)
+{
+	std::cout << err.what() << std::endl;
+}
 
 // 如果分配失败，new返回一个空指针
-int* pi1 = new int[n];	// 如果分配失败，new抛出std::bad_alloc
-delete[] pi1;
-
-// 如果分配失败，new返回一个空指针
-int* pi2 = new (nothrow) int[n];
-delete[] pi2;
+Widget* ptr2 = new (std::nothrow) Widget;
+if (ptr2 == nullptr)
+{
+	std::cout << "new false" << std::endl;
+}
+else
+{
+	// ...
+}
+delete ptr2;
 ```
+
+**Nothrow new是一个颇为局限的工具，因为它只适用于内存分配；后继的构造函数调用还是可能抛出异常**。
+
+Nothrow new对异常的强制保证性并不高。要知道，表达式 "new (std::nothrow) Widget" 发生两件事，第一，nothrow 版的 operator new被调用，用以分配足够内存给Widget对象。如果分配失败便返回nullptr指针，一如文档所言。如果分配成功，接下来 Widget构造函数会被调用，而在那一点上所有的筹码便都耗尽，因为Widget构造函数可以做它想做的任何事。它有可能又 new一些内存，而没人可以强迫它再次使用 nothrow new。因此虽然 "new (std::nothrow) Widget" 调用的operator new并不抛掷异常，但Widget构造函数却可能会。如果它真那么做，该异常会一如往常地传播。需要结论吗？结论就是：使用 nothrow new 只能保证operator new不抛掷异常，不保证像 "new (std::nothrow) Widget"这样的表达式绝不导致异常。因此你其实没有运用nothrow new的需要。
+
+
 
 
 
