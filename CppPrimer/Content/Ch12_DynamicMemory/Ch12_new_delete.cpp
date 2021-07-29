@@ -88,6 +88,7 @@ int main()
 
 	// 如果分配失败，new返回一个空指针
 	Widget* ptr2 = new (std::nothrow) Widget;
+	// 这个if...else...的判断可能有效
 	if (ptr2 == nullptr)
 	{
 		std::cout << "new false" << std::endl;
