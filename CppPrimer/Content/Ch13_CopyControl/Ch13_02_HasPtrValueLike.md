@@ -37,7 +37,7 @@ public:
 	HasPtr(const HasPtr& p) :ps_(new string(*p.ps_)), i_(p.i_) {  }
 	// copy assignment operator
 	HasPtr& operator=(const HasPtr&);
-	// copy assignment operator 的另一种实现，采用了“拷贝并交换”的技术（为了避免调用operator=存在二义性，实践时类定义中需要二者选择其一）
+	// copy assignment operator 的另一种实现，采用了“拷贝并交换”的技术（为了避免调用operator=存在二义性，实践时类定义中需要二选一）
 	HasPtr& operator=(HasPtr);
 	// destructor
 	~HasPtr() { delete ps_; }
@@ -98,9 +98,84 @@ inline void Swap(Foo& lhs, Foo& rhs)
 
 **一个合格的 *copy assignment operator* 既需要可以处理自赋值的情况，也还应该是异常安全的**。
 
+赋值运算符通常组合了构造函数和析构函数的操作。类似拷贝构造函数，赋值操作会从右侧运算对象拷贝数据。类似析构函数，赋值操作会销毁左侧运算对象的资源。但是，非常重要的一点是，这些操作是以正确的顺序执行的，即使将一个对象赋予它自身，也保证正确。而且，我们编写的赋值运算符还应该是异常安全的——当异常发生时能将左侧运算对象置于一个有意义的状态。
 
+在本例中，通过先拷贝右侧运算对象的资源，我们可以处理自赋值情况，在完成拷贝后，我们释放左侧运算对象的资源，并更新指针指向新分配的 string ，以及从 rhs 拷贝 int 值到本对象。本例同时能保证在异常发生时代码也是安全的，即如果 `new string(*rhs.ps_)`  抛出异常， `ps_` （及其栖身的那个 HasPtr 对象）会保持原状。
+
+```cpp
+// 既可以处理自赋值的情况，也还是异常安全的
+HasPtr& HasPtr::operator=(const HasPtr& rhs)
+{
+	// copy the underlying string
+	auto newp = new string(*rhs.ps_);
+	// free the old memory
+	delete ps_;
+	// copy data from rhs into this object
+	ps_ = newp;
+	i_ = rhs.i_;
+	// return this object
+	return *this;
+}
+```
+
+为了说明防范自赋值操作的重要性，考虑如果赋值运算符如下编写将会发生什么，即如果把正确示例中的 拷贝右侧运算对象的资源 和 释放左侧运算对象的资源 的语句顺序调换，将会导致 无法处理自赋值和不具备“异常安全性”。
+
+```cpp
+// 下面这样编写赋值运算符是错误的！
+HasPtr& HasPtr::operator=(const HasPtr& rhs)
+{
+	// free the old memory
+	delete ps_;
+	// 如果rhs和*this是同一个对象，我们就将从已释放的内存中拷贝数据！
+	// copy the underlying string
+	auto newp = new string(*rhs.ps_);
+	// copy data from rhs into this object
+	ps_ = newp;
+	i_ = rhs.i_;
+	// return this object
+	return *this;
+}
+```
+
+如果 rhs 和本对象是同一个对象，delete ps_ 会释放 *this 和 rhs 指向的 string 。接下来，当我们在 new 表达式中试图拷贝 `*rhs.ps_` 时，就会访问一个指向无效内存的指针，其行为和结果是未定义的。
+
+这一版同时还不具备“异常安全性”，异常发生时左侧运算对象将不是置于一个有意义的状态。具体地说，如果 `new string(*rhs.ps_)` 抛出异常（不论是因为分配时内存不足或因为 std::string 的拷贝构造函数抛出异常）， *this 最终会持有一个指针指向一块被删除的 std::string 。这样的指针有害。我们无法安全地删除它们，甚至无法安全地读取它们（解引用）。
 
 
 
 ## 类值交换操作
 
+交换两个类值HasPtr对象时，如果我们使用标准库定义的std::swap，为了交换两个对象需要进行一次拷贝和两次赋值。理论上，这些内存分配都是不必要的。我们更希望swap交换指针，而不是分配string的新副本。
+
+与拷贝控制成员不同，swap并不是必要的。但是，对于分配了资源的类，定义swap可能是一种很重要的优化手段。
+
+定义swap的类通常用swap来定义它们的赋值运算符。这些运算符使用了一种名为拷贝并交换（copy and swap）的技术。这种技术将左侧运算对象与右侧运算对象的一个副本进行交换。之所以与右侧运算对象的副本而不是本体进行交换，因为赋值操作不应该改变右侧对象，与本体交换对导致改变右侧对象。
+
+使用拷贝和交换的赋值运算符自动就是异常安全的，且能正确处理自赋值。
+
+```cpp
+// 注意 rhs 是按值传递的，即“拷贝并交换”的技术
+HasPtr& HasPtr::operator=(HasPtr rhs)
+{
+	Swap(*this, rhs);
+	return *this;
+}
+
+inline void Swap(HasPtr& lhs, HasPtr& rhs)
+{
+	// swap the pointers, not the string data
+	std::swap(lhs.ps_, rhs.ps_);
+	// swap the int members
+	std::swap(lhs.i_, rhs.i_);
+}
+```
+
+在这个版本的赋值运算符中，参数并不是一个引用，我们将右侧运算对象以传值方式传递给了赋值运算符。因此，rhs是右侧运算对象的一个副本。参数传递时拷贝HasPtr的操作会分配该对象的string的一个新副本。 
+
+在赋值运算符的函数体中，我们调用Swap来交换rhs和 *this 中的数据成员。这个调用将左侧运算对象中原来保存的指针存入rhs中，并将rhs中原来的指针存入 *this 中。因此，在swap调用之后， *this 中的指针成员将指向新分配的string——右侧运算对象中string的一个副本。
+
+当赋值运算符结束时，rhs被销毁，HasPtr的析构函数将执行。此析构函数 delete rhs 现在指向的内存，即，释放掉左侧运算对象中原来的内存。 
+
+这个技术的有趣之处是它自动处理了自赋值情况且天然就是异常安全的。它通过在改变左侧运算对象之前拷贝右侧运算对象保证了自赋值的正确，这与我们在原来的赋值运算符中使用的方法是一致的。它保证异常安全的方法也与原来的赋值运算符实现一样。代码中唯一可能抛出异常的是拷贝构造函数中的new表达式。如果真发生了异常，它也会在我们改变左侧运算对象之前发生。
+
+## 类值移动操作
