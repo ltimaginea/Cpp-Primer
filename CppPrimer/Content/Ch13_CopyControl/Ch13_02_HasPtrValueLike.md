@@ -141,6 +141,10 @@ HasPtr& HasPtr::operator=(const HasPtr& rhs)
 
 这一版同时还不具备“异常安全性”，异常发生时左侧运算对象将不是置于一个有意义的状态。具体地说，如果 `new string(*rhs.ps_)` 抛出异常（不论是因为分配时内存不足或因为 std::string 的拷贝构造函数抛出异常）， *this 最终会持有一个指针指向一块被删除的 std::string 。这样的指针有害。我们无法安全地删除它们，甚至无法安全地读取它们（解引用）。
 
+## 类值移动操作
+
+对规范的移动赋值，期待其令被移动对象遗留于合法状态（即有完好类不变式的状态），且在自赋值时要么不做任何事，要么至少遗留对象于合法状态，并以非 const 引用返回左操作数，而且为 `noexcept` 。
+
 
 
 ## 类值交换操作
@@ -149,7 +153,7 @@ HasPtr& HasPtr::operator=(const HasPtr& rhs)
 
 与拷贝控制成员不同，swap并不是必要的。但是，对于分配了资源的类，定义swap可能是一种很重要的优化手段。
 
-定义swap的类通常用swap来定义它们的赋值运算符。这些运算符使用了一种名为拷贝并交换（copy and swap）的技术。这种技术将左侧运算对象与右侧运算对象的一个副本进行交换。之所以与右侧运算对象的副本而不是本体进行交换，因为赋值操作不应该改变右侧对象，与本体交换会导致改变右侧对象。
+定义swap的类通常用swap来定义它们的赋值运算符。这些运算符使用了一种名为拷贝并交换（copy and swap）的技术。这种技术将左侧运算对象与右侧运算对象的一个副本进行交换。之所以与右侧运算对象的副本而不是本体进行交换，因为拷贝赋值操作不应该改变右侧对象，与本体交换会导致改变右侧对象。
 
 使用拷贝和交换的赋值运算符自动就是异常安全的，且能正确处理自赋值。
 
@@ -178,4 +182,14 @@ inline void Swap(HasPtr& lhs, HasPtr& rhs)
 
 这个技术的有趣之处是它自动处理了自赋值情况且天然就是异常安全的。它通过在改变左侧运算对象之前拷贝右侧运算对象保证了自赋值的正确，这与我们在原来的赋值运算符中使用的方法是一致的。它保证异常安全的方法也与原来的赋值运算符实现一样。代码中唯一可能抛出异常的是拷贝构造函数中的new表达式。如果真发生了异常，它也会在我们改变左侧运算对象之前发生。
 
-## 类值移动操作
+
+
+> ### *References*
+>
+> 1. [Move constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/move_constructor)
+> 2. [operator overloading - cppreference.com](https://en.cppreference.com/w/cpp/language/operators)
+> 3. [Copy assignment operator - cppreference.com](https://en.cppreference.com/w/cpp/language/copy_assignment)
+> 4. [Move assignment operator - cppreference.com](https://en.cppreference.com/w/cpp/language/move_assignment)
+> 5. [How to: Define move constructors and move assignment operators (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/move-constructors-and-move-assignment-operators-cpp?view=msvc-160)
+>
+> 
