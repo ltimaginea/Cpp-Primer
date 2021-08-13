@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <string>
+#include <utility>
 
 using std::string;
 
@@ -10,12 +11,22 @@ class HasPtr
 public:
 	// default constructor and constructor that takes a string
 	HasPtr(const string& s = string()) :ps_(new string(s)), i_(0) {  }
+
 	// copy constructor
 	HasPtr(const HasPtr& p) :ps_(new string(*p.ps_)), i_(p.i_) {  }
 	// copy assignment operator
 	//HasPtr& operator=(const HasPtr&);
-	// copy assignment operator 的另一种实现，采用了“拷贝并交换”的技术（为了避免调用operator=存在二义性，实践时类定义中需要二者选择其一）
+
+	// move constructor
+	HasPtr(HasPtr&& p) noexcept :ps_(p.ps_), i_(p.i_) { p.ps_ = nullptr; }
+	// move assignment operator
+	//HasPtr& operator=(HasPtr&&) noexcept;
+
+	// assignment operator 的另一种实现，采用了“拷贝/移动并交换”的技术。
+	// 传值和传引用形式的operator= ，在调用时存在二义性，实践时类定义中需要选择其一。
+	// assignment operator is both the copy- and move-assignment operator
 	HasPtr& operator=(HasPtr);
+
 	// destructor
 	~HasPtr() { delete ps_; }
 private:
@@ -37,7 +48,21 @@ private:
 //	return *this;
 //}
 
-// 注意 rhs 是按值传递的，即“拷贝并交换”的技术
+//HasPtr& HasPtr::operator=(HasPtr&& rhs) noexcept
+//{
+//	// direct test for self-assignment
+//	if (this != &rhs)
+//	{
+//		// free the old memory
+//		delete ps_;
+//		ps_ = rhs.ps_;
+//		i_ = rhs.i_;
+//		rhs.ps_ = nullptr;
+//	}
+//	return *this;
+//}
+
+// 注意 rhs 是按值传递的，即“拷贝/移动并交换”的技术
 HasPtr& HasPtr::operator=(HasPtr rhs)
 {
 	Swap(*this, rhs);
@@ -70,15 +95,18 @@ int main()
 {
 	HasPtr hp1;
 	HasPtr hp2("hi, mom");
-	HasPtr hp3("hi, daddddddddddddddddddddddddddddddddddddd");
-	HasPtr hp4(hp3);
+	HasPtr hp3("hi, dadddddddddddddddddddddddddddddddd");
+	HasPtr hp4(std::move(hp1));
 
 	hp1 = hp2;
 	hp2 = hp3;
 	hp3 = hp1;
+	hp1 = std::move(hp4);
 
+	Foo f1, f2;
+	Swap(f1, f2);
 	return 0;
 }
 
 // tips: 
-//   1. 一个合格的 copy assignment operator 既需要可以处理自赋值的情况，也还应该是异常安全的
+//   1. move constructor 和 move assignment operator 应该是 noexcept
