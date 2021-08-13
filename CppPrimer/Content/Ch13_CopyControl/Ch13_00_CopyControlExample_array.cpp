@@ -7,7 +7,7 @@ class MemoryBlock
 {
 public:
 	// Simple constructor that initializes the resource.
-	explicit MemoryBlock(size_t length = 0)
+	explicit MemoryBlock(size_t length = 1)
 		: _length(length)
 		, _data(new int[length])
 	{
