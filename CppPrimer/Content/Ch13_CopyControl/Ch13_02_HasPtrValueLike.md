@@ -23,6 +23,7 @@
 ```cpp
 #include <iostream>
 #include <string>
+#include <utility>
 
 using std::string;
 
@@ -33,12 +34,22 @@ class HasPtr
 public:
 	// default constructor and constructor that takes a string
 	HasPtr(const string& s = string()) :ps_(new string(s)), i_(0) {  }
+
 	// copy constructor
 	HasPtr(const HasPtr& p) :ps_(new string(*p.ps_)), i_(p.i_) {  }
 	// copy assignment operator
 	HasPtr& operator=(const HasPtr&);
-	// copy assignment operator 的另一种实现，采用了“拷贝并交换”的技术(为了避免调用operator=存在二义性，实践时类定义中需要二选一)
+
+	// move constructor
+	HasPtr(HasPtr&& p) noexcept :ps_(p.ps_), i_(p.i_) { p.ps_ = nullptr; }
+	// move assignment operator
+	HasPtr& operator=(HasPtr&&) noexcept;
+
+	// assignment operator 的另一种实现，采用了“拷贝/移动并交换”的技术。
+	// 传值和传引用形式的operator= ，在调用时存在二义性，实践时类定义中需要选择其一。
+	// assignment operator is both the copy- and move-assignment operator
 	HasPtr& operator=(HasPtr);
+
 	// destructor
 	~HasPtr() { delete ps_; }
 private:
@@ -60,7 +71,21 @@ HasPtr& HasPtr::operator=(const HasPtr& rhs)
 	return *this;
 }
 
-// 注意 rhs 是按值传递的，即“拷贝并交换”的技术
+HasPtr& HasPtr::operator=(HasPtr&& rhs) noexcept
+{
+	// direct test for self-assignment
+	if (this != &rhs)
+	{
+		// free the old memory
+		delete ps_;
+		ps_ = rhs.ps_;
+		i_ = rhs.i_;
+		rhs.ps_ = nullptr;
+	}
+	return *this;
+}
+
+// 注意 rhs 是按值传递的，即“拷贝/移动并交换”的技术
 HasPtr& HasPtr::operator=(HasPtr rhs)
 {
 	Swap(*this, rhs);
@@ -141,9 +166,26 @@ HasPtr& HasPtr::operator=(const HasPtr& rhs)
 
 这一版同时还不具备“异常安全性”，异常发生时左侧运算对象将不是置于一个有意义的状态。具体地说，如果 `new string(*rhs.ps_)` 抛出异常（不论是因为分配时内存不足或因为 std::string 的拷贝构造函数抛出异常）， *this 最终会持有一个指针指向一块被删除的 std::string 。这样的指针有害。我们无法安全地删除它们，甚至无法安全地读取它们（解引用）。
 
-## 类值移动操作
+## 类值移动赋值运算符
 
 对规范的移动赋值，期待其令被移动对象遗留于合法状态（即有完好类不变式的状态），且在自赋值时要么不做任何事，要么至少遗留对象于合法状态，并以非 const 引用返回左操作数，而且为 `noexcept` 。
+
+```cpp
+// move assignment operator
+HasPtr& HasPtr::operator=(HasPtr&& rhs) noexcept
+{
+	// direct test for self-assignment
+	if (this != &rhs)
+	{
+		// free the old memory
+		delete ps_;
+		ps_ = rhs.ps_;
+		i_ = rhs.i_;
+		rhs.ps_ = nullptr;
+	}
+	return *this;
+}
+```
 
 
 
@@ -158,7 +200,8 @@ HasPtr& HasPtr::operator=(const HasPtr& rhs)
 使用拷贝和交换的赋值运算符自动就是异常安全的，且能正确处理自赋值。
 
 ```cpp
-// 注意 rhs 是按值传递的，即“拷贝并交换”的技术
+// 注意 rhs 是按值传递的，即“拷贝/移动并交换”的技术
+// assignment operator is both the copy- and move-assignment operator
 HasPtr& HasPtr::operator=(HasPtr rhs)
 {
 	Swap(*this, rhs);
@@ -184,7 +227,7 @@ inline void Swap(HasPtr& lhs, HasPtr& rhs)
 
 
 
-> ### *References*
+> ## *References*
 >
 > 1. [Move constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/move_constructor)
 > 2. [operator overloading - cppreference.com](https://en.cppreference.com/w/cpp/language/operators)
