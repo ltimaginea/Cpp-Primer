@@ -58,6 +58,7 @@ private:
 };
 
 // 既可以处理自赋值的情况，也还是异常安全的
+// copy assignment operator
 HasPtr& HasPtr::operator=(const HasPtr& rhs)
 {
 	// copy the underlying string
@@ -71,6 +72,7 @@ HasPtr& HasPtr::operator=(const HasPtr& rhs)
 	return *this;
 }
 
+// move assignment operator
 HasPtr& HasPtr::operator=(HasPtr&& rhs) noexcept
 {
 	// direct test for self-assignment
@@ -86,6 +88,7 @@ HasPtr& HasPtr::operator=(HasPtr&& rhs) noexcept
 }
 
 // 注意 rhs 是按值传递的，即“拷贝/移动并交换”的技术
+// assignment operator is both the copy- and move-assignment operator
 HasPtr& HasPtr::operator=(HasPtr rhs)
 {
 	Swap(*this, rhs);
@@ -129,6 +132,7 @@ inline void Swap(Foo& lhs, Foo& rhs)
 
 ```cpp
 // 既可以处理自赋值的情况，也还是异常安全的
+// copy assignment operator
 HasPtr& HasPtr::operator=(const HasPtr& rhs)
 {
 	// copy the underlying string
