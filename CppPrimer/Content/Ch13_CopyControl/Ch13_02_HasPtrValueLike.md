@@ -191,7 +191,8 @@ HasPtr& HasPtr::operator=(const HasPtr& rhs)
 
 存在的缺陷如下：
 
-- 当指针成员为 `nullptr` 时，这时对指针解引用就会发生未定义行为。比如， `x = std::move(y); y = z;` ，移后源对象 `y` 的指针成员值就会是 `nullptr` ，这时再为 `y` 赋予新值将是不安全的，即对空指针解引用就会发生未定义行为。
+- 这样的实现缺少通用性，有没有问题完全依赖于 *ps_ 对应类型operator= 的实现。标准库std::string的operator=是有着良好实现的，示例那样的实现暂时是没有问题的，但如果 *ps_ 不是std::string而是别的类型，比如某个浅拷贝实现的operator=的类型，那这样就会出问题了。
+- 当指针成员 ps_ 为无效指针时，这时对指针解引用就会发生未定义行为。比如， `x = std::move(y); y = z;` ，移后源对象 `y` 的指针成员 ps_ 就会是 `nullptr` ，这时再为 `y` 赋予新值将是不安全的，即这时对指针 ps_ 解引用就会发生未定义行为。
 - 不具备异常安全性。赋值操作可能抛异常，如 `*ps_ = *rhs.ps_;` 可能存在动态内存分配，则可能抛异常。当类含有多个指针成员时，从对第二个指针成员解引用赋值开始，如果某次解引用赋值时抛出了异常，异常发生时左侧运算对象将不是置于一个有意义的状态，即类对象没有保持原状，一部分成员已经被赋予了新值，另一部分成员还保存着旧值。
 
 
@@ -278,5 +279,6 @@ inline void Swap(HasPtr& lhs, HasPtr& rhs)
 > 3. [Copy assignment operator - cppreference.com](https://en.cppreference.com/w/cpp/language/copy_assignment)
 > 4. [Move assignment operator - cppreference.com](https://en.cppreference.com/w/cpp/language/move_assignment)
 > 5. [How to: Define move constructors and move assignment operators (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/move-constructors-and-move-assignment-operators-cpp?view=msvc-160)
+> 6. [C++ 拷贝赋值运算符的规范实现应该是什么样 ？ - 知乎 (zhihu.com)](https://www.zhihu.com/question/480261834)
 >
 > 
