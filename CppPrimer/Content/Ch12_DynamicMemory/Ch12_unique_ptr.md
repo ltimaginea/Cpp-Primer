@@ -10,7 +10,7 @@ unique_ptr<int> p1(new int(42));
 unique_ptr<string> p2 = make_unique<string>(12, 'T');
 ```
 
-unique_ptr 不支持普通的拷贝或赋值操作。
+unique_ptr 不支持普通的拷贝或赋值操作，但可以进行移动操作。unique_ptr的移动赋值，接管新资源的同时，还会销毁旧资源。
 
 ```cpp
 // 错误，unique_ptr 不支持拷贝
@@ -18,6 +18,30 @@ unique_ptr 不支持普通的拷贝或赋值操作。
 unique_ptr<string> p4 = make_unique<string>("TianZhou2");
 // 错误，unique_ptr 不支持赋值
 // p4 = p2;
+
+unique_ptr<string> up1(new string("Good morning"));
+unique_ptr<string> up2(make_unique<string>("sleep"));
+unique_ptr<string> up3 = make_unique<string>("weak up");
+unique_ptr<string> up4(std::move(up1));
+// copy!
+unique_ptr<string> up5(make_unique<string>(*up2));
+
+up1.reset(up2.release());
+// 接管右侧新资源，释放左侧旧资源，可以认为等效于上一句
+up3 = std::move(up4);
+// copy!
+up5 = make_unique<string>(*up3);	// make_unique的返回值是临时对象，即右值
+// up5.reset(make_unique<string>(*up3).release());		// 同上等效
+// up5.reset(new string(*up3));		// 同上等效
+
+// 不建议下面这样赋值，其安全性依赖于*up的类型的operator=的实现，安全性不稳定
+// *up1 = *up5;
+
+// We can use make_unique to create a unique_ptr to an array, but have to initialize the array separately.
+// Create a unique_ptr to an array of 5 integers.
+auto p = make_unique<int[]>(5);
+// Initialize the array elements separately.
+for (int i = 0; i < 5; ++i) { p[i] = i; }
 ```
 
 虽然我们不能拷贝或赋值unique_ptr，但可以通过调用 `release` 或 `reset` 将指针的所有权从一个（非const）unique_ptr转移给另一个unique。
@@ -106,3 +130,11 @@ up.reset();
   ```
 
   
+
+> ## *References*
+>
+> [How to: Create and use unique_ptr instances | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/how-to-create-and-use-unique-ptr-instances?view=msvc-160)
+>
+> [ make_unique |  Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/memory-functions?view=msvc-160#make_unique)
+>
+> 
