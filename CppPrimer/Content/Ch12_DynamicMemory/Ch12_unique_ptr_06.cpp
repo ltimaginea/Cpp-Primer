@@ -64,7 +64,7 @@ int main()
 	//up5.reset(make_unique<string>(*up3).release());		// 同上等效
 	//up5.reset(new string(*up3));		// 同上等效
 
-	// 不建议下面这样赋值，其安全性依赖于*up的类型的operator=的实现，安全性不确定
+	// 不建议下面这样赋值，其安全性依赖于*up的类型的operator=的实现，安全性不稳定
 	// *up1 = *up5;
 
 	unique_ptr<Foo> p1(make_unique<Foo>(1));
@@ -93,7 +93,7 @@ int main()
 
 	SongVector();
 
-	// We can use make_unique to create a unique_ptr to an array, but you cannot use make_unique to initialize the array elements.
+	// We can use make_unique to create a unique_ptr to an array, but cannot use make_unique to initialize the array elements.
 	// We have to initialize the array elements separately. Rather than using make_unique<T[]>, perhaps a better choice is to use a std::vector.
 	// Create a unique_ptr to an array of 5 integers.
 	auto p = make_unique<int[]>(5);
