@@ -64,7 +64,7 @@ public:
 			<< other._length << ". Moving resource." << std::endl;
 
 		other._length = 0;
-		//other._data = nullptr;	// 不需要再显示置为nullptr，移动赋值会使右值置为nullptr
+		//other._data = nullptr;	// 不需要再显式置为nullptr，移动赋值会使右值置为nullptr
 	}
 
 	// Move assignment operator.
@@ -79,7 +79,7 @@ public:
 			_data = std::move(other._data);
 
 			other._length = 0;
-			//other._data = nullptr;	// 不需要再显示置为nullptr，移动赋值会使右值置为nullptr
+			//other._data = nullptr;	// 不需要再显式置为nullptr，移动赋值会使右值置为nullptr
 		}
 		return *this;
 	}
