@@ -2,7 +2,7 @@
 #include <iostream>
 #include <algorithm>    // std::copy, std::copy_if
 #include <vector>
-#include <iterator>		// std::back_inserter
+#include <iterator>
 
 int main()
 {
@@ -35,7 +35,7 @@ int main()
 }
 
 // Tips:
-//  1. 数组指针也是迭代器
+//	1. 数组指针也是迭代器
 //	2. std::copy, std::copy_if 的返回值是指向目标范围中最后复制元素的下个元素的输出迭代器
 //	3. 和memcpy相比，std::copy应该不存在大端小端问题
 //	4. http://www.cplusplus.com/forum/general/103106/
