@@ -15,7 +15,7 @@ int main()
 	std::cout << _MSC_VER << std::endl;
 #endif // _MSC_VER
 
-	// linux-gnu g++ 专用预定义宏
+	// g++ 专用预定义宏
 #ifdef __GNUG__
 	std::cout << __GNUG__ << __GNUC_MINOR__ << __GNUC_PATCHLEVEL__ << std::endl;
 #endif // __GNUG__
