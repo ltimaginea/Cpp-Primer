@@ -279,6 +279,7 @@ inline void Swap(HasPtr& lhs, HasPtr& rhs)
 > 3. [Copy assignment operator - cppreference.com](https://en.cppreference.com/w/cpp/language/copy_assignment)
 > 4. [Move assignment operator - cppreference.com](https://en.cppreference.com/w/cpp/language/move_assignment)
 > 5. [How to: Define move constructors and move assignment operators (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/move-constructors-and-move-assignment-operators-cpp?view=msvc-160)
-> 6. [C++ 拷贝赋值运算符的规范实现应该是什么样 ？ - 知乎 (zhihu.com)](https://www.zhihu.com/question/480261834)
+> 6. [令被移动对象遗留于合法状态](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c64-a-move-operation-should-move-and-leave-its-source-in-a-valid-state)
+> 7. [C++ 拷贝赋值运算符的规范实现应该是什么样 ？ - 知乎 (zhihu.com)](https://www.zhihu.com/question/480261834)
 >
 > 
