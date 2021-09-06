@@ -12,7 +12,7 @@ public:
 	HasPtr& operator=(const HasPtr&);
 	~HasPtr();
 
-	// 为了保证移后源对象是有效的、可析构的状态，借助new表达式勉强实现的移动操作，但这样的实现是可能抛异常的
+	// 为了保证移后源对象是有效的、可析构的状态，借助new表达式勉强实现的移动操作，但这样的实现是可能抛异常的，可以认为是失败的实现
 	// move constructor takes over the pointers from its argument and makes the argument safe to destroy
 	HasPtr(HasPtr&& rhs) /*noexcept*/ :ps_(rhs.ps_), i_(rhs.i_), use_(rhs.use_) { rhs.ps_ = new std::string(); rhs.use_ = new std::size_t(1); }
 	HasPtr& operator=(HasPtr&&) /*noexcept*/;
@@ -51,7 +51,7 @@ HasPtr::~HasPtr()
 	}
 }
 
-// 为了保证移后源对象是有效的、可析构的状态，借助new表达式勉强实现的移动操作，但这样的实现是可能抛异常的
+// 为了保证移后源对象是有效的、可析构的状态，借助new表达式勉强实现的移动操作，但这样的实现是可能抛异常的，可以认为是失败的实现
 HasPtr& HasPtr::operator=(HasPtr&& rhs) /*noexcept*/
 {
 	// direct test for self-assignment
