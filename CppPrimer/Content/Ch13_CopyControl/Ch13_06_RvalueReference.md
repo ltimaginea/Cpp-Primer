@@ -66,7 +66,7 @@ void Foo(int&& rr)
 }
 ```
 
-右值引用可用于为临时对象[延长生存期](https://zh.cppreference.com/w/cpp/language/reference_initialization#.E4.B8.B4.E6.97.B6.E9.87.8F.E7.94.9F.E5.AD.98.E6.9C.9F)（注意，到 const 的左值引用也能延长临时对象生存期，但这些对象无法因此被修改）。
+右值引用可用于为临时对象[延长生存期](https://zh.cppreference.com/w/cpp/language/reference_initialization#.E4.B8.B4.E6.97.B6.E9.87.8F.E7.94.9F.E5.AD.98.E6.9C.9F)（注意，到 const 的左值引用也能延长临时对象生存期，但这些对象无法因此被修改）。临时对象的生命周期由其用法决定。如果临时对象被绑定到一个引用上，则它的生命周期就是引用的生命周期；否则，临时对象的生命周期与它所处的完整表达式（full expression）一致。
 
 ## 标准库 move 函数
 
