@@ -90,4 +90,8 @@ int&& rr3 = std::move(rr1);
 >
 > [How to: Define move constructors and move assignment operators (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/move-constructors-and-move-assignment-operators-cpp?view=msvc-160)
 >
+> [Temporary object lifetime - cppreference.com](https://en.cppreference.com/w/cpp/language/lifetime#Temporary_object_lifetime)
+>
+> [临时延长生存期 - cppreference.com](https://zh.cppreference.com/w/cpp/language/reference_initialization#.E4.B8.B4.E6.97.B6.E9.87.8F.E7.94.9F.E5.AD.98.E6.9C.9F)
+>
 > 
