@@ -84,6 +84,8 @@ int&& rr3 = std::move(rr1);
 >
 > [值类别 - cppreference.com](https://zh.cppreference.com/w/cpp/language/value_category) 
 >
+> [Value categories - cppreference.com](https://en.cppreference.com/w/cpp/language/value_category)
+>
 > [Value Categories: Lvalues and Rvalues (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/lvalues-and-rvalues-visual-cpp?view=msvc-160)
 >
 > [Rvalue Reference Declarator: && | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/rvalue-reference-declarator-amp-amp?view=msvc-160)
