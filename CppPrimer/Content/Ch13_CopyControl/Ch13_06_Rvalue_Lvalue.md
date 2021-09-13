@@ -26,7 +26,7 @@ void f(vector<string>&& vs)
 }
 ```
 
-此处， std::move(vs) 是一个特别值。它明显有身份（我们能像vs一样引用它），并且我们显式地给予了将其值移出的许可，方式是调用 std::move(vs) 。
+此处， std::move(vs) 是一个特别值（xvalue）。它明显有身份（我们能像vs一样引用它），并且我们显式地给予了将其值移出的许可，方式是调用 std::move(vs) 。
 
 在实际编程过程中，考虑左值和右值就足够了。一条表达式要么是左值，要么是右值，不可能两者都是。当然，准确地“二分”应该是 泛左值（glvalue）和 纯右值（prvalue）。
 
@@ -46,4 +46,4 @@ void f(vector<string>&& vs)
 >
 > A **prvalue** expression has no address that is accessible by your program. Examples of prvalue expressions include literals, function calls that return a non-reference type, and temporary objects that are created during expression evaluation but accessible only by the compiler.
 >
-> An **xvalue** expression has an address that no longer accessible by your program but can be used to initialize an rvalue reference, which provides access to the expression. Examples include function calls that return an rvalue reference, and the array subscript, member and pointer to member expressions where the array or object is an rvalue reference.
+> An **xvalue** expression has an address that no longer accessible by your program but can be used to initialize an rvalue reference, which provides access to the expression. Examples include function calls that return an rvalue reference (e.g., std::move() ), and the array subscript, member and pointer to member expressions where the array or object is an rvalue reference.
