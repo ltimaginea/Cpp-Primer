@@ -66,7 +66,7 @@ void StrVec::free()
 	}
 }
 
-// 这里的reallocate实现，仅适合增大容量的情形，缩减容量的情形需要重新实现（如果是缩减，下面的实现的构造部分alloc_.construct将可能会因为内存越界而出错）
+// 这里的reallocate实现，仅适合增大容量的情形，缩减容量的情形需要重新实现（如果是缩减，下面的实现的std::uninitialized_copy部分将可能会因为内存越界而出错）
 void StrVec::reallocate(bool is_specified, size_t new_cap)
 {
 	size_t new_capacity = 1;
