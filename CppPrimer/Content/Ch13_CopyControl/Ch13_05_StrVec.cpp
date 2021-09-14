@@ -16,7 +16,7 @@ public:
 	StrVec& operator=(const std::initializer_list<std::string>&);
 	~StrVec();
 	void push_back(const std::string&);
-	void push_back(std::string&&) noexcept;
+	void push_back(std::string&&);	// 该移动操作可能会抛异常因为可能分配内存
 	size_t size() const { return first_free_ - elements_; }
 	size_t capacity() const { return cap_ - elements_; }
 	std::string* begin() const { return elements_; }
@@ -43,8 +43,9 @@ void StrVec::push_back(const std::string& str)
 	alloc_.construct(first_free_++, str);
 }
 
-void StrVec::push_back(std::string&& str) noexcept
+void StrVec::push_back(std::string&& str)	// 该移动操作可能会抛异常因为可能分配内存
 {
+	// 如果需要的话为 StrVec 重新分配内存
 	chk_n_alloc();
 	alloc_.construct(first_free_++, std::move(str));
 }
