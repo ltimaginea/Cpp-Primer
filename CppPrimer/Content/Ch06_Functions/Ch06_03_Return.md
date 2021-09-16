@@ -50,7 +50,7 @@ X Foo()
 >
 > ### [C++ - Returning unique_ptr from functions - Stack Overflow](https://stackoverflow.com/questions/4316727/returning-unique-ptr-from-functions)
 >
-> ### 《深度探索C++对象模型》
+> ### 《深度探索C++对象模型》—— 2.3 返回值的初始化 & 在编译器层面做优化
 >
 > 
 
