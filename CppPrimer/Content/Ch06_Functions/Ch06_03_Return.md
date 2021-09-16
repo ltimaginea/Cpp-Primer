@@ -2,7 +2,9 @@
 
 ## Return a non-reference type
 
-我们不需要也不应该 `std::move()` 返回值（因为可能会对RVO帮倒忙）。C++ Standard 指出，对于以下代码：
+返回一个值的方式和初始化一个变量或形参的方式完全一样：返回的值用于初始化调用点的一个临时量，该临时量就是函数调用的结果。
+
+我们不需要也不应该 `std::move()` 返回值（因为可能会对编译器的RVO帮倒忙）。C++ Standard 指出，对于以下代码：
 
 ```cpp
 X Foo()
@@ -15,7 +17,7 @@ X Foo()
 
 保证有下列行为：
 
-- 如果X有一个存在且可访问的（例如，不能是private的）copy或move构造函数，编译器可以选择略去其中的copy版本。这也就是所谓的 (named) return value optimization ( (N)RVO ) ，这个特性甚至在C++11之前就获得了大多数编译器的支持。
+- 如果X有一个存在且可访问的（例如，不能是private的）copy或move构造函数，编译器可以选择略去其中的copy版本。这也就是所谓的 Return Value Optimization (RVO) or Named Return Value Optimization (NRVO) ，这个特性甚至在C++11之前就获得了大多数编译器的支持。
 - 否则，如果X有一个move构造函数，X就被moved（搬移）。
 - 否则，如果X有一个copy构造函数，X就被copied（复制）。
 - 否则，报出一个编译期错误（compile-time error）。
@@ -33,6 +35,8 @@ X Foo()
 > ### [Rvalue Reference Declarator: && | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/rvalue-reference-declarator-amp-amp?view=msvc-160)
 >
 > Move semantics also helps when the compiler cannot use Return Value Optimization (RVO) or Named Return Value Optimization (NRVO). In these cases, the compiler calls the move constructor if the type defines it.
+>
+> 当编译器无法使用返回值优化 (RVO) 或命名返回值优化 (NRVO) 时，移动语义也很有用。 在这些情况下，如果类型定义了移动构造函数，则编译器将调用该函数。
 >
 > ### [Options Controlling C++ Dialect ( GCC Manual )](https://gcc.gnu.org/onlinedocs/gcc-11.2.0/gcc/C_002b_002b-Dialect-Options.html#C_002b_002b-Dialect-Options)
 >
