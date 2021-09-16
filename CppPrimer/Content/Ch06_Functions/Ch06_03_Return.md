@@ -46,11 +46,17 @@ C++ Standard 指出，按值返回的函数（比如 Foo）保证有下列行为
 >
 > 当编译器无法使用返回值优化 (RVO) 或命名返回值优化 (NRVO) 时，移动语义也很有用。 在这些情况下，如果类型定义了移动构造函数，则编译器将调用该函数。
 >
-> ### [/O1, /O2 (Minimize Size, Maximize Speed) VS2019| Microsoft Docs](https://docs.microsoft.com/en-us/cpp/build/reference/o1-o2-minimize-size-maximize-speed?view=msvc-160)
->
 > ### [/O1, /O2 (Minimize Size, Maximize Speed) VS2012| Microsoft Docs](https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2012/8f8h5cxt(v=vs.110))
 >
 > **/O1** and **/O2** also enable the Named Return Value optimization, which eliminates the copy constructor and destructor of a stack based return value.
+>
+> ### [/O1, /O2 (Minimize Size, Maximize Speed) VS2019| Microsoft Docs](https://docs.microsoft.com/en-us/cpp/build/reference/o1-o2-minimize-size-maximize-speed?view=msvc-160)
+>
+> #### To set this compiler option in the Visual Studio development environment
+>
+> 1. Open the project's **Property Pages** dialog box. For details, see [Set C++ compiler and build properties in Visual Studio](https://docs.microsoft.com/en-us/cpp/build/working-with-project-properties?view=msvc-160).
+> 2. Select the **Configuration Properties** > **C/C++** > **Optimization** property page.
+> 3. Modify the **Optimization** property.
 >
 > ### [Options Controlling C++ Dialect ( GCC Manual )](https://gcc.gnu.org/onlinedocs/gcc-11.2.0/gcc/C_002b_002b-Dialect-Options.html#C_002b_002b-Dialect-Options)
 >
