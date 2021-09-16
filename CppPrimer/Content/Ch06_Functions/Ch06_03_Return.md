@@ -24,12 +24,6 @@ C++ Standard 指出，按值返回的函数（比如 Foo）保证有下列行为
 
 
 
-Visual Studio 2019 的Debug模式的 **Optimization** 默认是 `已禁用 (/Od)` ，Release模式的 **Optimization** 默认是 `最大优化(优选速度) (/O2)` 。我们可以在项目属性页 **Configuration Properties** > **C/C++** > **Optimization** 中设置，其中**/O1** 和 **/O2** 级别都可以开启 (N)RVO 。
-
-g++ 默认开启 (N)RVO ，我们可以通过编译选项 `-fno-elide-constructors` 来禁用优化。
-
-
-
 ## Return a reference type
 
 
@@ -54,11 +48,9 @@ g++ 默认开启 (N)RVO ，我们可以通过编译选项 `-fno-elide-constructo
 >
 > 当编译器无法使用返回值优化 (RVO) 或命名返回值优化 (NRVO) 时，移动语义也很有用。 在这些情况下，如果类型定义了移动构造函数，则编译器将调用该函数。
 >
-> ### [/O1, /O2 (Minimize Size, Maximize Speed) VS2012| Microsoft Docs](https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2012/8f8h5cxt(v=vs.110))
->
-> **/O1** and **/O2** also enable the Named Return Value optimization, which eliminates the copy constructor and destructor of a stack based return value.
->
 > ### [/O1, /O2 (Minimize Size, Maximize Speed) VS2019| Microsoft Docs](https://docs.microsoft.com/en-us/cpp/build/reference/o1-o2-minimize-size-maximize-speed?view=msvc-160)
+>
+> Visual Studio 2019 的Debug模式的 **Optimization** 默认是 `已禁用 (/Od)` ，Release模式的 **Optimization** 默认是 `最大优化(优选速度) (/O2)` 。我们可以按照如下方法修改 **Optimization** 级别：
 >
 > To set this compiler option in the Visual Studio development environment:
 >
@@ -66,7 +58,15 @@ g++ 默认开启 (N)RVO ，我们可以通过编译选项 `-fno-elide-constructo
 > 2. Select the **Configuration Properties** > **C/C++** > **Optimization** property page.
 > 3. Modify the **Optimization** property.
 >
+> **/O1** and **/O2** also enable the Named Return Value optimization, which eliminates the copy constructor and destructor of a stack based return value.
+>
+> ### [/O1, /O2 (Minimize Size, Maximize Speed) VS2012| Microsoft Docs](https://docs.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-2012/8f8h5cxt(v=vs.110))
+>
+> **/O1** and **/O2** also enable the Named Return Value optimization, which eliminates the copy constructor and destructor of a stack based return value.
+>
 > ### [Options Controlling C++ Dialect ( GCC Manual )](https://gcc.gnu.org/onlinedocs/gcc-11.2.0/gcc/C_002b_002b-Dialect-Options.html#C_002b_002b-Dialect-Options)
+>
+> g++ 默认开启 (N)RVO ，我们可以通过编译选项 `-fno-elide-constructors` 来禁用优化。
 >
 > `-fno-elide-constructors`
 >
