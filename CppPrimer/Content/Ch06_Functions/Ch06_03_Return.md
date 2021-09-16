@@ -17,7 +17,7 @@ X Foo()
 
 C++ Standard 指出，按值返回的函数（比如 Foo）保证有下列行为：
 
-- 如果类型 X 有一个存在且可访问的（例如，不能是private的）copy或move构造函数，编译器可以选择略去其中的copy和move版本，通过直接在为函数返回值分配的内存上创建局部对象 x 来避免复制（或者移动）。这就是所谓的“返回值优化” *Return Value Optimization (RVO)* 或“命名返回值优化” *Named Return Value Optimization (NRVO)* ，这个特性甚至在C++11之前就获得了大多数编译器的支持。编译器对按值返回的函数实施(N)RVO需要满足两个前提条件：（1）局部对象与函数返回值的类型相同；（2）局部对象就是要返回的东西。适合的局部对象包括大多数局部变量（比如 Foo 里的 x ），还有作为`return`语句的一部分而创建的临时对象。函数形参不满足要求。
+- 如果类型 X 有一个存在且可访问的（例如，不能是private的）copy或move构造函数，编译器可以选择略去其中的copy和move版本，通过直接在为函数返回值分配的内存上创建局部对象 x 来避免复制（或者移动）。这就是所谓的“返回值优化” *Return Value Optimization (RVO)* 或“命名返回值优化” *Named Return Value Optimization (NRVO)* ，这个特性甚至在C++11之前就获得了大多数编译器的支持。编译器对按值返回的函数实施(N)RVO需要满足两个前提条件：（1）局部对象与函数返回值的类型相同；（2）局部对象就是要返回的东西。适合的局部对象包括大多数局部变量（比如 Foo 里的 x ），还有作为 return 语句的一部分而创建的临时对象。函数形参不满足要求。
 - 否则，如果X有一个move构造函数，X就被moved（搬移）。
 - 否则，如果X有一个copy构造函数，X就被copied（复制）。
 - 否则，报出一个编译期错误（compile-time error）。
@@ -34,7 +34,7 @@ C++ Standard 指出，按值返回的函数（比如 Foo）保证有下列行为
 
 > ## *References*
 >
-> ### 《深度探索C++对象模型》—— 2.3 返回值的初始化 & 在编译器层面做优化
+> ### [Inside The Cpp Object Model_RVO](https://www.cnblogs.com/ltimaginea/p/15302197.html)
 >
 > ### [Effective Modern Cpp Chinese / Item25.md](https://github.com/kelthuzadx/EffectiveModernCppChinese/blob/master/5.RRefMovSemPerfForw/item25.md)
 >
