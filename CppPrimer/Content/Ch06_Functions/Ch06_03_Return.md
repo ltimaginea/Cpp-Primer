@@ -22,6 +22,14 @@ C++ Standard 指出，按值返回的函数（比如 Foo）保证有下列行为
 - 否则，如果X有一个copy构造函数，X就被copied（复制）。
 - 否则，报出一个编译期错误（compile-time error）。
 
+
+
+Visual Studio 2019 的Debug模式的 **Optimization** 默认是 `已禁用 (/Od)` ，Release模式的 **Optimization** 默认是 `最大优化(优选速度) (/O2)` 。我们可以在项目属性页 **Configuration Properties** > **C/C++** > **Optimization** 中设置，其中**/O1** 和 **/O2** 级别都可以开启 (N)RVO 。
+
+g++ 默认开启 (N)RVO ，我们可以通过编译选项 `-fno-elide-constructors` 来禁用优化。
+
+
+
 ## Return a reference type
 
 
@@ -52,7 +60,7 @@ C++ Standard 指出，按值返回的函数（比如 Foo）保证有下列行为
 >
 > ### [/O1, /O2 (Minimize Size, Maximize Speed) VS2019| Microsoft Docs](https://docs.microsoft.com/en-us/cpp/build/reference/o1-o2-minimize-size-maximize-speed?view=msvc-160)
 >
-> #### To set this compiler option in the Visual Studio development environment
+> To set this compiler option in the Visual Studio development environment:
 >
 > 1. Open the project's **Property Pages** dialog box. For details, see [Set C++ compiler and build properties in Visual Studio](https://docs.microsoft.com/en-us/cpp/build/working-with-project-properties?view=msvc-160).
 > 2. Select the **Configuration Properties** > **C/C++** > **Optimization** property page.
