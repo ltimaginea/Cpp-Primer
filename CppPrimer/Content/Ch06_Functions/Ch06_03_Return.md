@@ -4,7 +4,7 @@
 
 返回一个值的方式和初始化一个变量或形参的方式完全一样：返回的值用于初始化调用点的一个临时量，该临时量就是函数调用的结果。
 
-对于以下按值返回的函数 Foo ，我们不需要也不应该 `std::move()` 返回值（因为可能会对编译器的(N)RVO帮倒忙）。
+**对于按值返回的函数，我们不需要也不应该 `std::move()` 返回值（因为可能会对编译器的(N)RVO帮倒忙）**。
 
 ```cpp
 X Foo()
@@ -26,7 +26,27 @@ C++ Standard 指出，按值返回的函数（比如 Foo）保证有下列行为
 
 ## Return a reference type
 
+**不要返回局部对象的引用或指针**。
 
+同其他引用类型一样，如果函数返回引用，则该引用仅是它所引对象的一个别名。当函数结束时局部对象占用的空间也就随之释放掉了，return 的局部对象的引用或指针将指向不再有效的内存区域。所以，函数不要 return 局部对象的引用或指针。
+
+rvalue reference也是个reference，如果返回它而它指向（referring to） local对象，意味着返回一个reference却指向一个不再存在的对象，则将会造成严重错误。
+
+```cpp
+std::string&& Foo()
+{
+	static std::string static_str("ShenZhou12");
+
+	std::string str("astronauts");
+
+	if (str.length() > static_str.length())
+		return std::move(str);		// 错误！不要返回局部对象的引用或指针
+	else if (str.length() < static_str.length())
+		return "astronaut";			// 错误！"astronaut"是一个局部临时对象
+	else
+		return std::move(static_str);	// 正确！函数结束时 local static 对象并不会消亡
+}
+```
 
 
 
