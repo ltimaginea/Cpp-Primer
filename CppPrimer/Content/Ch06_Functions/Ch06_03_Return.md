@@ -1,5 +1,18 @@
 # Return
 
+return语句终止当前正在执行的函数并将控制权返回到调用该函数的地方。return语句有两种形式：
+
+```cpp
+return;
+return expression;
+```
+
+没有返回值的return语句只能用在返回类型是void的函数中。返回void的函数不要求非得有return语句，因为在这类函数的最后一句后面会隐式地执行return。 通常情况下，void函数如果想在它的中间位置提前退出，可以使用return语句。
+
+return语句的第二种形式提供了函数的结果。有返回值函数的函数体内部的每条return语句必须返回一个值。
+
+
+
 ## Return a non-reference type
 
 返回一个值的方式和初始化一个变量或形参的方式完全一样：返回的值用于初始化调用点的一个临时量，该临时量就是函数调用的结果。
@@ -49,6 +62,31 @@ std::string&& Foo()
 ```
 
 
+
+## Return an initializer_list
+
+C++11新标准规定，函数可以返回花括号包围的值的列表，用来对表示函数返回的临时量进行列表初始化。
+
+```cpp
+std::vector<std::string> Process()
+{
+	std::string expected("astronauts");
+	std::string actual("ShenZhou12");
+
+	if (expected.empty())
+		return {};
+	else if (expected == actual)
+		return { "functionX","okay" };
+	else
+		return { "functionX",expected,actual };
+}
+```
+
+
+
+## Return an array pointer
+
+因为数组不能被拷贝，所以函数不能返回数组。不过，函数可以返回数组的指针或引用。虽然从语法上来说，要想定义一个返回数组的指针或引用的函数比较烦琐，具体如何定义详见《C++ Primer》6.3.3节，作为一种知识上的了解即可， `std::array` ， `std::vector` ， `std::string` 这些更好用的数据容器几乎总是比原始数组更方便。
 
 
 
