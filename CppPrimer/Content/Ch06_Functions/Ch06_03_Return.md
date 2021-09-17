@@ -42,7 +42,7 @@ std::string&& Foo()
 	if (str.length() > static_str.length())
 		return std::move(str);		// 错误！不要返回局部对象的引用或指针
 	else if (str.length() < static_str.length())
-		return "astronaut";			// 错误！"astronaut"是一个局部临时对象
+		return "astronaut";		// 错误！"astronaut"是一个局部临时对象
 	else
 		return std::move(static_str);	// 正确！函数结束时 local static 对象并不会消亡
 }
