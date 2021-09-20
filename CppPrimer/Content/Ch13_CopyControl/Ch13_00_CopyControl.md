@@ -34,14 +34,23 @@
 - 类似拷贝构造函数，如果类的析构函数被定义为删除的或不可访问的，则类的移动构造函数被定义为删除的。
 - 类似拷贝赋值运算符，如果有类成员是const的或是引用，则类的移动赋值运算符被定义为删除的。
 
+移动操作和合成的拷贝控制成员间还有最后一个相互作用关系：一个类是否定义了自己的移动操作对拷贝操作如何合成有影响。**如果类定义了一个移动构造函数 和/或 一个移动赋值运算符，则该类的合成拷贝构造函数和拷贝赋值运算符 都 会被定义为删除的**。
+
 举例：
 
 ```cpp
+#include <iostream>
+#include <string>
+#include <utility>
+
 class Y
 {
 public:
 	Y() = default;
 	Y(Y&&) = delete;
+	Y& operator=(Y&&) = default;
+private:
+	std::string str_;
 };
 
 class HasY
@@ -49,17 +58,30 @@ class HasY
 public:
 	HasY() = default;
 	HasY(HasY&&) = default;	// 最终编译器会将HasY的移动构造函数定义为删除的
+	HasY& operator=(HasY&&) = default;	// OK
 private:
 	Y mem_;	// Y的移动构造函数是删除的
 };
 
-HasY hy1;
-HasY hy2(std::move(hy1));	// 错误！HasY移动构造函数是删除的
+int main()
+{
+	HasY hy1;
+	HasY hy2(std::move(hy1));	// 错误！HasY移动构造函数是删除的
+
+	HasY hy3, hy4;
+	hy3 = std::move(hy4);	// OK
+
+	HasY hy5, hy6;
+	// error! 'HasY::HasY(const HasY&)' is implicitly declared as deleted because 'HasY' declares a move constructor or move assignment operator
+	HasY hy7(hy5);
+	// error! 'HasY& HasY::operator=(const HasY&)' is implicitly declared as deleted because 'HasY' declares a move constructor or move assignment operator
+	hy5 = hy6;
+
+	return 0;
+}
 ```
 
-类HasY拥有一个不能移动的类型为Y的成员mem_，而我们又显式地要求编译器生成`=default`的移动构造函数，但编译器无法为其生成。因此，HasY会有一个删除的移动构造函数。如果HasY忽略了移动构造函数的声明，则编译器根本不能为它合成一个。如果移动操作可能被定义为删除的函数，编译器就不会合成它们。 
-
-移动操作和合成的拷贝控制成员间还有最后一个相互作用关系：一个类是否定义了自己的移动操作对拷贝操作如何合成有影响。**如果类定义了一个移动构造函数 和/或 一个移动赋值运算符，则该类的合成拷贝构造函数和拷贝赋值运算符 都 会被定义为删除的**。
+类HasY拥有一个不能移动构造的类型为Y的成员mem_，而我们又显式地要求编译器生成`=default`的移动构造函数，但编译器无法为其生成。因此，HasY会有一个删除的移动构造函数。如果HasY忽略了移动构造函数的声明，则编译器根本不能为它合成一个。如果移动操作可能被定义为删除的函数，编译器就不会合成它们。 
 
 
 
