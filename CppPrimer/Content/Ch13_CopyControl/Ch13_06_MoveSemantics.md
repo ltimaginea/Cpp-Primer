@@ -167,7 +167,7 @@ int main()
 
 ## Reference Qualifier
 
-Reference Qualifier 参见：
+引用限定符（Reference Qualifier） 参见：
 
 -  [Cpp-Primer/Ch13_06_ReferenceQualifier.md at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_06_ReferenceQualifier.md)
 -  [Cpp-Primer/Ch13_06_ReferenceQualifier.cpp at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_06_ReferenceQualifier.cpp)
