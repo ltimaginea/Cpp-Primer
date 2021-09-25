@@ -6,9 +6,48 @@
 
 对于内置类型，如 `int` 和 `double*` ，被认为具有移动操作，其实就是简单的拷贝。
 
+### 移动构造函数
 
+如果一个构造函数的第一个参数是自身类类型的右值引用，且任何额外参数都有默认值，则此构造函数是移动构造函数。如果我们的移动构造函数不抛出任何异常，我们就应该将它标记为 noexcept 。
 
-举例： [Ch13_05_StrVec.cpp at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_05_StrVec.cpp)
+举例： [Ch13_05_StrVec.cpp at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_05_StrVec.cpp) 
+
+```cpp
+StrVec::StrVec(StrVec&& sv) noexcept :elements_(sv.elements_), first_free_(sv.first_free_), cap_(sv.cap_)
+{
+	sv.elements_ = nullptr;
+	sv.first_free_ = nullptr;
+	sv.cap_ = nullptr;
+}
+```
+
+与拷贝构造函数不同，移动构造函数不分配任何新内存；它接管给定的StrVec中的内存。在接管内存之后，它将给定对象中的指针都置为nullptr。这样就完成了从给定对象的移动操作，此对象将继续存在。最终，移后源对象会被销毁，意味着将在其上运行析构函数。StrVec的析构函数在first_free上调用deallocate。如果我们忘记了改变sv.first_free，则销毁移后源对象就会释放掉我们刚刚移动的内存。
+
+### 移动赋值运算符
+
+移动赋值运算符执行与析构函数和移动构造函数相同的工作。与移动构造函数一样，如果我们的移动赋值运算符不抛出任何异常，我们就应该将它标记为 noexcept 。类似拷贝赋值运算符，移动赋值运算符必须正确处理自赋值。
+
+举例： [Ch13_05_StrVec.cpp at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_05_StrVec.cpp) 
+
+```cpp
+StrVec& StrVec::operator=(StrVec&& sv) noexcept
+{
+	// direct test for self-assignment
+	if (this != &sv)
+	{
+		free();
+		elements_ = sv.elements_;
+		first_free_ = sv.first_free_;
+		cap_ = sv.cap_;
+		sv.elements_ = nullptr;
+		sv.first_free_ = nullptr;
+		sv.cap_ = nullptr;
+	}
+	return *this;
+}
+```
+
+在此例中，我们直接检查this指针与rhs的地址是否相同。如果相同，右侧和左侧运算对象指向相同的对象，我们不需要做任何事情。否则，我们释放左侧运算对象所使用的内存，并接管给定对象的内存。与移动构造函数一样，我们将rhs中的指针置为nullptr。
 
 
 
@@ -26,13 +65,23 @@
 
 **不抛出异常的移动构造函数和移动赋值运算符应该标记为 `noexcept`** 。
 
-由于移动操作“窃取”资源，它**通常**不分配任何资源。因此，移动操作**通常**不会抛出任何异常。当编写一个不抛出异常的移动操作时，我们应该将此事通知标准库。一种通知标准库的方法是在我们的构造函数中指明 noexcept ， noexcept 是我们承诺一个函数不抛出异常的一种方法。我们在一个函数的参数列表后指定 noexcept 。在一个构造函数中， noexcept 出现在参数列表和初始化列表开始的冒号之间。
+由于移动操作“窃取”资源，它**通常**不分配任何资源。因此，移动操作通常不会抛出任何异常。当编写一个不抛出异常的移动操作时，我们应该将此事通知标准库。一种通知标准库的方法是在我们的构造函数中指明 noexcept ， noexcept 是我们承诺一个函数不抛出异常的一种方法。我们在一个函数的参数列表后指定 noexcept 。在一个构造函数中， noexcept 出现在参数列表和初始化列表开始的冒号之间。
 
 我们必须在类头文件的声明中和定义中（如果定义在类外的话）**都**指定 noexcept 。 
 
-搞清楚为什么需要 noexcept 能帮助我们深入理解标准库是如何与我们自定义的类型交互的。**我们需要指出一个移动操作不抛出异常，这是因为两个相互关联的事实：首先，虽然移动操作通常不抛出异常，但抛出异常也是允许的；其次，标准库容器需要对异常发生时其自身的行为提供保障，即保证是异常安全的**。
+搞清楚为什么需要 noexcept 能帮助我们深入理解标准库是如何与我们自定义的类型交互的。我们需要指出一个移动操作不抛出异常，这是因为两个相互关联的事实：首先，虽然移动操作通常不抛出异常，但抛出异常也是允许的；其次，标准库容器需要对异常发生时其自身的行为提供保障，即保证是异常安全的。
 
-例如，vector保证，如果我们调用push_back时发生异常，vector自身不会发生改变，即保证是异常安全的。对一个vector调用push_back可能要求为vector重新分配内存空间，当重新分配vector的内存完成后，vector会将元素从旧空间移动到新内存中，如果在移动了部分而不是全部元素后抛出了一个异常，就会产生问题：旧空间中的移动源元素已经被改变了，而新空间中未构造的元素可能尚不存在。在此情况下，vector将不能满足自身保持不变的要求。为了避免这种潜在问题，**除非vector知道元素类型的移动构造函数不会抛出异常，否则在重新分配内存的过程中，它就必须使用拷贝构造函数而不是移动构造函数。如果希望在vector重新分配内存这类情况下对我们自定义类型的对象进行移动而不是拷贝，就必须显式地告诉标准库我们的移动构造函数可以安全使用。我们通过将移动构造函数（及移动赋值运算符）标记为 noexcept 来做到这一点**。
+例如，vector保证，如果我们调用push_back时发生异常，vector自身不会发生改变，即保证是异常安全的。对一个vector调用push_back可能要求为vector重新分配内存空间，当重新分配vector的内存完成后，vector会将元素从旧空间移动到新内存中，如果在移动了部分而不是全部元素后抛出了一个异常，就会产生问题：旧空间中的移动源元素已经被改变了，而新空间中未构造的元素可能尚不存在。在此情况下，vector将不能满足自身保持不变的要求。为了避免这种潜在问题，除非vector知道元素类型的移动构造函数不会抛出异常，否则在重新分配内存的过程中，它就必须使用拷贝构造函数而不是移动构造函数。如果希望在vector重新分配内存这类情况下对我们自定义类型的对象进行移动而不是拷贝，就必须显式地告诉标准库我们的移动构造函数可以安全使用。我们通过将移动构造函数（及移动赋值运算符）标记为 noexcept 来做到这一点。
+
+## 合成的移动操作
+
+只有当一个类没有定义任何自己版本的拷贝控制成员，且类的每个非static数据成员都可以移动时，编译器才会为它合成移动构造函数或移动赋值运算符。
+
+与拷贝操作不同，移动操作永远不会隐式定义为删除的函数。但是，如果我们显式地要求编译器生成`=default`的移动操作，且编译器不能移动所有成员，则编译器会将移动操作定义为删除的函数。
+
+移动操作和合成的拷贝控制成员间还有最后一个相互作用关系：一个类是否定义了自己的移动操作对拷贝操作如何合成有影响。如果类定义了一个移动构造函数 和/或 一个移动赋值运算符，则该类的合成拷贝构造函数和拷贝赋值运算符 都 会被定义为删除的。
+
+详细内容参见：  [Ch13_00_CopyControl.md at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_00_CopyControl.md#合成的移动操作)
 
 ## 移动右值，拷贝左值
 
