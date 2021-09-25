@@ -165,6 +165,15 @@ int main()
 
 
 
+## Reference Qualifier
+
+Reference Qualifier 参见：
+
+-  [Cpp-Primer/Ch13_06_ReferenceQualifier.md at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_06_ReferenceQualifier.md)
+-  [Cpp-Primer/Ch13_06_ReferenceQualifier.cpp at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_06_ReferenceQualifier.cpp)
+
+
+
 > ## References
 >
 > [令移后源对象遗留于有效状态](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c64-a-move-operation-should-move-and-leave-its-source-in-a-valid-state)
