@@ -1,5 +1,25 @@
 # Move Semantics
 
+类似 string 类（及其他标准库类），如果我们自己的类也同时支持移动和拷贝，那么也能从中受益。为了让我们自己的类型支持移动操作（move operation），需要为其定义移动构造函数和移动赋值运算符。这两个成员类似对应的拷贝操作，但它们从给定对象“窃取”资源而不是拷贝资源。
+
+对于内置类型，如 `int` 和 `double*` ，被认为具有移动操作，其实就是简单的拷贝。
+
+## 移后源对象置为析构安全和有效的状态
+
+从一个对象移动数据并不会销毁此对象，但有时在移动操作完成后，源对象会被销毁。因此，当我们编写一个移动操作时，必须确保移后源对象进入一个析构安全的状态和 [有效的状态](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c64-a-move-operation-should-move-and-leave-its-source-in-a-valid-state) 。
+
+当编写一个移动操作时，我们应该： **(1) 保证将移后源对象（moved-from object）置为析构安全的状态；(2) 保证移后源对象仍然是有效的，一般来说，移后源对象有效就是指可以安全地为移后源对象赋予新值或者可以安全地使用移后源对象而不依赖其当前值**。此外，移动操作对移后源对象中留下的值没有任何要求，因此，我们的程序不应该依赖于移后源对象中的数据。一个比较好的设计是，类的移动操作将移后源对象置于与默认初始化的对象相同的状态。
+
+标准库保证“移后源”（moved-from）对象仍然保持一个析构安全的状态和有效的状态，但我们不能对其值进行任何假设。
+
+## 移动操作、标准库容器和异常
+
+由于移动操作“窃取”资源，它通常不分配任何资源。因此，移动操作通常不会抛出任何异常。当编写一个不抛出异常的移动操作时，我们应该将此事通知标准库。一种通知标准库的方法是在我们的构造函数中指明noexcept。noexcept是我们承诺一个函数不抛出异常的一种方法。我们在一个函数的参数列表后指定noexcept。在一个构造函数中，noexcept出现在参数列表和初始化列表开始的冒号之间。我们必须在类头文件的声明中和定义中（如果定义在类外的话）都指定noexcept。 不抛出异常的移动构造函数和移动赋值运算符应该标记为noexcept。
+
+
+
+
+
 
 
 一般来说，我们不需要为函数操作定义接受一个 `const T&&` 或是一个（普通的） `T&` 参数的版本。当我们希望从实参“窃取”数据时，通常传递一个右值引用。为了达到这一目的，实参不能是 const 的。类似的，从一个对象进行拷贝的操作不应该改变该对象。因此，通常不需要定义一个接受一个（普通的） T& 参数的版本。
@@ -86,3 +106,12 @@ int main()
 }
 ```
 
+
+
+> ## References
+>
+> [令移后源对象遗留于有效状态](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c64-a-move-operation-should-move-and-leave-its-source-in-a-valid-state)
+>
+> [Ch13_00_Copy_and_Move.md at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_00_Copy_and_Move.md)
+>
+> 
