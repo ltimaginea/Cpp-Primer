@@ -8,7 +8,7 @@
 - [C++ Core Guidelines (isocpp.github.io)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)
 - [GDB online Debugger | Compiler - Code, Compile, Run, Debug online C, C++ (onlinegdb.com)](https://www.onlinegdb.com/)
 
-## Great books for learning C++
+## Great Books for Learning C++
 
 Here are three great books for learning C++ – whether you know C++ already or not, and whether you even know how to program in any language or not, you’ll find the book that’s right for you.
 
