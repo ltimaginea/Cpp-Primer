@@ -1,5 +1,9 @@
 # Cpp-Primer
 
+## Learning Suggestions to Beginners of C++
+
+"I think for a beginner, the most important thing is don't try and learn it all at once. No modern language you can just learn everything and then start using it. You have to think about what you need. You have to start with the fundamentals with the things that are relatively simple. So actually for C++, you should learn the modern part first, and leaving some of the old fashion stuff to later. But people often do the exact opposite in practice. " - Bjarne Stroustrup 
+
 ## Web Resources
 
 - [Standard C++ (isocpp.org)](https://isocpp.org/)
