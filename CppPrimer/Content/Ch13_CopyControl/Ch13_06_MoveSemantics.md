@@ -21,7 +21,7 @@ StrVec::StrVec(StrVec&& sv) noexcept :elements_(sv.elements_), first_free_(sv.fi
 }
 ```
 
-与拷贝构造函数不同，移动构造函数不分配任何新内存；它接管给定的StrVec中的内存。在接管内存之后，它将给定对象中的指针都置为nullptr。这样就完成了从给定对象的移动操作，此对象将继续存在。最终，移后源对象会被销毁，意味着将在其上运行析构函数。StrVec的析构函数在 elements_ 上调用deallocate。如果我们忘记了改变 sv.elements_ ，则销毁移后源对象就会释放掉我们刚刚移动的内存。
+在此例中，与拷贝构造函数不同，移动构造函数不分配任何新内存；它接管给定的StrVec中的内存。在接管内存之后，它将给定对象中的指针都置为nullptr。这样就完成了从给定对象的移动操作，此对象将继续存在。最终，移后源对象会被销毁，意味着将在其上运行析构函数。StrVec的析构函数在 elements_ 上调用deallocate。如果我们忘记了改变 sv.elements_ ，则销毁移后源对象就会释放掉我们刚刚移动的内存。
 
 ### 移动赋值运算符
 
@@ -49,9 +49,9 @@ StrVec& StrVec::operator=(StrVec&& sv) noexcept
 
 在此例中，我们直接检查 this 指针与 sv 的地址是否相同。如果相同，右侧和左侧运算对象指向相同的对象，我们不需要做任何事情。否则，我们释放左侧运算对象所使用的内存，并接管给定对象的内存。与移动构造函数一样，我们将 sv 中的指针置为 nullptr 。
 
+### Tips
 
-
-一般来说，我们不需要为函数操作定义接受一个 `const T&&` 或是一个（普通的） `T&` 参数的版本。当我们希望从实参“窃取”数据时，通常传递一个右值引用。为了达到这一目的，实参不能是 const 的。类似的，从一个对象进行拷贝的操作不应该改变该对象。因此，通常不需要定义一个接受一个（普通的） T& 参数的版本。
+一般来说，我们不需要为函数操作定义接受一个 `const T&&` 或是一个（普通的） `T&` 参数的版本。当我们希望从实参“窃取”数据时，通常传递一个右值引用。移动一个对象通常会改变它的值，因此实参不能是 `const T&&` 的。类似的，从一个对象进行拷贝的操作不应该改变该对象。因此，通常不需要定义一个接受一个（普通的） `T&` 参数的版本。
 
 ## 移后源对象置为析构安全和有效的状态
 
@@ -165,7 +165,13 @@ int main()
 
 
 
-## Reference Qualifier
+## 右值引用和成员函数
+
+右值引用版本的成员函数，举例： `void StrVec::push_back(std::string&& str)` ，参见：
+
+- [Cpp-Primer/Ch13_05_StrVec.cpp at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_05_StrVec.cpp)
+
+
 
 引用限定符（Reference Qualifier） 参见：
 
