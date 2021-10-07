@@ -29,6 +29,9 @@ Widget::Widget(const Widget& rhs) : pimpl_(std::make_unique<Impl>(*rhs.pimpl_))
 
 }
 
+// 编译器合成的移动操作完全符合预期，所以我们使用 =default 来由编译器合成移动构造函数。
+// 因为头文件 Ch13_00_pimpl_widget.h 中声明的移动构造函数未标记为 noexcept ，
+// 所以编译器为使移动构造函数的声明和实现的“异常说明”一致，此例的合成移动构造函数将不会是 noexcept 。这算是Pimpl技术的一个缺点吧。
 Widget::Widget(Widget&&) = default;
 
 Widget& Widget::operator=(const Widget& rhs)
@@ -37,6 +40,9 @@ Widget& Widget::operator=(const Widget& rhs)
 	return *this;
 }
 
+// 编译器合成的移动操作完全符合预期，所以我们使用 =default 来由编译器合成移动赋值运算符。
+// 因为头文件 Ch13_00_pimpl_widget.h 中声明的移动赋值运算符未标记为 noexcept ，
+// 所以编译器为使移动赋值运算符的声明和实现的“异常说明”一致，此例的合成移动赋值运算符将不会是 noexcept 。这算是Pimpl技术的一个缺点吧。
 Widget& Widget::operator=(Widget&&) = default;
 
 Widget::~Widget() = default;
