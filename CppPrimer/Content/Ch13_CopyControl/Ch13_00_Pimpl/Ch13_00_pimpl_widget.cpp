@@ -29,7 +29,7 @@ Widget::Widget(const Widget& rhs) : pimpl_(std::make_unique<Impl>(*rhs.pimpl_))
 
 }
 
-Widget::Widget(Widget&& rhs) = default;
+Widget::Widget(Widget&&) = default;
 
 Widget& Widget::operator=(const Widget& rhs)
 {
@@ -37,7 +37,7 @@ Widget& Widget::operator=(const Widget& rhs)
 	return *this;
 }
 
-Widget& Widget::operator=(Widget&& rhs) = default;
+Widget& Widget::operator=(Widget&&) = default;
 
 Widget::~Widget() = default;
 

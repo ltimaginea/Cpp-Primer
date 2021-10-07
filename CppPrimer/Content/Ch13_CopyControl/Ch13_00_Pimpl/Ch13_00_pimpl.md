@@ -75,7 +75,7 @@ Widget::Widget(const Widget& rhs) : pimpl_(std::make_unique<Impl>(*rhs.pimpl_))
 }
 
 // 编译器合成的移动操作完全符合预期，所以我们使用 =default
-Widget::Widget(Widget&& rhs) = default;
+Widget::Widget(Widget&&) = default;
 
 Widget& Widget::operator=(const Widget& rhs)
 {
@@ -84,7 +84,7 @@ Widget& Widget::operator=(const Widget& rhs)
 }
 
 // 编译器合成的移动操作完全符合预期，所以我们使用 =default
-Widget& Widget::operator=(Widget&& rhs) = default;
+Widget& Widget::operator=(Widget&&) = default;
 
 Widget::~Widget() = default;
 
@@ -176,6 +176,8 @@ Pimpl 打破了这种编译依赖；实现的改动不会导致重编译。结�
 
 
 > ## *References*
+>
+> [Effective-Modern-Cpp/Item22_pimpl.md at main · ltimaginea/Effective-Modern-Cpp · GitHub](https://github.com/ltimaginea/Effective-Modern-Cpp/blob/main/EffectiveModernCpp/Content/Item22_pimpl.md)
 >
 > [PImpl - cppreference.com](https://en.cppreference.com/w/cpp/language/pimpl)
 >
