@@ -28,6 +28,7 @@ int main()
 	T t3("33");
 	T t4("44");
 
+	// 除非 vector 知道元素类型的移动构造函数不会抛出异常，否则在重新分配内存的过程中，它就必须使用拷贝构造函数而不是移动构造函数。该程序会使用移动构造函数。
 	std::vector<T> vc;
 	vc.push_back(std::move(t1));
 	vc.push_back(std::move(t2));
