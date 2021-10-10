@@ -137,7 +137,8 @@ int main()
 		Widget w3(33);
 		Widget w4(44);
 		std::vector<Widget> v;
-        // 注释掉下面这句，便可以观察到vector重新分配内存的过程中，使用拷贝构造函数复制旧元素至新内存，因为类Widget的合成移动构造函数是可能抛异常的
+        // 注释掉下面这句，便可以观察到vector重新分配内存的过程中，使用拷贝构造函数复制旧元素至新内存，
+        // 因为类Widget的合成移动构造函数是可能抛异常的
 		//v.reserve(10);
 		v.push_back(std::move(w1));
 		v.push_back(std::move(w2));
