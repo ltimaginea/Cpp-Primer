@@ -59,17 +59,12 @@ sometype::sometype() = delete; // error: must be deleted on the first declaratio
 
 ## References
 
-> [C++ keywords: default - cppreference.com](https://en.cppreference.com/w/cpp/keyword/default)
->
-> [= delete - cppreference.com](https://en.cppreference.com/w/cpp/language/function#Deleted_functions)
->
-> [Move constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/move_constructor)
->
-> [is_nothrow_move_constructible - C++ Reference (cplusplus.com)](http://www.cplusplus.com/reference/type_traits/is_nothrow_move_constructible/)
->
-> [std::is_move_constructible, std::is_trivially_move_constructible, std::is_nothrow_move_constructible - cppreference.com](https://en.cppreference.com/w/cpp/types/is_move_constructible)
->
-> [c++ - Is the default Move constructor defined as noexcept? - Stack Overflow](https://stackoverflow.com/questions/18653726/is-the-default-move-constructor-defined-as-noexcept)
->
-> 
+* [C++ keywords: default - cppreference.com](https://en.cppreference.com/w/cpp/keyword/default)
+* [= delete - cppreference.com](https://en.cppreference.com/w/cpp/language/function#Deleted_functions)
+* [Move constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/move_constructor)
+* [is_nothrow_move_constructible - C++ Reference (cplusplus.com)](http://www.cplusplus.com/reference/type_traits/is_nothrow_move_constructible/)
+* [std::is_move_constructible, std::is_trivially_move_constructible, std::is_nothrow_move_constructible - cppreference.com](https://en.cppreference.com/w/cpp/types/is_move_constructible)
+* [c++ - Is the default Move constructor defined as noexcept? - Stack Overflow](https://stackoverflow.com/questions/18653726/is-the-default-move-constructor-defined-as-noexcept)
+
+
 
