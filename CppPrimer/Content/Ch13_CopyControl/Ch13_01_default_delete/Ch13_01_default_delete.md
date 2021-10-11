@@ -57,10 +57,8 @@ sometype::sometype() = delete; // error: must be deleted on the first declaratio
 
 
 
+## References
 
-
-> ## References
->
 > [C++ keywords: default - cppreference.com](https://en.cppreference.com/w/cpp/keyword/default)
 >
 > [= delete - cppreference.com](https://en.cppreference.com/w/cpp/language/function#Deleted_functions)
