@@ -10,6 +10,7 @@
 - [C++ Reference](http://en.cppreference.com/w/): A site with its main focus on a complete Standard Template Library reference, the Technical Specifications, and a list of selected non-ANSI/ISO libraries. An [offline archive](http://en.cppreference.com/w/Cppreference:Archives) is available.
 - [cplusplus.com](http://www.cplusplus.com/): A site with general information about the C++ language, a reference, tutorial, and an articles section.
 - [C++ Core Guidelines (isocpp.github.io)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)
+- [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)
 - [GDB online Debugger | Compiler - Code, Compile, Run, Debug online C, C++ (onlinegdb.com)](https://www.onlinegdb.com/)
 
 ## Great Books for Learning C++
