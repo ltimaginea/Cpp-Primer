@@ -17,5 +17,5 @@
 
 Here are three great books for learning C++ – whether you know C++ already or not, and whether you even know how to program in any language or not, you’ll find the book that’s right for you.
 
-![](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Images/Chapter00/Ch00_00_GreatCppBooks.png)
+![GreatCppBooks.png](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Images/Chapter00/Ch00_00_GreatCppBooks.png)
 
