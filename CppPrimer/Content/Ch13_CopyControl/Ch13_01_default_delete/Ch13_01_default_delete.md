@@ -61,6 +61,39 @@ sometype::sometype() = delete; // error: must be deleted on the first declaratio
 
 我们可以通过将拷贝构造函数和拷贝赋值运算符定义为删除的函数来阻止拷贝，同时还可以通过将移动构造函数和移动赋值运算符定义为删除的函数来阻止移动。
 
+```cpp
+// Singleton 的典型实现
+#include <iostream>
+#include <cassert>
+
+class Singleton
+{
+public:
+	static Singleton& Instance()
+	{
+		static Singleton instance;
+		return instance;
+	}
+public:
+	Singleton(const Singleton&) = delete;
+	Singleton(Singleton&&) = delete;
+	Singleton& operator=(const Singleton&) = delete;
+	Singleton& operator=(Singleton&&) = delete;
+private:
+	Singleton() = default;
+	~Singleton() = default;
+};
+
+int main()
+{
+	auto& a = Singleton::Instance();
+	auto& b = Singleton::Instance();
+	assert(&a == &b);
+
+	return 0;
+}
+```
+
 
 
 ## References
