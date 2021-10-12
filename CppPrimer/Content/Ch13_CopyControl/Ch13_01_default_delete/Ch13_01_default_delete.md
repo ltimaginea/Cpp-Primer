@@ -46,7 +46,9 @@ int main()
 
 ## delete
 
+**删除函数**（deleted function）是这样一种函数：我们虽然声明了它，但不能以任何方式使用它。在函数的参数列表后面加上 `=delete` 来指出我们希望将它定义为删除的。
 
+通常，删除函数（deleted function）应该被声明为 `public` 而不是 `private` 。这样做是有原因的。当客户代码尝试调用某个成员函数时，C++ 会先检查它的可访问性，后检查 *deleted* 状态。这么一来，当客户代码尝试调用某个 *private* 的删除函数时，有些编译器只会给出该函数是 *private* 的错误（而没有诸如该函数被 *deleted* 修饰的错误），即使函数的访问性不影响它是否能被使用。所以值得牢记，如果要将老代码的“ *private* 且未定义”函数替换为 *deleted* 函数时请一并修改它的访问性为 `public` ，这样可以让编译器产生更好的错误信息。
 
 与 `=default` 不同，`=delete` 必须出现在函数第一次声明的时候（ [= delete - cppreference.com](https://en.cppreference.com/w/cpp/language/function#Deleted_functions) 也有相关的描述： The deleted definition of a function must be the first declaration in a translation unit: a previously-declared function cannot be redeclared as deleted）。
 
@@ -55,16 +57,22 @@ struct sometype { sometype(); };
 sometype::sometype() = delete; // error: must be deleted on the first declaration
 ```
 
+与 `=default` 的另一个不同之处是，我们可以对任何函数指定 `=delete` （我们只能对编译器可以合成的默认构造函数或拷贝控制成员使用 `=default` ）。虽然删除函数的主要用途是禁止拷贝控制成员，但当我们希望引导函数匹配过程时，删除函数有时也是有用的。
+
+我们可以通过将拷贝构造函数和拷贝赋值运算符定义为删除的函数来阻止拷贝，同时还可以通过将移动构造函数和移动赋值运算符定义为删除的函数来阻止移动。
+
 
 
 ## References
 
 * [C++ keywords: default - cppreference.com](https://en.cppreference.com/w/cpp/keyword/default)
 * [= delete - cppreference.com](https://en.cppreference.com/w/cpp/language/function#Deleted_functions)
+* [EffectiveModernCppChinese/item11.md at master · kelthuzadx/EffectiveModernCppChinese · GitHub](https://github.com/kelthuzadx/EffectiveModernCppChinese/blob/master/3.MovingToModernCpp/item11.md)
 * [Move constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/move_constructor)
 * [is_nothrow_move_constructible - C++ Reference (cplusplus.com)](http://www.cplusplus.com/reference/type_traits/is_nothrow_move_constructible/)
 * [std::is_move_constructible, std::is_trivially_move_constructible, std::is_nothrow_move_constructible - cppreference.com](https://en.cppreference.com/w/cpp/types/is_move_constructible)
 * [c++ - Is the default Move constructor defined as noexcept? - Stack Overflow](https://stackoverflow.com/questions/18653726/is-the-default-move-constructor-defined-as-noexcept)
-
+* [C.80: Use `=default` if you have to be explicit about using the default semantics (CppCoreGuidelines)](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c80-use-default-if-you-have-to-be-explicit-about-using-the-default-semantics)
+* [C.81: Use `=delete` when you want to disable default behavior (CppCoreGuidelines)](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c81-use-delete-when-you-want-to-disable-default-behavior-without-wanting-an-alternative)
 
 
