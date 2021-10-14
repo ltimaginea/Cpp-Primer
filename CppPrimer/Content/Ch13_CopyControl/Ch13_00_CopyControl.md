@@ -8,6 +8,8 @@
 
 只有特殊成员函数被需要（被调用）时，它们才会被编译器合成。
 
+对于特殊成员函数来说，删除也是一种定义。
+
 ### 合成的拷贝操作
 
 **如果一个类未定义任何构造函数，编译器会为其定义一个合成默认构造函数。类似的，如果类未定义 拷贝构造函数、拷贝赋值运算符和析构函数，编译器总会为我们合成这些操作，它们要么被定义为逐成员拷贝，要么被定义为逐成员赋值，要么被定义为逐成员析构，要么被定义为删除的函数**。
@@ -31,9 +33,7 @@
 
 编译器合成的移动构造函数执行的是逐成员移动构造，同时还会移动构造它的基类部分（如果有的话）；编译器合成的移动赋值运算符执行的是逐成员移动赋值，同时还会移动赋值它的基类部分（如果有的话）。“按成员移动”实际上更像是按成员的移动请求，因为对于那些不可移动的类型将通过其复制操作实现“移动”。
 
-**只有当一个类没有定义任何自己版本的拷贝控制成员，且类的每个非static数据成员都可以移动时，编译器才会为它合成移动构造函数或移动赋值运算符**。（删除也是一种定义）
-
-编译器可以移动内置类型的成员。如果一个成员是类类型，且该类有对应的移动操作，编译器也能移动这个成员。
+**只有当一个类没有定义任何自己版本的拷贝控制成员（删除也是一种定义），且类的每个非static数据成员都可以移动时，编译器才会为它合成移动构造函数或移动赋值运算符**。编译器可以移动内置类型的成员。如果一个成员是类类型，且该类有对应的移动操作，编译器也能移动这个成员。
 
 与拷贝操作不同，移动操作永远不会隐式定义为删除的函数。但是，**如果我们显式地要求编译器生成`=default`的移动操作，且编译器不能移动所有成员，则编译器会将移动操作定义为删除的函数**。除了一个重要例外，什么时候将合成的移动操作定义为删除的函数遵循与定义删除的合成拷贝操作类似的原则：
 
@@ -42,7 +42,7 @@
 - 类似拷贝构造函数，如果类的析构函数被定义为删除的或不可访问的，则类的移动构造函数被定义为删除的。
 - 类似拷贝赋值运算符，如果有类成员是const的或是引用，则类的移动赋值运算符被定义为删除的。
 
-移动操作和合成的拷贝控制成员间还有最后一个相互作用关系：一个类是否定义了自己的移动操作对拷贝操作如何合成有影响。**如果类定义了一个移动构造函数 和/或 一个移动赋值运算符，则该类的合成拷贝构造函数和拷贝赋值运算符 都 会被定义为删除的**。（删除也是一种定义）
+移动操作和合成的拷贝控制成员间还有最后一个相互作用关系：一个类是否定义了自己的移动操作对拷贝操作如何合成有影响。**如果类定义了一个移动构造函数 和/或 一个移动赋值运算符（删除也是一种定义），则该类的合成拷贝构造函数和拷贝赋值运算符 都 会被定义为删除的**。
 
 举例：
 
@@ -93,12 +93,19 @@ int main()
 
 
 
-
-
 > ## *References*
 >
 > [The rule of three/five/zero - cppreference.com](https://en.cppreference.com/w/cpp/language/rule_of_three)
 >
 > [三/五/零之法则 - cppreference.com](https://zh.cppreference.com/w/cpp/language/rule_of_three)
 >
+> [Move constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/move_constructor)
+>
+> [is_nothrow_move_constructible - C++ Reference (cplusplus.com)](http://www.cplusplus.com/reference/type_traits/is_nothrow_move_constructible/)
+>
+> [std::is_move_constructible, std::is_trivially_move_constructible, std::is_nothrow_move_constructible - cppreference.com](https://en.cppreference.com/w/cpp/types/is_move_constructible)
+>
+> [c++ - Is the default Move constructor defined as noexcept? - Stack Overflow](https://stackoverflow.com/questions/18653726/is-the-default-move-constructor-defined-as-noexcept)
+>
 > 
+
