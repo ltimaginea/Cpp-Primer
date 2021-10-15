@@ -14,7 +14,7 @@ private:
 	std::string str_;
 };
 
-T::T(const T&) = default;	// 对成员的类外定义使用 =default
+T::T(const T&) = default;	// 只对成员的类外定义使用 =default ，合成的成员将是非内联函数
 
 int main()
 {
