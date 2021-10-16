@@ -1,9 +1,15 @@
+#include <iostream>
 #include <vector>
+#include <type_traits>
 
 #include "Ch13_00_pimpl_widget.h"
 
 int main()
 {
+	// ·Ö±ğÊä³ö false	false
+	std::cout << std::boolalpha << std::is_nothrow_move_constructible<Widget>::value << std::noboolalpha << std::endl;
+	std::cout << std::boolalpha << std::is_nothrow_move_assignable<Widget>::value << std::noboolalpha << std::endl;
+
 	Widget w1(1);
 	Widget w2(w1);
 	Widget w3 = std::move(w1);
@@ -40,6 +46,8 @@ int main()
 
 /*
 Outputs:
+false
+false
 4
 1
 1

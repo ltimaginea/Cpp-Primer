@@ -108,12 +108,18 @@ void Widget::PrintInfo()
 `user (Ch13_00_pimpl_user.cpp)`
 
 ```cpp
+#include <iostream>
 #include <vector>
+#include <type_traits>
 
 #include "Ch13_00_pimpl_widget.h"
 
 int main()
 {
+	// 分别输出 false	false
+	std::cout << std::boolalpha << std::is_nothrow_move_constructible<Widget>::value << std::noboolalpha << std::endl;
+	std::cout << std::boolalpha << std::is_nothrow_move_assignable<Widget>::value << std::noboolalpha << std::endl;
+
 	Widget w1(1);
 	Widget w2(w1);
 	Widget w3 = std::move(w1);
