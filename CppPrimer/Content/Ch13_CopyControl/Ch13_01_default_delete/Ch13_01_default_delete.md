@@ -15,7 +15,8 @@
 class T
 {
 public:
-	T(std::string str = std::string()) :str_(str) {  }
+	T(std::string str) : str_(str) {  }
+	T() = default;
 	T(const T&);	// 仅声明
 	T(T&&) = default;
 	T& operator=(const T&) = default;
