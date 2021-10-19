@@ -11,7 +11,7 @@ public:
 		delete ptr;
 	}
 
-	// Destroy() is `delete this`, which looks like very dangerous, not recommended. The more recommended is `static void StaticDestroy(T* ptr)`.
+	// Destroy() is 'delete this', which looks like very dangerous, not recommended. The more recommended is 'static void StaticDestroy(T* ptr)'.
 	void Destroy()
 	{
 		delete this;
@@ -53,7 +53,7 @@ int main()
 	//delete t3;
 
 	auto t4 = new T();
-	// Destroy() is `delete this`, which looks like very dangerous, not recommended. The more recommended is `static void StaticDestroy(T* ptr)`.
+	// Destroy() is 'delete this', which looks like very dangerous, not recommended. The more recommended is 'static void StaticDestroy(T* ptr)'.
 	t4->Destroy();
 	t4 = nullptr;
 
