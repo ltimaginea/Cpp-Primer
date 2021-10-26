@@ -99,6 +99,65 @@ int main()
 
 
 
+## private 拷贝控制
+
+在 C++11 之前，类是通过将其拷贝构造函数和拷贝赋值运算符声明为 `private` 但并不定义它们来禁止拷贝的。
+
+由于拷贝构造函数和拷贝赋值运算符是 `private` 的，用户代码将不能拷贝这个类型的对象。但是，友元和成员函数仍旧可以拷贝对象。为了阻止友元和成员函数进行拷贝，我们将这些拷贝控制成员声明为 `private` 的，但并不定义它们。 
+
+声明但不定义一个成员函数是合法的。试图访问一个未定义的成员将导致一个链接时错误。通过声明为 `private` 但并不定义的拷贝构造函数和拷贝赋值运算符，我们可以预先阻止任何拷贝该类型对象的企图：试图拷贝对象的用户代码将在编译阶段被标记为错误；成员函数或友元函数中的拷贝操作将会导致链接时错误。
+
+```cpp
+// C++98 style的Singleton的典型实现
+#include <iostream>
+#include <cassert>
+
+class Singleton
+{
+public:
+	static Singleton* Instance()
+	{
+		if (instance_ == 0)
+		{
+			instance_ = new Singleton();
+		}
+		return instance_;
+	}
+public:
+	~Singleton() {  }
+private:
+	// 将拷贝构造函数和拷贝赋值运算符声明为 private 但不定义它们，从而禁止拷贝操作
+	Singleton(const Singleton&);
+	Singleton& operator=(const Singleton&);
+private:
+	Singleton() {  }
+private:
+	static Singleton* instance_;
+};
+
+Singleton* Singleton::instance_ = 0;
+
+int main()
+{
+	Singleton* a = Singleton::Instance();
+	Singleton* b = Singleton::Instance();
+	assert(a == b);
+
+	// 完全不再使用后销毁Singleton实例的时机难以把握，当没有delete时会造成内存泄漏。
+	// 当delete之后，对于那些已经获得Singleton实例的指针，它们将成为“空悬指针”，如程序中的 Singleton::instance_ , a 和 b 。
+	delete Singleton::Instance();
+
+	return 0;
+}
+
+// C++98 style的Singleton的缺点:
+//	1. 完全不再使用后销毁Singleton实例的时机难以把握，当没有delete时会造成内存泄漏。
+//	   当delete之后，对于那些已经获得Singleton实例的指针，它们将成为“空悬指针”，如示例中的 Singleton::instance_ , a 和 b 。
+//	2. 存在线程安全的问题，因此还需要进一步优化（加锁）。
+```
+
+
+
 ## References
 
 * [C++ keywords: default - cppreference.com](https://en.cppreference.com/w/cpp/keyword/default)
