@@ -59,7 +59,7 @@ class base_of_five_defaults
 };
 ```
 
-然而这使得类有可能被切片，这是多态类经常把复制定义为弃置的原因（见 C++ 核心指南中的 [C.67：多态类应该抑制复制操作](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rc-copy-virtual)），这带来了下列的五之法则的通用说法：
+然而这使得类有可能被切片，这是多态类经常把复制定义为 `=delete` 的原因（见 C++ 核心指南中的 [C.67：多态类应该抑制复制操作](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rc-copy-virtual)），这带来了下列的五之法则的通用说法：
 
 [C.21：若有任何默认操作被定义或 =delete，则应当对它们全部进行定义或 =delete](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rc-five)
 
