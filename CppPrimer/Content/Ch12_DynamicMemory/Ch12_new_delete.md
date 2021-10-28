@@ -177,7 +177,7 @@ string* ps = static_cast<string*>(memory);
 >
 > If initialization terminates by throwing an exception (e.g. from the constructor), if new-expression allocated any storage, it calls the appropriate [deallocation function](https://en.cppreference.com/w/cpp/memory/new/operator_delete): [`operator delete`](http://en.cppreference.com/w/cpp/memory/new/operator_delete) for non-array type, [`operator delete[]`](http://en.cppreference.com/w/cpp/memory/new/operator_delete) for array type. 
 >
-> see also: [operator delete - C++ Reference (cplusplus.com) ](http://www.cplusplus.com/reference/new/operator delete/) 
+> see also: [operator delete - C++ Reference (cplusplus.com) ](http://www.cplusplus.com/reference/new/operator%20delete/) 
 
 
 
@@ -214,7 +214,7 @@ operator delete(ps);
 ## References
 
 - [new expression - cppreference.com](https://en.cppreference.com/w/cpp/language/new)
-- [operator delete - C++ Reference (cplusplus.com) ](http://www.cplusplus.com/reference/new/operator delete/)
+- [operator delete - C++ Reference (cplusplus.com) ](http://www.cplusplus.com/reference/new/operator%20delete/)
 - [operator delete, operator delete[] - cppreference.com](https://en.cppreference.com/w/cpp/memory/new/operator_delete)
 - [new delete_ltimaginea的博客-CSDN博客](https://blog.csdn.net/sinat_43125576/article/details/121015742)
 - [new delete - ltimaginea - 博客园 (cnblogs.com)](https://www.cnblogs.com/ltimaginea/p/15063785.html)
