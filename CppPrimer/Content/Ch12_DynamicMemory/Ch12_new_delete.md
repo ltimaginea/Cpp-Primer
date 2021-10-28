@@ -160,7 +160,7 @@ string* ps = new string("Memory Management");
 string* arr = new string[10];
 ```
 
-实际执行了三步操作。第一步，new表达式调用一个名为 `operator new` （或者 `operator new[]` ）的标准库函数。该函数分配一块足够大的、原始的、未命名的内存空间以便存储特定类型的对象（或者对象的数组）。第二步，编译器运行相应的构造函数以构造这些对象，并为其传入初始值。第三步，对象被分配了空间并构造完成，返回一个指向该对象的指针。近似的伪代码如下：
+实际执行了三步操作。第一步，new表达式调用一个名为 `operator new` （或者 `operator new[]` ）的标准库函数。该函数分配一块足够大的、原始的、未命名的内存空间以便存储特定类型的对象（或者对象的数组）。第二步，编译器运行相应的构造函数以构造这些对象，并为其传入初始值。第三步，对象被分配了空间并构造完成，返回一个指向该对象的指针。近似的伪代码如下：(see also: [new delete - ltimaginea (cnblogs.com)](https://www.cnblogs.com/ltimaginea/p/15063785.html) )
 
 ```cpp
 // 分配原始内存
@@ -188,7 +188,7 @@ delete ps;
 delete[] arr;
 ```
 
-实际执行了两步操作。第一步，对ps所指的对象或者arr所指的数组中的元素执行对应的析构函数。第二步，编译器调用名为 `operator delete` （或者 `operator delete[]` ）的标准库函数释放内存空间。近似的伪代码如下：
+实际执行了两步操作。第一步，对ps所指的对象或者arr所指的数组中的元素执行对应的析构函数。第二步，编译器调用名为 `operator delete` （或者 `operator delete[]` ）的标准库函数释放内存空间。近似的伪代码如下：(see also: [new delete - ltimaginea (cnblogs.com)](https://www.cnblogs.com/ltimaginea/p/15063785.html) )
 
 ```cpp
 // 调用析构函数
