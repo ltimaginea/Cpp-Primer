@@ -38,3 +38,7 @@
 
 详见： [Ch13_00_CopyControl.md](./Ch13_00_CopyControl.md) 
 
+## the rule of three/five/zero
+
+详见： [Ch13_01_The_rule_of_three_five_zero.md](./Ch13_01_The_rule_of_three_five_zero.md)
+
