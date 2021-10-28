@@ -171,6 +171,14 @@ call string::string("Memory Management") on *memory;
 string* ps = static_cast<string*>(memory);
 ```
 
+> *Note*:
+>
+> `new expression` 实际执行的过程中，如果构造函数环节失败（例如抛出了异常），那么前面第一步 `operator new` 所分配的内存将会被编译器自动调用合适的 `operator delete` 来释放。 [new expression - cppreference.com](https://en.cppreference.com/w/cpp/language/new) 有相关的描述：
+>
+> If initialization terminates by throwing an exception (e.g. from the constructor), if new-expression allocated any storage, it calls the appropriate [deallocation function](https://en.cppreference.com/w/cpp/memory/new/operator_delete): [`operator delete`](http://en.cppreference.com/w/cpp/memory/new/operator_delete) for non-array type, [`operator delete[]`](http://en.cppreference.com/w/cpp/memory/new/operator_delete) for array type. 
+>
+> see also: [operator delete - C++ Reference (cplusplus.com)](http://www.cplusplus.com/reference/new/operator delete/) 
+
 
 
 当我们使用一条 `delete表达式` 删除一个动态分配的对象时：
@@ -191,7 +199,7 @@ operator delete(ps);
 
 
 
-## *Tips*
+## Tips
 
 -  `空悬指针` （dangling pointer） 是一个指针，指向曾经保存一个对象但现在已释放的内存。
 -  `野指针` （wild pointer）是指未初始化的指针，其指向的位置是不确定的。
@@ -200,3 +208,12 @@ operator delete(ps);
   - 使用了错误的delete形式。一方面，如果delete释放一块并非new分配的内存，那么其行为是未定义的。另一方面，如果分配了单个对象，则必须使用“delete”；如果分配了数组，则需要用“delete[]”。如果使用了不正确的delete形式，那么结果将是未定义的。在有些平台上，程序会在运行时崩溃。在其他平台上，它会妨碍进一步运行，有时会泄漏资源和破坏内存。
   - 使用空悬指针。通过在释放内存后将指针置为nullptr，可以部分程度上提供保护。当有多个指针指向相同的内存时，在delete内存之后重置指针为nullptr的方法只对这个指针有效，对其他任何仍指向（已释放的）内存的指针是没有作用的。
   - 同一块内存释放多次。当有多个指针指向相同的动态分配对象时，可能发生这种错误。如果对其中一个指针进行了delete操作，对象的内存就被归还给自由空间了。如果我们随后又delete第二个指针，自由空间就可能被破坏。
+
+
+
+## References
+
+- [new expression - cppreference.com](https://en.cppreference.com/w/cpp/language/new)
+- [operator delete - C++ Reference (cplusplus.com)](http://www.cplusplus.com/reference/new/operator delete/)
+- [operator delete, operator delete[] - cppreference.com](https://en.cppreference.com/w/cpp/memory/new/operator_delete)
+
