@@ -77,14 +77,34 @@ int main()
 	try
 	{
 		// 如果分配失败，new抛出std::bad_alloc
-		Widget* ptr1 = new Widget;
-		// ...
-		delete ptr1;
+		Widget* ptr = new Widget;
+
+		try
+		{
+			//... perform some operations(may throw exceptions)
+		}
+		catch (...)			// for any exception
+		{
+			delete ptr;		// clean up
+			throw;			// rethrow the exception
+		}
+
+		delete ptr;			// clean up on normal end
 	}
 	catch (const std::bad_alloc& err)
 	{
 		std::cout << err.what() << std::endl;
 	}
+	catch (const std::exception& err)
+	{
+		std::cout << err.what() << std::endl;
+	}
+	catch (...)
+	{
+		std::cout << "unknown exceptions" << std::endl;
+	}
+
+
 
 	// 如果分配失败，new返回一个空指针
 	Widget* ptr2 = new (std::nothrow) Widget;
