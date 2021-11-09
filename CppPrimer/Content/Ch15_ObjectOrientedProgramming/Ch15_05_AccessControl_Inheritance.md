@@ -1,6 +1,6 @@
 # Access Control and Inheritance
 
-## Access specifiers
+## Access Specifiers
 
 
 
@@ -32,4 +32,5 @@
 ## References
 
 - [Access specifiers - cppreference.com](https://en.cppreference.com/w/cpp/language/access)
+- [Derived classes - cppreference.com](https://en.cppreference.com/w/cpp/language/derived_class)
 
