@@ -2,13 +2,16 @@
 
 ## Access Specifiers
 
-公有成员（public member） ：能够被类的所有用户访问。通常情况下，只有实现类的接口的函数才被设为 public 。
+公有成员（public member） ：能够被类的所有用户访问。
 
-保护成员（protected member） ：能够被派生类的成员和友元访问（Tip: regardless of whether the members are on the same or different instances.）。但是这些成员只对派生类对象的实现者是可访问的，对类对象的普通用户则是不可访问的。
+保护成员（protected member） ：能够被派生类的成员和友元访问（Tip: regardless of whether the members are on the same or different instances.） ：
 
-私有成员（private member） ：只能被类的成员和友元访问（Tip: regardless of whether the members are on the same or different instances.）。数据成员以及仅供类本身使用而不作为接口的功能函数一般设为 private 。
+- 保护成员对于派生类的成员和友元来说是可访问的，但对于类的普通用户来说是不可访问的。
+- 派生类的成员和友元只能访问派生类对象中的基类部分的受保护成员；对于普通的基类对象中的成员不具有特殊的访问权限。
 
+私有成员（private member） ：只能被类的成员和友元访问（Tip: regardless of whether the members are on the same or different instances.）。
 
+`public` ， `protected` 和 `private` 三类关键字在类中出现的次数和先后次序都没有限制。成员的可访问性由离它前面最近的那个访问说明符决定。如果某个成员前面没有访问说明符，则对 class 来说，该成员默认是私有成员；对 struct 来说，该成员默认是公有成员。
 
 ## Access Control with Inheritance
 
