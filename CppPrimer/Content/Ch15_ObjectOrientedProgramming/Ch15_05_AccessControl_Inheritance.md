@@ -2,7 +2,11 @@
 
 ## Access Specifiers
 
+公有成员（public member） ：能够被类的所有用户访问。通常情况下，只有实现类的接口的函数才被设为 public 。
 
+保护成员（protected member） ：能够被派生类的成员和友元访问（Tip: regardless of whether the members are on the same or different instances.）。但是这些成员只对派生类对象的实现者是可访问的，对类对象的普通用户则是不可访问的。
+
+私有成员（private member） ：只能被类的成员和友元访问（Tip: regardless of whether the members are on the same or different instances.）。数据成员以及仅供类本身使用而不作为接口的功能函数一般设为 private 。
 
 
 
@@ -10,7 +14,7 @@
 
 
 
-我们可以认为一个类有两种不同的用户：普通用户和类的实现者。普通用户编写的代码使用类的对象；类的实现者则负责编写类的成员和友元的代码。
+我们可以认为一个类有两种不同的用户：普通用户（user）和类的实现者（author）。普通用户编写的代码使用类的对象；类的实现者则负责编写类的成员和友元的代码。
 
 - 普通用户：不考虑继承的话，普通用户只能访问类的公有（接口）成员；考虑继承的话，普通用户仍旧只能访问派生类的公有（接口）成员。
 - 类的实现者：不考虑继承的话，类的实现者可以访问类的所有成员；考虑继承的话，派生类的实现者既可以访问派生类自定义部分的所有成员，还可以访问继承自基类部分的 `protected` 成员和 `public` 成员。
@@ -33,4 +37,7 @@
 
 - [Access specifiers - cppreference.com](https://en.cppreference.com/w/cpp/language/access)
 - [Derived classes - cppreference.com](https://en.cppreference.com/w/cpp/language/derived_class)
+- [类成员的访问范围说明符_ltimaginea的博客-CSDN博客](https://blog.csdn.net/sinat_43125576/article/details/109106282)
+- [不同派生方式下基类成员在派生类中的可访问范围属性_ltimaginea的博客-CSDN博客](https://blog.csdn.net/sinat_43125576/article/details/109250948)
+- [虚函数的访问权限_ltimaginea的博客-CSDN博客](https://blog.csdn.net/sinat_43125576/article/details/110359051)
 
