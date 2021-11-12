@@ -7,15 +7,48 @@
 保护成员（protected member） ：能够被派生类的成员和友元访问（Tip: regardless of whether the members are on the same or different instances.） ：
 
 - 保护成员对于派生类的成员和友元来说是可访问的，但对于类的普通用户来说是不可访问的。
-- 派生类的成员和友元只能访问派生类对象中的基类部分的受保护成员；对于普通的基类对象中的成员不具有特殊的访问权限。（Tip: 按理说，基类的成员和友元对于普通的派生类对象，也应该是不具有特殊的访问权限的。但经过测试发现，对于 `protected` 或 `private` 继承的方式，基类的成员和友元是符合预期地仅可以访问普通派生类对象自定义部分的 `public` 成员；但是对于 `public` 继承的方式，基类的成员和友元是出乎预期地既可以访问普通派生类对象自定义部分的 `public` 成员，还可以访问普通派生类对象继承自基类部分的所有成员，见本文 Access Control with Inheritance 段落的示例程序。）
+- 派生类的成员和友元只能访问派生类对象中的基类部分的受保护成员；对于普通的基类对象中的成员不具有特殊的访问权限。（Tip: 按理说，基类的成员和友元对于普通的派生类对象，也应该是不具有特殊的访问权限的。但经过测试发现，对于 `protected` 或 `private` 继承的方式，基类的成员和友元是符合预期地仅可以访问普通派生类对象自定义部分的 `public` 成员；但是对于 `public` 继承的方式，基类的成员和友元是出乎预期地既可以访问普通派生类对象自定义部分的 `public` 成员，还可以访问普通派生类对象继承自基类部分的所有成员，见本文最后的示例程序。）
 
 私有成员（private member） ：只能被类的成员和友元访问（Tip: regardless of whether the members are on the same or different instances.）。
 
-`public` ， `protected` 和 `private` 三类关键字在类中出现的次数和先后次序都没有限制。成员的可访问性由离它前面最近的那个访问说明符决定。如果某个成员前面没有访问说明符，则对 class 来说，该成员默认是私有成员；对 struct 来说，该成员默认是公有成员。
+`public` ， `protected` 和 `private` 三类关键字在类中出现的次数和先后次序都没有限制。成员的可访问性由离它前面最近的那个访问说明符决定。如果某个成员前面没有访问说明符，则对 class 来说，该成员默认是 `private` 成员；对 struct 来说，该成员默认是 `public` 成员。
+
+![Ch15_05_AccessControl.png](../../Images/Chapter15/Ch15_05_AccessControl.png)
 
 ## Access Control with Inheritance
 
+C++ 中存在公有、私有和受保护继承的三种继承方式。
 
+某个类对其继承而来的成员的访问权限受到两个因素影响：一是在基类中该成员的访问说明符，二是在派生类的派生列表中的访问说明符。
+
+派生访问说明符对于派生类的成员（及友元）能否访问其直接基类的成员没什么影响，对其直接基类的成员的访问权限只与基类中的访问说明符有关。
+
+派生访问说明符的目的是控制派生类用户（包括派生类的派生类在内）对于基类成员的访问权限：
+
+- 公有继承（public inheritance）： 在公有继承中，基类的成员将遵循其原有的访问说明符。
+- 受保护的继承（protected inheritance）： 在受保护的继承中，基类的公有成员和受保护成员是派生类的受保护成员。
+- 私有继承（private inheritance）： 在私有继承中，基类的公有成员和受保护成员是派生类的私有成员。
+
+|              | 派生方式 | 派生方式 | 派生方式 |
+| :----------: | :------: | :------: | :------: |
+| **基类成员** | 公有派生 | 私有派生 | 保护派生 |
+|   私有成员   | 不可访问 | 不可访问 | 不可访问 |
+|   保护成员   |   保护   |   私有   |   保护   |
+|   公有成员   |   公有   |   私有   |   保护   |
+
+基类的私有成员在派生类中成为不可访问成员，只能通过基类的成员和友元间接访问。
+
+默认情况下，使用 class 关键字定义的派生类是 `private` 继承的；而使用 struct 关键字定义的派生类是 `public` 继承的。
+
+```cpp
+class Base { /* ... */ };
+struct D1 : Base { /* ... */ };	// 默认 public 继承
+class D2 : Base { /* ... */ };	// 默认 private 继承
+```
+
+
+
+## Class Design
 
 我们可以认为一个类有两种不同的用户：普通用户（user）和类的实现者（author）。普通用户编写的代码使用类的对象；类的实现者则负责编写类的成员和友元的代码。
 
@@ -149,12 +182,11 @@ int main()
 
 
 
-
-
 ## References
 
 - [Access specifiers - cppreference.com](https://en.cppreference.com/w/cpp/language/access)
 - [Derived classes - cppreference.com](https://en.cppreference.com/w/cpp/language/derived_class)
+- [Member Access Control (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/member-access-control-cpp?view=msvc-170)
 - [类成员的访问范围说明符_ltimaginea的博客-CSDN博客](https://blog.csdn.net/sinat_43125576/article/details/109106282)
 - [不同派生方式下基类成员在派生类中的可访问范围属性_ltimaginea的博客-CSDN博客](https://blog.csdn.net/sinat_43125576/article/details/109250948)
 - [虚函数的访问权限_ltimaginea的博客-CSDN博客](https://blog.csdn.net/sinat_43125576/article/details/110359051)
