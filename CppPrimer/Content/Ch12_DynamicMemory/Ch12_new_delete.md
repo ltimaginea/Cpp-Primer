@@ -201,11 +201,11 @@ string* ps = static_cast<string*>(memory);
 
 > *Note*:
 >
-> `new expression` 实际执行的过程中，如果构造函数环节失败（例如抛出了异常），那么前面第一步 `operator new` 所分配的内存将会被编译器自动调用合适的 `operator delete` 来释放。 [new expression - cppreference.com](https://en.cppreference.com/w/cpp/language/new) 的 Construction 段落 有相关的描述：
+> `new expression` 实际执行的过程中，如果构造函数环节失败（例如抛出了异常），那么前面第一步 `operator new` 所分配的内存将会被编译器自动调用合适的 `operator delete` 来释放（详见《深度探索C++对象模型》 Ch6.2节 P256页）。
 >
-> If initialization terminates by throwing an exception (e.g. from the constructor), if new-expression allocated any storage, it calls the appropriate [deallocation function](https://en.cppreference.com/w/cpp/memory/new/operator_delete): [`operator delete`](http://en.cppreference.com/w/cpp/memory/new/operator_delete) for non-array type, [`operator delete[]`](http://en.cppreference.com/w/cpp/memory/new/operator_delete) for array type. 
+>  [new expression - cppreference.com](https://en.cppreference.com/w/cpp/language/new) 的 Construction 段落 也有相关的描述： If initialization terminates by throwing an exception (e.g. from the constructor), if new-expression allocated any storage, it calls the appropriate [deallocation function](https://en.cppreference.com/w/cpp/memory/new/operator_delete): [`operator delete`](http://en.cppreference.com/w/cpp/memory/new/operator_delete) for non-array type, [`operator delete[]`](http://en.cppreference.com/w/cpp/memory/new/operator_delete) for array type. 
 >
-> see also: [operator delete - C++ Reference (cplusplus.com) ](http://www.cplusplus.com/reference/new/operator%20delete/) 
+>  [operator delete - C++ Reference (cplusplus.com) ](http://www.cplusplus.com/reference/new/operator%20delete/) 也有相关的描述： The other signatures ((2) and (3)) are never called by a *delete-expression* (the `delete` operator always calls the ordinary version of this function, and exactly once for each of its arguments). These other signatures are only called automatically by a *new-expression* when their object construction fails (e.g., if the constructor of an object throws while being constructed by a *new-expression* with nothrow, the matching operator delete function accepting a nothrow argument is called).
 
 
 
@@ -216,7 +216,7 @@ delete ps;
 delete[] arr;
 ```
 
-实际执行了两步操作。第一步，对ps所指的对象或者arr所指的数组中的元素执行对应的析构函数。第二步，编译器调用名为 `operator delete` （或者 `operator delete[]` ）的标准库函数释放内存空间。近似的伪代码如下：(see also: [new delete - ltimaginea (cnblogs)](https://www.cnblogs.com/ltimaginea/p/15063785.html) )
+实际执行了两步操作。第一步，对 ps 所指的对象或者 arr 所指的数组中的元素执行对应的析构函数。第二步，编译器调用名为 `operator delete` （或者 `operator delete[]` ）的标准库函数释放内存空间。近似的伪代码如下：(see also: [new delete - ltimaginea (cnblogs)](https://www.cnblogs.com/ltimaginea/p/15063785.html) )
 
 ```cpp
 // 调用析构函数
@@ -224,6 +224,8 @@ ps->~string();
 // 释放内存空间
 operator delete(ps);
 ```
+
+对于继承体系中的类类型，当我们 `delete` 一个动态分配的指向派生类对象的基类指针时，如前所述， `delete expression` 实际执行了两步操作：第一步是执行对象的析构函数，只要基类的析构函数是虚函数，就能确保当我们 `delete` 基类指针时将运行正确的析构函数版本；第二步调用名为 `operator delete` 的标准库函数释放内存空间，当该指针是指向派生类对象的基类指针时，依然会正确无误地完整释放内存空间，因为一个内存块（block）的头部和脚部编码了这个块的大小和这个块是已分配还是空闲的信息，释放内存时，根据大小和“分配/空闲”标志位的信息就可以完成释放内存空间的操作，一般只需将块头部和脚部的“分配/空闲”标志位由“已分配”设置为“空闲的”即可，所以释放内存空间操作与该指针的动态类型没有关系，不同编译器的具体策略可能会略有不同（详见《C++ Primer》Ch19.1节 和《深入理解计算机系统》 Ch9.9节）。同时，我们从释放内存空间操作的相关函数 [ `void operator delete(void* ptr)` ](https://en.cppreference.com/w/cpp/memory/new/operator_delete) 和 [ `void free(void* ptr)` ](https://en.cppreference.com/w/cpp/memory/c/free) 的函数签名可以发现，函数的参数类型是 `void*` ，这也从另一方面说明，释放内存空间操作与指针类型是无关的。注意，以上的讨论不包括数组，绝对不要以多态方式处理数组！原因详见《深度探索C++对象模型》Ch6.2 节，《More Effective C++》Item3 以及 C++ 核心指南 C.152 : [C.152: Never assign a pointer to an array of derived class objects to a pointer to its base (C++ Core Guidelines)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rh-array) 。
 
 
 
