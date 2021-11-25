@@ -49,4 +49,6 @@ int main()
 }
 
 // Tips:
-//	1. 一般情况下，基类与派生类的同名同参数表的虚函数的访问范围说明符应保持一致。
+//	1. Access rules for the names of virtual functions are checked at the call point using the type of the expression used to denote the object for which the member function is called. 
+//	   The access of the final overrider is ignored.
+//	2. 一般情况下，基类与派生类的同名同参数表的虚函数的访问范围说明符应保持一致。
