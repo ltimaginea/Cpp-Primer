@@ -6,6 +6,41 @@
 
 通常情况下，using声明语句只是令某个名字在当前作用域内可见。而当作用于构造函数时，using声明语句将令编译器产生代码。对于基类的每个构造函数，编译器都生成一个与之对应的派生类构造函数。换句话说，对于基类的每个构造函数，编译器都在派生类中生成一个形参列表完全相同的构造函数。
 
+举例：
+
+```cpp
+class Base
+{
+public:
+	virtual ~Base() = default;
+
+	Base(int i) : i_(i) {  }
+	Base(int i, double d) : i_(i), d_(d) {  }
+	Base(int i, double d, std::string s) : i_(i), d_(d), s_(s) {  }
+private:
+	int i_;
+	double d_;
+	std::string s_;
+};
+
+class Derived : public Base
+{
+public:
+	~Derived() override = default;
+	
+	// inheriting constructors
+	using Base::Base;
+	/* inheriting constructors are equivalent to:
+	Derived(int i) : Base(i) {  }
+	Derived(int i, double d) : Base(i, d) {  }
+	Derived(int i, double d, std::string s) : Base(i, d, s) {  }
+	*/
+
+};
+```
+
+
+
 如果派生类含有自己的数据成员，则这些成员将被默认初始化。
 
 ## 继承的构造函数的特点
