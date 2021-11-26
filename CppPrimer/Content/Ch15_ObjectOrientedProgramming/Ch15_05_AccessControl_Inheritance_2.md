@@ -22,7 +22,7 @@ See [Access specifiers - cppreference.com](https://en.cppreference.com/w/cpp/lan
 
 有时我们需要改变派生类继承的某个名字的访问级别，通过使用 [using declaration](https://en.cppreference.com/w/cpp/language/using_declaration) （using声明）可以达到这一目的。
 
-通过在类的内部使用using声明语句，我们可以将该类的直接或间接基类中的任何可访问成员（例如，非私有成员）标记出来。using声明语句中名字的访问权限由该using声明语句之前的访问说明符来决定。也就是说，如果一条using声明语句出现在类的private部分，则该名字只能被类的成员和友元访问；如果using声明语句位于public部分，则类的所有用户都能访问它；如果using声明语句位于protected部分，则该名字对于成员、友元和派生类是可访问的。 
+通过在类的内部使用using声明语句，我们可以将该类的直接或间接基类中的任何可访问成员（例如，非私有成员）标记出来（当我们使用using声明语句进行标记时，不能使用间接基类进行标记，只能使用直接基类进行标记）。using声明语句中名字的访问权限由该using声明语句之前的访问说明符来决定。也就是说，如果一条using声明语句出现在类的private部分，则该名字只能被类的成员和友元访问；如果using声明语句位于public部分，则类的所有用户都能访问它；如果using声明语句位于protected部分，则该名字对于成员、友元和派生类是可访问的。 
 
 派生类只能为那些它可以访问的名字提供using声明。
 
