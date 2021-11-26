@@ -12,7 +12,7 @@ See [Access specifiers - cppreference.com](https://en.cppreference.com/w/cpp/lan
 
 类的友元能够访问类对象的所有成员。
 
-就像友元关系不能传递一样，友元关系同样也不能继承。基类的友元在访问派生类对象的成员时不具有特殊性，类似的，派生类的友元在访问基类对象的成员时也不具有特殊性。基类的友元能够访问基类对象的所有成员，这种可访问性包括了基类对象内嵌在其派生类对象中的情况（经过测试发现仅派生类对象是公有继承基类时才正确），见示例程序 [Ch15_05_friend_inheritance.cpp](./Ch15_05_friend_inheritance.cpp) 中的 `int f3(Derived d) { return d.state_; }` 。
+就像友元关系不能传递一样，友元关系同样也不能继承。基类的友元在访问派生类对象的成员时不具有特殊性，类似的，派生类的友元在访问基类对象的成员时也不具有特殊性。基类的友元能够访问基类对象的所有成员，这种可访问性包括了基类对象内嵌在其派生类对象中的情况（经过测试发现仅派生类对象是公有继承基类时该论述才正确），见示例程序 [Ch15_05_friend_inheritance.cpp](./Ch15_05_friend_inheritance.cpp) 中的 `int f3(Derived d) { return d.state_; }` 。
 
 当一个类将另一个类声明为友元时，这种友元关系只对做出声明的类有效。对于原来那个类来说，其友元的基类或者派生类不具有特殊的访问能力。
 
@@ -20,7 +20,13 @@ See [Access specifiers - cppreference.com](https://en.cppreference.com/w/cpp/lan
 
 ## 改变个别成员的可访问性
 
+有时我们需要改变派生类继承的某个名字的访问级别，通过使用 [using declaration](https://en.cppreference.com/w/cpp/language/using_declaration) （using声明）可以达到这一目的。
 
+通过在类的内部使用using声明语句，我们可以将该类的直接或间接基类中的任何可访问成员（例如，非私有成员）标记出来。using声明语句中名字的访问权限由该using声明语句之前的访问说明符来决定。也就是说，如果一条using声明语句出现在类的private部分，则该名字只能被类的成员和友元访问；如果using声明语句位于public部分，则类的所有用户都能访问它；如果using声明语句位于protected部分，则该名字对于成员、友元和派生类是可访问的。 
+
+派生类只能为那些它可以访问的名字提供using声明。
+
+示例程序见： [Ch15_05_using_ChangeMemberAccess.cpp](./Ch15_05_using_ChangeMemberAccess.cpp) 
 
 ## 派生类向基类转换的可访问性
 
@@ -39,6 +45,5 @@ See [Access specifiers - cppreference.com](https://en.cppreference.com/w/cpp/lan
 - [虚函数的访问权限_ltimaginea的博客-CSDN博客](https://blog.csdn.net/sinat_43125576/article/details/110359051)
 - [C.128: Virtual functions should specify exactly one of virtual, override, or final (C++ Core Guidelines)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rh-override)
 - [Ch15_05_AccessControl_Inheritance.md](./Ch15_05_AccessControl_Inheritance.md)
-
-
+- [Using-declaration - cppreference.com](https://en.cppreference.com/w/cpp/language/using_declaration)
 
