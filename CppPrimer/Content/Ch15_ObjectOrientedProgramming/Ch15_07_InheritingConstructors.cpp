@@ -38,7 +38,7 @@ private:
 int main()
 {
 	Base b;
-	Derived d1(5);			// 派生类自己的数据成员 Derived::value_ 将被默认初始化
+	Derived d1(5);		// 派生类自己的数据成员 Derived::value_ 将被默认初始化
 	Derived d2(5, 3.14);	// 派生类自己的数据成员 Derived::value_ 将被默认初始化
 	Derived d3(5, 3.14, "yesterday's memory");	// 派生类自己的数据成员 Derived::value_ 将被默认初始化
 
