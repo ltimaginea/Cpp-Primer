@@ -116,13 +116,14 @@ int main()
 {
 	HasPtr hp1("Jenny");
 	HasPtr hp2("Hello");
+	hp1 = hp1;
 	HasPtr hp3(hp2);
 	HasPtr hp4(std::move(hp1));
 
 	hp1 = hp2;
-	hp2 = hp3;
-	hp3 = hp1;
 	hp1 = std::move(hp4);
+	hp3 = hp4;
+	hp4 = hp2;
 
 	Foo f1, f2;
 	Swap(f1, f2);
