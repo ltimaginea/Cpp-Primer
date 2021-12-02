@@ -1,3 +1,8 @@
+# Better Practices
+
+1. 下文为《C++ Primer》13.2.1节的示例代码和相关分析，但示例代码中缺少了对拷贝源对象的成员指针的有效性判断，经过完善，增加了有效性判断，完善后的程序见：(1) [Ch13_02_HasPtrValueLike_better.cpp](./Ch13_02_HasPtrValueLike_better.cpp) (2) [Ch13_02_HasPtrValueLike_unique_ptr_better.cpp](./Ch13_02_HasPtrValueLike_unique_ptr_better.cpp) 
+2. swap 与 namespace 
+
 # HasPtrValueLike
 
 通常，管理类外资源的类必须定义拷贝控制成员，这种类需要通过析构函数来释放对象所分配的资源。一旦一个类需要析构函数，那么它几乎肯定也需要一个拷贝构造函数和一个拷贝赋值运算符。 
