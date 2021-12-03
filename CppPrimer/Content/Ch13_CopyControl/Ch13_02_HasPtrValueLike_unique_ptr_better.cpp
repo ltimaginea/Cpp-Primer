@@ -10,9 +10,9 @@ public:
 	// default constructor and constructor that takes a string
 	HasPtr(const std::string& s = std::string()) : ps_(std::make_unique<std::string>(s)), d_(3.14) {  }
 	// copy constructor
-	HasPtr(const HasPtr&);
+	HasPtr(const HasPtr& rhp) : ps_(rhp.ps_ ? std::make_unique<std::string>(*rhp.ps_) : nullptr), d_(rhp.d_) {  }
 	// move constructor (Best Practice: =default)
-	HasPtr(HasPtr&&) noexcept;
+	HasPtr(HasPtr&& rhp) noexcept : ps_(std::move(rhp.ps_)), d_(rhp.d_) {  }
 	// copy assignment operator
 	HasPtr& operator=(const HasPtr&);
 	// move assignment operator (Best Practice: =default)
@@ -32,36 +32,12 @@ private:
 	double d_;
 };
 
-// copy constructor
-HasPtr::HasPtr(const HasPtr& rhp) : ps_(nullptr), d_(rhp.d_)
-{
-	if (rhp.ps_)
-	{
-		ps_ = std::make_unique<std::string>(*rhp.ps_);
-	}
-}
-
-// move constructor (Best Practice: =default)
-HasPtr::HasPtr(HasPtr&& rhp) noexcept : ps_(std::move(rhp.ps_)), d_(rhp.d_)
-{
-
-}
-
 // 既可以处理自赋值的情况，也还是异常安全的
 // copy assignment operator
 HasPtr& HasPtr::operator=(const HasPtr& rhp)
 {
-	if (rhp.ps_)
-	{
-		ps_ = std::make_unique<std::string>(*rhp.ps_);
-	}
-	else
-	{
-		ps_ = nullptr;
-	}
-
+	ps_ = rhp.ps_ ? std::make_unique<std::string>(*rhp.ps_) : nullptr;
 	d_ = rhp.d_;
-
 	return *this;
 }
 
@@ -122,6 +98,7 @@ int main()
 
 	HasPtr hp7("summer");
 	hp5 = std::move(hp7);
+	HasPtr hp8(hp7);
 
 	Foo f1(111), f2(222);
 	f1.Swap(f2);
