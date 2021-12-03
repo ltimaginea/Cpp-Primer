@@ -19,6 +19,12 @@ int main()
 	Widget w6(6);
 	w5 = std::move(w5);
 	w6 = w1;
+	w6 = std::move(w1);
+	w6 = w1;
+	Widget w7(w1);
+	w1 = w2;
+	w6 = w2;
+	w7 = w2;
 
 	w1.PrintInfo();
 	w2.PrintInfo();
@@ -26,6 +32,7 @@ int main()
 	w4.PrintInfo();
 	w5.PrintInfo();
 	w6.PrintInfo();
+	w7.PrintInfo();
 
 	{
 		Widget w1(11);
@@ -48,10 +55,11 @@ int main()
 Outputs:
 false
 false
-4
+1
 1
 1
 4
 5
-4
+1
+1
 */

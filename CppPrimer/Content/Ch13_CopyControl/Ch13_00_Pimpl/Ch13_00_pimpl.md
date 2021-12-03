@@ -54,7 +54,7 @@ private:
 class Widget::Impl
 {
 public:
-	Impl(int i = 0) :i_(i) {  }
+	Impl(int i = 0) : i_(i) {  }
 public:
 	int GetInfo() { return i_; }
 private:
@@ -64,14 +64,17 @@ private:
 	// ...
 };
 
-Widget::Widget(int i) :pimpl_(std::make_unique<Impl>(i))
+Widget::Widget(int i) : pimpl_(std::make_unique<Impl>(i))
 {
 
 }
 
-Widget::Widget(const Widget& rhs) : pimpl_(std::make_unique<Impl>(*rhs.pimpl_))
+Widget::Widget(const Widget& rp) : pimpl_(nullptr)
 {
-
+	if (rp.pimpl_)
+	{
+		pimpl_ = std::make_unique<Impl>(*rp.pimpl_);
+	}
 }
 
 // 编译器合成的移动操作完全符合预期，所以我们使用 =default 来由编译器合成移动构造函数。
@@ -79,9 +82,16 @@ Widget::Widget(const Widget& rhs) : pimpl_(std::make_unique<Impl>(*rhs.pimpl_))
 // 所以编译器为使移动构造函数的声明和实现的“异常说明”一致，此例的合成移动构造函数将不会是 noexcept 。这算是Pimpl技术的一个缺点吧。
 Widget::Widget(Widget&&) = default;
 
-Widget& Widget::operator=(const Widget& rhs)
+Widget& Widget::operator=(const Widget& rp)
 {
-	pimpl_ = std::make_unique<Impl>(*rhs.pimpl_);
+	if (rp.pimpl_)
+	{
+		pimpl_ = std::make_unique<Impl>(*rp.pimpl_);
+	}
+	else
+	{
+		pimpl_ = nullptr;
+	}
 	return *this;
 }
 
@@ -100,7 +110,8 @@ void Widget::PrintInfo()
 // Tips:
 //	1. 对于 std::unique_ptr 而言，删除器的类型是智能指针类型的一部分
 //	2. 对于 std::shared_ptr 而言，删除器的类型并非智能指针类型的一部分
-//	3. 编译器合成的移动操作完全符合预期，即针对 std::unique_ptr 执行移动操作，所以我们可以在实现文件中使用 =default
+//	3. 编译器合成的移动操作完全符合预期，即针对 std::unique_ptr 执行移动操作，所以我们可以使用 =default 来让编译器生成合成版本的移动操作
+
 ```
 
 
@@ -129,6 +140,12 @@ int main()
 	Widget w6(6);
 	w5 = std::move(w5);
 	w6 = w1;
+	w6 = std::move(w1);
+	w6 = w1;
+	Widget w7(w1);
+	w1 = w2;
+	w6 = w2;
+	w7 = w2;
 
 	w1.PrintInfo();
 	w2.PrintInfo();
@@ -136,6 +153,7 @@ int main()
 	w4.PrintInfo();
 	w5.PrintInfo();
 	w6.PrintInfo();
+	w7.PrintInfo();
 
 	{
 		Widget w1(11);
