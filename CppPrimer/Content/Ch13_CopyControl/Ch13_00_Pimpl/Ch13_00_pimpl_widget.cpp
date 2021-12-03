@@ -24,12 +24,9 @@ Widget::Widget(int i) : pimpl_(std::make_unique<Impl>(i))
 
 }
 
-Widget::Widget(const Widget& rp) : pimpl_(nullptr)
+Widget::Widget(const Widget& rp) : pimpl_(rp.pimpl_ ? std::make_unique<Impl>(*rp.pimpl_) : nullptr)
 {
-	if (rp.pimpl_)
-	{
-		pimpl_ = std::make_unique<Impl>(*rp.pimpl_);
-	}
+
 }
 
 // 编译器合成的移动操作完全符合预期，所以我们使用 =default 来由编译器合成移动构造函数。
@@ -39,14 +36,7 @@ Widget::Widget(Widget&&) = default;
 
 Widget& Widget::operator=(const Widget& rp)
 {
-	if (rp.pimpl_)
-	{
-		pimpl_ = std::make_unique<Impl>(*rp.pimpl_);
-	}
-	else
-	{
-		pimpl_ = nullptr;
-	}
+	pimpl_ = rp.pimpl_ ? std::make_unique<Impl>(*rp.pimpl_) : nullptr;
 	return *this;
 }
 
