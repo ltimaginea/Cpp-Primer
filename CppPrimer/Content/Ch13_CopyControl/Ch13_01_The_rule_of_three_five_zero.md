@@ -59,7 +59,7 @@ class base_of_five_defaults
 };
 ```
 
-然而这使得类有可能被切片，这是多态类经常把复制定义为 `=delete` 的原因（见 C++ 核心指南中的 [C.67：多态类应该抑制复制操作](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rc-copy-virtual)），这带来了下列的五之法则的通用说法：
+然而这使得类有可能被切片，这是多态类经常把复制和移动操作定义为 `=delete` 或者 `protected` 并添加一个 virtual `clone` 函数的原因。如果类没有数据，把复制和移动操作定义为 `=delete` ，否则，定义为 `protected` （见 [C.67](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rc-copy-virtual) , [C.130](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rh-copy) ）。这带来了下面的五之法则的通用说法：
 
 [C.21：若有任何默认操作被定义或 =delete，则应当对它们全部进行定义或 =delete](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rc-five)
 
@@ -110,9 +110,9 @@ class base_of_five_defaults
 };
 ```
 
-however, this makes the class prone to slicing, which is why polymorphic classes often define copy as deleted (see [C.67: A polymorphic class should suppress copying](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rc-copy-virtual) in C++ Core Guidelines), which leads to the following generic wording for the Rule of Five:
+However, this makes the class prone to slicing, which is why polymorphic classes often make the copy and move operations  `=delete` or `protected` , and add a virtual `clone` function. If the class has no data, `=delete` the copy and move operations, otherwise, make them  `protected`  (see [C.67](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rc-copy-virtual) , [C.130](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rh-copy) in C++ Core Guidelines), which leads to the following generic wording for the Rule of Five:
 
-[C.21: If you define or =delete any default operation, define or =delete them all](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rc-five)
+[C.21: If you define or =delete any default operation, define or =delete them all](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rc-five) 
 
 
 
@@ -121,5 +121,7 @@ however, this makes the class prone to slicing, which is why polymorphic classes
 - [The rule of three/five/zero - cppreference.com](https://en.cppreference.com/w/cpp/language/rule_of_three)
 - [三/五/零之法则 - cppreference.com](https://zh.cppreference.com/w/cpp/language/rule_of_three)
 - [C.20: If you can avoid defining default operations, do (C++ Core Guidelines)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c20-if-you-can-avoid-defining-default-operations-do)
-- [C.21: If you define or =delete any copy, move, or destructor function, define or =delete them all (C++ Core Guidelines)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c21-if-you-define-or-delete-any-copy-move-or-destructor-function-define-or-delete-them-all)
+- [C.21: If you define or =delete any copy, move, or destructor function, define or =delete them all (C++ Core Guidelines)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c21-if-you-define-or-delete-any-copy-move-or-destructor-function-define-or-delete-them-all) 
+- [C.67: A polymorphic class should suppress public copy and move(CppCoreGuidelines)](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rc-copy-virtual) 
+- [C.130: For making deep copies of polymorphic classes prefer a virtual clone function instead of public copy construction and assignment(CppCoreGuidelines)](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rh-copy) 
 
