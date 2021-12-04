@@ -135,7 +135,7 @@ int main()
 
 而且与往常一样，**赋值运算符必须处理自赋值。我们通过先递增rhs中的计数然后再递减左侧运算对象中的计数来实现这一点**。通过这种方法，当两个对象相同时，在我们检查 ps_ （及 use_ ）是否应该释放之前，计数器就已经被递增过了。
 
-对于移动操作，《C++ Primer》中的这个示例添加移动操作是很勉强的。如果按照《C++ Primer》的源码示例那样实现： [Cpp-Primer/HasPtrUseCount.cc at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/code_GCC_4_7_0/13/HasPtrUseCount.cc) ，将会导致移后源对象无法析构和无法赋予新值的严重问题，违反了移动操作的要求。表面看到是因为对无效指针解引用导致了问题，其实根本原因在于书中示例类的默认构造函数对指针成员的默认值是`new std::string`，并非是`nullptr`，从而导致了后续一系列的问题。指针成员的默认值是有效指针（有时会是比较昂贵的操作），这样代码后续就没有再对指针成员进行有效性检查。如果指针成员的默认值是`nullptr`，那么示例代码中就会对所有指针成员解引用的操作，首先进行是否空指针的检查，这时然后我们再按照《C++ Primer》的源码示例那样实现移动操作，就是没有问题的了。本文档示例代码中添加的移动操作，虽然对《C++ Primer》书中的示例可以不做修改，[令被移动对象遗留于合法状态](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c64-a-move-operation-should-move-and-leave-its-source-in-a-valid-state)，即移后源对象可析构和赋予新值，但是带来的问题在于进行了动态内存分配，导致了移动操作可能抛异常！对书中示例彻底修改后的标准实现就是 `std::shared_ptr` 。
+对于移动操作，《C++ Primer》中的这个示例添加移动操作是很勉强的。如果按照《C++ Primer》的源码示例那样实现： [HasPtrUseCount.cc](./Ch00_GreatResources/CppPrimer5e_SourceCode/code_GCC_4_7_0/13/HasPtrUseCount.cc) ，将会导致移后源对象无法析构和无法赋予新值的严重问题，违反了移动操作的要求。表面看到是因为对无效指针解引用导致了问题，其实根本原因在于书中示例类的默认构造函数对指针成员的默认值是`new std::string`，并非是`nullptr`，从而导致了后续一系列的问题。指针成员的默认值是有效指针（有时会是比较昂贵的操作），这样代码后续就没有再对指针成员进行有效性检查。如果指针成员的默认值是`nullptr`，那么示例代码中就会对所有指针成员解引用的操作，首先进行是否空指针的检查，这时然后我们再按照《C++ Primer》的源码示例那样实现移动操作，就是没有问题的了。本文档示例代码中添加的移动操作，虽然对《C++ Primer》书中的示例可以不做修改，[令被移动对象遗留于合法状态](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c64-a-move-operation-should-move-and-leave-its-source-in-a-valid-state)，即移后源对象可析构和赋予新值，但是带来的问题在于进行了动态内存分配，导致了移动操作可能抛异常！对书中示例彻底修改后的完美实现就是 `std::shared_ptr` 。
 
 
 
@@ -143,7 +143,7 @@ int main()
 >
 > [令被移动对象遗留于合法状态](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c64-a-move-operation-should-move-and-leave-its-source-in-a-valid-state)
 >
-> [Cpp-Primer/HasPtrUseCount.cc at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/code_GCC_4_7_0/13/HasPtrUseCount.cc)
+> [HasPtrUseCount.cc](./Ch00_GreatResources/CppPrimer5e_SourceCode/code_GCC_4_7_0/13/HasPtrUseCount.cc)
 >
 > 
 
