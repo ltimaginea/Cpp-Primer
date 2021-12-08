@@ -90,8 +90,7 @@ int main()
 	return 0;
 }
 
-/*
-Outputs:
+/* GNU g++ Outputs:
 Test start
 Except4's destructor is called!
 Except2's destructor is called!
@@ -101,4 +100,4 @@ Test end
 */
 
 // tips: 
-//   1. 异常必须要被捕获处理，未捕获异常将导致不会调用局部对象的析构函数（典型情况下如此，具体是否调用依赖于各个平台编译器的实现）
+//   1. 异常必须要被捕获处理，未捕获异常将导致不会调用局部对象的析构函数（典型情况如此，具体是否调用依赖于具体的实现）
