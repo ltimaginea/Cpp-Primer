@@ -3,6 +3,17 @@
 #include <string>
 #include <new>
 
+class Except0
+{
+public:
+	~Except0()
+	{
+		std::cout << "Except0's destructor is called!" << std::endl;
+	}
+private:
+	std::string str_;
+};
+
 class Except1
 {
 public:
@@ -72,6 +83,7 @@ int main()
 	std::cout << "Test start" << std::endl;
 	try
 	{
+		Except0 ex0;
 		Test1();
 	}
 	catch (const std::bad_alloc& err)
@@ -95,6 +107,7 @@ Test start
 Except4's destructor is called!
 Except2's destructor is called!
 Except1's destructor is called!
+Except0's destructor is called!
 basic_string::at: __n (which is 1) >= this->size() (which is 0)
 Test end
 */
