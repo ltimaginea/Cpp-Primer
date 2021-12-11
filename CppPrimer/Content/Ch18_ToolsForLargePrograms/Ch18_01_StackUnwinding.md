@@ -11,9 +11,11 @@
 
 
 
-[std::abort](https://en.cppreference.com/w/cpp/utility/program/abort) : 不会进行清理工作：不会调用自动对象，静态对象和线程局部对象的析构函数。
+[std::terminate](https://en.cppreference.com/w/cpp/error/terminate) : 终止当前的程序。默认情况下， [std::terminate](https://en.cppreference.com/w/cpp/error/terminate) 会调用 [std::abort](https://en.cppreference.com/w/cpp/utility/program/abort) 。当我们使用 [std::set_terminate](https://en.cppreference.com/w/cpp/error/set_terminate) 为 [std::terminate](https://en.cppreference.com/w/cpp/error/terminate) 安装新的 [std::terminate_handler](https://en.cppreference.com/w/cpp/error/terminate_handler) 时，新安装的 [std::terminate_handler](https://en.cppreference.com/w/cpp/error/terminate_handler) 最终应该终止程序，如果没有， [std::abort](https://en.cppreference.com/w/cpp/utility/program/abort) 将会被自动调用以终止程序（经过使用 MSVC 和 g++ 测试，确实是这样。See: [Unhandled C++ exceptions | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/unhandled-cpp-exceptions?view=msvc-170) ）。
 
-[std::exit](https://en.cppreference.com/w/cpp/utility/program/exit) : 会进行清理工作：会调用静态对象和线程局部对象的析构函数；但不进行栈展开（stack unwinding）：不会调用自动对象的析构函数。
+[std::abort](https://en.cppreference.com/w/cpp/utility/program/abort) : 导致程序异常终止。它不进行清理工作：不会调用自动对象，静态对象和线程局部对象的析构函数。
+
+[std::exit](https://en.cppreference.com/w/cpp/utility/program/exit) : 导致程序正常终止。它会进行一些清理工作：会调用静态对象和线程局部对象的析构函数；但不进行栈展开（stack unwinding）：不会调用自动对象的析构函数。
 
 [std::abort](https://en.cppreference.com/w/cpp/utility/program/abort) 和 [std::exit](https://en.cppreference.com/w/cpp/utility/program/exit) 这两个函数都不会销毁自动对象，因为 stack unwinding 不会被执行起来。如果希望确保所有局部对象的析构函数被调用，应该运用异常机制（捕获异常）或正常返回，然后从 main() 退出程序。
 
@@ -35,6 +37,7 @@ In the C++ exception mechanism, control moves from the throw statement to the fi
 
 - Bjarne Stroustroup's [*The C++ Programming Language*](http://www.amazon.com/The-Programming-Language-4th-Edition/dp/0321563840/) ,Chapter 13
 - [Exceptions and stack unwinding in C++ | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/exceptions-and-stack-unwinding-in-cpp?view=msvc-170)
+- [Unhandled C++ exceptions | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/unhandled-cpp-exceptions?view=msvc-170)
 - [try-block - cppreference.com](https://en.cppreference.com/w/cpp/language/try_catch)
 - [throw expression - cppreference.com](https://en.cppreference.com/w/cpp/language/throw)
 -  [std::terminate - cppreference.com](https://en.cppreference.com/w/cpp/error/terminate)
