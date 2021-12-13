@@ -177,7 +177,7 @@ HasPtr& HasPtr::operator=(const HasPtr& rhs)
 
 如果 rhs 和本对象是同一个对象，`delete ps_` 会释放 `*this` 和 rhs 指向的 string 。接下来，当我们在 `new` 表达式中试图拷贝 `*rhs.ps_` 时，就会访问一个指向无效内存的指针，其行为和结果是未定义的。
 
-这一版同时还不具备“异常安全性”，异常发生时左侧运算对象将不是置于一个有意义的状态。具体地说，如果 `new string(*rhs.ps_)` 抛出异常（不论是因为分配时内存不足或因为 std::string 的拷贝构造函数抛出异常）， `*this` 最终会持有一个指针指向一块被删除的 std::string 。这样的指针有害。我们无法安全地删除它们，甚至无法安全地读取它们（解引用）。
+这一版同时还不具备“异常安全性”，异常发生时左侧运算对象将不是置于一个有意义的状态。具体地说，如果 `new string(*rhs.ps_)` 抛出异常（不论是因为分配时内存不足或因为 std::string 的拷贝构造函数抛出异常）， `*this` 最终会持有一个指针指向一块被删除的 std::string 。这样的指针有害。我们无法安全地删除它们（详见[Ch13_02_HasPtrValueLike_Case_NotExceptionSafe.md](./Ch13_02_HasPtrValueLike_Case_NotExceptionSafe.md)），甚至无法安全地读取它们（解引用）。
 
 ### Warning item 02
 
