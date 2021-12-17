@@ -50,7 +50,7 @@ HasPtr& HasPtr::operator=(HasPtr&& rhp) noexcept
 	return *this;
 }
 
-// 注意 rhs 是按值传递的，即“拷贝/移动并交换”的技术
+// 注意 rhp 是按值传递的，即“拷贝/移动并交换”的技术
 // assignment operator is both the copy- and move-assignment operator
 //HasPtr& HasPtr::operator=(HasPtr rhp)
 //{
