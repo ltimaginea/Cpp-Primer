@@ -1,6 +1,6 @@
 # static members
 
-示例程序1：
+示例程序1： [Cpp-Primer/Ch07_06_StaticMembers.cpp](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch07_Class/Ch07_06_StaticMembers.cpp)
 
 示例程序2： [Xinbiaozhun_cpp_Chengxusheji/StaticMember.cpp](https://github.com/ltimaginea/Xinbiaozhun_cpp_Chengxusheji/blob/master/XinBiaoZhun_Cpp/Chapter3_Constructor_Destructor/StaticMember.cpp) 
 
