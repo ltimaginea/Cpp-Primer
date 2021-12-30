@@ -104,7 +104,7 @@ private:
 const char Screen::bkground_;
 ```
 
-## avoid static class data members variables
+## avoid static class data members
 
 我们应该避免使用类的 static data member ，因为其本质上是全局对象，全局对象存在一些缺点：（1）多个编译单元内的全局对象的构造和析构顺序是未定义的。（2）任何措施都无法捕获全局对象的构造和析构过程中抛出的异常。（3）多线程环境下，使用 non-const 的全局变量时，存在 data race 。
 
