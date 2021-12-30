@@ -85,8 +85,8 @@ public:
 	// ...
 private:
 	static Bar mem1_;	// Ok, 静态成员可以是不完全类型
-	Bar* mem2_;			// Ok, 指针成员可以是不完全类型
-	Bar mem3_;			// Error, 数据成员必须是完全类型
+	Bar* mem2_;		// Ok, 指针成员可以是不完全类型
+	Bar mem3_;		// Error, 数据成员必须是完全类型
 };
 ```
 
