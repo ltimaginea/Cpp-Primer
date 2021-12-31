@@ -201,11 +201,31 @@ string* ps = static_cast<string*>(memory);
 
 > *Note*:
 >
-> `new expression` 实际执行的过程中，如果构造函数环节失败（例如抛出了异常），那么前面第一步 `operator new` 所分配的内存将会被编译器自动调用合适的 `operator delete` 来释放（详见《深度探索C++对象模型》 Ch6.2节 P256页）。
+> `new expression` 实际执行的过程中，如果构造函数环节失败（例如抛出了异常），C++语言保证，前面第一步 `operator new` 所分配的内存将会被自动调用合适的 `operator delete` 来释放。详见《深度探索C++对象模型》 Ch6.2节 P256页和如下的链接：
 >
->  [new expression - cppreference.com](https://en.cppreference.com/w/cpp/language/new) 的 Construction 段落 也有相关的描述： If initialization terminates by throwing an exception (e.g. from the constructor), if new-expression allocated any storage, it calls the appropriate [deallocation function](https://en.cppreference.com/w/cpp/memory/new/operator_delete): [`operator delete`](http://en.cppreference.com/w/cpp/memory/new/operator_delete) for non-array type, [`operator delete[]`](http://en.cppreference.com/w/cpp/memory/new/operator_delete) for array type. 
+> - [new-doesnt-leak-if-ctor-throws, C++ FAQ (isocpp.org)](https://isocpp.org/wiki/faq/freestore-mgmt#new-doesnt-leak-if-ctor-throws) : If an exception occurs during the `Fred` constructor of `p = new Fred()`, the C++ language guarantees that the memory `sizeof(Fred)` bytes that were allocated will automagically be released back to the heap.
 >
->  [operator delete - C++ Reference (cplusplus.com) ](http://www.cplusplus.com/reference/new/operator%20delete/) 也有相关的描述： The other signatures ((2) and (3)) are never called by a *delete-expression* (the `delete` operator always calls the ordinary version of this function, and exactly once for each of its arguments). These other signatures are only called automatically by a *new-expression* when their object construction fails (e.g., if the constructor of an object throws while being constructed by a *new-expression* with nothrow, the matching operator delete function accepting a nothrow argument is called).
+>   Thus the actual generated code is functionally similar to:
+>
+>   ```cpp
+>   // Original code: Fred* p = new Fred();
+>   Fred* p;
+>   void* tmp = operator new(sizeof(Fred));
+>   try {
+>     new(tmp) Fred();  // Placement new
+>     p = (Fred*)tmp;   // The pointer is assigned only if the ctor succeeds
+>   }
+>   catch (...) {
+>     operator delete(tmp);  // Deallocate the memory
+>     throw;                 // Re-throw the exception
+>   }
+>   ```
+>
+>   
+>
+> - [new expression - cppreference.com](https://en.cppreference.com/w/cpp/language/new) 的 Construction 段落 也有相关的描述： If initialization terminates by throwing an exception (e.g. from the constructor), if new-expression allocated any storage, it calls the appropriate [deallocation function](https://en.cppreference.com/w/cpp/memory/new/operator_delete): [`operator delete`](http://en.cppreference.com/w/cpp/memory/new/operator_delete) for non-array type, [`operator delete[]`](http://en.cppreference.com/w/cpp/memory/new/operator_delete) for array type. 
+>
+> - [operator delete - C++ Reference (cplusplus.com) ](http://www.cplusplus.com/reference/new/operator%20delete/) 也有相关的描述： The other signatures ((2) and (3)) are never called by a *delete-expression* (the `delete` operator always calls the ordinary version of this function, and exactly once for each of its arguments). These other signatures are only called automatically by a *new-expression* when their object construction fails (e.g., if the constructor of an object throws while being constructed by a *new-expression* with nothrow, the matching operator delete function accepting a nothrow argument is called).
 
 
 
@@ -244,6 +264,7 @@ operator delete(ps);
 
 ## References
 
+- [Memory Management, C++ FAQ (isocpp.org)](https://isocpp.org/wiki/faq/freestore-mgmt)
 - [new expression - cppreference.com](https://en.cppreference.com/w/cpp/language/new)
 - [operator delete - C++ Reference (cplusplus.com) ](http://www.cplusplus.com/reference/new/operator%20delete/)
 - [operator delete, operator delete[] - cppreference.com](https://en.cppreference.com/w/cpp/memory/new/operator_delete)
