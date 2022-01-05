@@ -4,7 +4,7 @@
 
 对于 static local variable ，在 control 首次经过其声明时才会被初始化（除非其初始化是零初始化或常量初始化，这可以在首次进入块前进行），在其后所有的调用中，声明均被跳过，在程序结束时其才会被销毁。
 
-C++11起，static local variable 的初始化是线程安全的，C++11标准保证：如果多个线程试图同时初始化同一静态局部变量，则初始化严格只发生一次。见《C++ Concurrency in Action》Second Edition，Chapter 3.3.1，或者见 [Storage class specifiers - cppreference.com](https://en.cppreference.com/w/cpp/language/storage_duration#Static_local_variables) : 
+C++11起，static local variable 的初始化是线程安全的，C++11标准保证：如果多个线程试图同时初始化同一静态局部变量，则初始化严格只发生一次。见《C++ Concurrency in Action》Second Edition，Chapter 3.3.1，或者见 [Static local variables - cppreference.com](https://en.cppreference.com/w/cpp/language/storage_duration#Static_local_variables) : 
 
 > If multiple threads attempt to initialize the same static local variable concurrently, the initialization occurs exactly once.
 
