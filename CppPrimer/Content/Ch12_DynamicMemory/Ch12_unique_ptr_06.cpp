@@ -55,12 +55,16 @@ int main()
 	unique_ptr<string> up4(std::move(up1));
 	// copy!
 	unique_ptr<string> up5(make_unique<string>(*up2));
+	// safe copy!
+	unique_ptr<string> up6(up2 ? make_unique<string>(*up2) : nullptr);
 
 	up1.reset(up2.release());
 	// 接管右侧新资源，释放左侧旧资源，可以认为等效于上一句
 	up3 = std::move(up4);
 	// copy!
 	up5 = make_unique<string>(*up3);	// 无需再通过std::move将make_unique的返回值强制类型转换为右值，因为make_unique的返回值是临时对象，即右值
+	// safe copy!
+	up5 = up3 ? make_unique<string>(*up3) : nullptr;
 	//up5.reset(make_unique<string>(*up3).release());		// 同上等效
 	//up5.reset(new string(*up3));		// 同上等效
 
