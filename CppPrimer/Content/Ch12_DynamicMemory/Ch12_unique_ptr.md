@@ -25,12 +25,16 @@ unique_ptr<string> up3 = make_unique<string>("weak up");
 unique_ptr<string> up4(std::move(up1));
 // copy!
 unique_ptr<string> up5(make_unique<string>(*up2));
+// safe copy!
+unique_ptr<string> up6(up2 ? make_unique<string>(*up2) : nullptr);
 
 up1.reset(up2.release());
 // 接管右侧新资源，释放左侧旧资源，可以认为等效于上一句
 up3 = std::move(up4);
 // copy!
 up5 = make_unique<string>(*up3);	// make_unique的返回值是临时对象，即右值
+// safe copy!
+up5 = up3 ? make_unique<string>(*up3) : nullptr;
 // up5.reset(make_unique<string>(*up3).release());		// 同上等效
 // up5.reset(new string(*up3));		// 同上等效
 
@@ -64,7 +68,7 @@ auto p = p5.release();
 delete p;
 ```
 
-不能拷贝unique_ptr的规则有一个例外：我们可以拷贝或赋值一个将要被销毁的unique_ptr。下面的程序，编译器都知道要返回的对象将要被销毁。
+不能拷贝unique_ptr的规则有一个例外：我们可以拷贝或赋值一个将要被销毁的unique_ptr。下面的程序，编译器知道函数要返回的对象将要被销毁。函数以值方式返回一个unique_ptr是合法的，因为unique_ptr存在一个有效定义的move constructor，返回值将会被移动构造，并且我们不需要也不应该 `std::move()` 返回的unique_ptr，因为这可能会对编译器的(N)RVO帮倒忙，详见 [Ch06_03_Return.md#return-a-non-reference-type](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch06_Functions/Ch06_03_Return.md#return-a-non-reference-type) 。
 
 ```cpp
 unique_ptr<double> clone(double p)
