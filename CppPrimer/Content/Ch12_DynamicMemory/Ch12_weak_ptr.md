@@ -38,7 +38,7 @@ if (auto p = wp.lock())
 
 ​     
 
-> ## [***std::weak_ptr - cppreference.com***](https://zh.cppreference.com/w/cpp/memory/weak_ptr)
+> ## [*std::weak_ptr - cppreference.com*](https://en.cppreference.com/w/cpp/memory/weak_ptr)
 >
 > `std::weak_ptr` 是一种智能指针，它对被 [std::shared_ptr](https://zh.cppreference.com/w/cpp/memory/shared_ptr) 管理的对象存在非拥有性（“弱”）引用。在访问所引用的对象前必须先转换为 [std::shared_ptr](https://zh.cppreference.com/w/cpp/memory/shared_ptr)。
 >
