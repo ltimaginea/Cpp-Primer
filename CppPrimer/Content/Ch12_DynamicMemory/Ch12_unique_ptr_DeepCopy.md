@@ -7,9 +7,9 @@ deep copy 示例如下：
 ```cpp
 std::unique_ptr<std::string> up1(std::make_unique<std::string>("Good morning"));
 
-// copy!
+// copy construct!
 std::unique_ptr<std::string> up2(std::make_unique<std::string>(*up1));
-// safe copy!
+// safe copy construct!
 std::unique_ptr<std::string> up3(up1 ? std::make_unique<std::string>(*up1) : nullptr);
 // copy assignment!
 up2 = std::make_unique<std::string>(*up1);
