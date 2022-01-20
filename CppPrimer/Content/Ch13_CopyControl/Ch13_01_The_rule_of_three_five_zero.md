@@ -122,6 +122,7 @@ However, this makes the class prone to slicing, which is why polymorphic classes
 - [三/五/零之法则 - cppreference.com](https://zh.cppreference.com/w/cpp/language/rule_of_three)
 - [C.20: If you can avoid defining default operations, do (C++ Core Guidelines)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c20-if-you-can-avoid-defining-default-operations-do)
 - [C.21: If you define or =delete any copy, move, or destructor function, define or =delete them all (C++ Core Guidelines)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c21-if-you-define-or-delete-any-copy-move-or-destructor-function-define-or-delete-them-all) 
-- [C.67: A polymorphic class should suppress public copy and move(CppCoreGuidelines)](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rc-copy-virtual) 
-- [C.130: For making deep copies of polymorphic classes prefer a virtual clone function instead of public copy construction and assignment(CppCoreGuidelines)](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rh-copy) 
+- [C.67: A polymorphic class should suppress public copy and move (CppCoreGuidelines)](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rc-copy-virtual) 
+- [C.130: For making deep copies of polymorphic classes prefer a virtual clone function instead of public copy construction and assignment (CppCoreGuidelines)](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Rh-copy) 
+- [Copyable_Movable_Types (Google C++ Style Guide)](https://google.github.io/styleguide/cppguide.html#Copyable_Movable_Types)
 
