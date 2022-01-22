@@ -98,4 +98,5 @@ int main()
 - [override specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/override)
 - [final specifier (since C++11) - cppreference.com](https://en.cppreference.com/w/cpp/language/final)
 - [C.128: Virtual functions should specify exactly one of virtual, override, or final (C++ Core Guidelines)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rh-override)
+- [C.139: Use final on classes sparingly (C++ Core Guidelines)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rh-final)
 
