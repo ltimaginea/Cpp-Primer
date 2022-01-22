@@ -177,7 +177,7 @@ delete ptr2;
 >
 > Nothrow new对异常的强制保证性并不高。要知道，表达式 "new (std::nothrow) Widget" 发生两件事，第一，nothrow 版的 operator new被调用，用以分配足够内存给Widget对象。如果分配失败便返回nullptr指针，一如文档所言。如果分配成功，接下来 Widget构造函数会被调用，而在那一点上所有的筹码便都耗尽，因为Widget构造函数可以做它想做的任何事。它有可能又 new一些内存，而没人可以强迫它再次使用 nothrow new。因此虽然 "new (std::nothrow) Widget" 调用的operator new并不抛掷异常，但Widget构造函数却可能会。如果它真那么做，该异常会一如往常地传播。需要结论吗？结论就是：使用 nothrow new 只能保证operator new不抛掷异常，不保证像 "new (std::nothrow) Widget"这样的表达式绝不导致异常。因此你其实没有运用nothrow new的需要。
 
-## 工作机理
+## Explanation
 
 `new expression` 和 `delete expression` 的工作机理大致如下：
 
