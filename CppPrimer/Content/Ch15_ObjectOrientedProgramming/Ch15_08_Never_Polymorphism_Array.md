@@ -53,7 +53,7 @@ int main()
 
 数组的可调整性很差：多态地处理数组是绝对的类型错误，而且编译器有可能不会做出任何提示。数组对象几乎总是会涉及指针的算术运算，在多态情形下，指针的算术运算通常会是不正确的，所以多态和指针的算术运算不能混用。
 
-对于上文示例程序中的 `ptr1` ，在 for 循环中自从数组第一个元素之后的指针算术运算都将会发生错误。因为在对指向 Derived 对象的 Base 指针 `ptr1` 进行指针的算术运算时，`ptr1[i]` 代表的其实是 `*(ptr1 + i)` ，编译器会将其本质上会计算为 `*(ptr1 + i * sizeof(Base))` ，即是将内存中的对象都当作 Base 类型的了——而不是实际的大小可能不同的派生类类型对象。由于 derived classes 通常比其 base classes 有更多的  data members ，所以 derived class objects 通常都比其 base class objects 要大。在这样的情形下，对指针进行算术运算将会产生错误。
+对于上文示例程序中的 `ptr1` ，在 for 循环中自从数组第一个元素之后的指针算术运算都将会发生错误。因为在对指向 Derived 对象的 Base 指针 `ptr1` 进行指针算术运算时，`ptr1[i]` 代表的其实是 `*(ptr1 + i)` ，编译器会将其本质上计算为 `*(ptr1 + i * sizeof(Base))` ，即是将内存中的对象都当作 Base 类型的了——而不是实际的大小可能不同的 Derived 类型。由于 derived classes 通常比其 base classes 有更多的  data members ，所以 derived class objects 通常比其 base class objects 要大。在这样的情形下，`ptr1[i]` 的地址很有可能不位于实际对应的 Derived 类型对象的起始位置，即这时的指针算术运算会是不正确的。
 
 对于上文示例程序中的 `ptr2` ，一方面对其进行指针算术运算时将会产生错误，另一方面在 `delete[]` 此指针时，即在通过 base class 指针删除一个由 derived classes objects 构成的数组时，也将会发生错误。因为当数组被删除时，编译器需要借助指针的算术运算来对数组中每一个元素进行调用 destructor ，因此结果会出错。如果迫不得已写这样的程序，那么解决方法是先将指针转换为原先的派生类指针，然后再进行 `delete[]` ，代码如下：
 
@@ -68,7 +68,7 @@ delete[] p;		// correct!
 
 要存储多态对象的数组，需要用到一个基类指针（例如原始指针，或更好的 `std::shared_ptr` ）的数组（使用真正的容器更好），这样数组中每个指针都指向一个多态对象（很可能分配在自由存储区中），举例： `std::vector<std::shared_ptr<Base>> basket;` 。示例程序见：
 
-现代C++中要避免使用C风格数组，应该优先使用 `std::array` 或智能指针，它们从语法上就禁止了多态地处理数组：
+现代C++中要避免使用C风格数组，应该优先使用 `std::array` 或智能指针，因为它们从语法上就禁止了多态地处理数组：
 
 ```cpp
 std::array<Derived, kSize> arr_d1;
