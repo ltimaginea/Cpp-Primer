@@ -60,7 +60,8 @@ public:
 示例程序见：
 
 -  [Ch15_07_InheritingConstructors.cpp](./Ch15_07_InheritingConstructors.cpp)
-- [Design-Patterns-in-Cpp17/Observer.cpp at master · downdemo/Design-Patterns-in-Cpp17 · GitHub](https://github.com/downdemo/Design-Patterns-in-Cpp17/blob/master/src/Observer.cpp)
+-  [Observer.cpp#L43](https://github.com/downdemo/Design-Patterns-in-Cpp17/blob/fc5faa91d77a814f11e111f00a25f8118f9ae84e/src/Observer.cpp#L43)
+-  [Observer.cpp#L54](https://github.com/downdemo/Design-Patterns-in-Cpp17/blob/fc5faa91d77a814f11e111f00a25f8118f9ae84e/src/Observer.cpp#L54)
 
 ## References
 
