@@ -21,13 +21,13 @@ C++ 中存在公有继承、受保护继承和私有继承的三种继承方式�
 
 某个类对其继承而来的成员的访问权限受到两个因素影响：一是在基类中该成员的访问说明符，二是在派生类的派生列表中的访问说明符。
 
-**派生访问说明符**对于派生类的成员（及友元）能否访问其直接基类的成员没什么影响，对其直接基类的成员的访问权限只与基类中的访问说明符有关。
+**派生访问说明符**对于派生类的成员（及友元）能否访问其**直接基类**的成员没什么影响，对其直接基类的成员的访问权限只与基类中的访问说明符有关（但是，**间接基类**不同，即一个派生类能否访问其间接基类的成员，会受影响于该派生类的直接基类是以何种方式继承该派生类的间接基类的，详见下一段，示例程序见 [Ch15_05_AccessControl_InheritanceHierarchy.cpp](./Ch15_05_AccessControl_InheritanceHierarchy.cpp) ）。
 
-**派生访问说明符**的目的是控制派生类用户（包括派生类的派生类在内）对于基类成员的访问权限：
+**派生访问说明符**的目的是控制派生类用户（包括派生类的派生类在内，示例程序见 [Ch15_05_AccessControl_InheritanceHierarchy.cpp](./Ch15_05_AccessControl_InheritanceHierarchy.cpp) ）对于基类成员的访问权限：
 
-- 公有继承（public inheritance）： 在公有继承中，基类的成员将遵循其原有的访问说明符。
-- 受保护的继承（protected inheritance）： 在受保护的继承中，基类的公有成员和受保护成员是派生类的受保护成员。
-- 私有继承（private inheritance）： 在私有继承中，基类的公有成员和受保护成员是派生类的私有成员。
+- 公有继承（public inheritance）： 在公有继承中，基类的成员将遵循其原有的访问说明符 成为派生类的成员。
+- 受保护的继承（protected inheritance）： 在受保护的继承中，基类的公有成员和受保护成员会成为派生类的受保护成员。
+- 私有继承（private inheritance）： 在私有继承中，基类的公有成员和受保护成员会成为派生类的私有成员。
 
 |              | 派生类对象 | 派生类对象 | 派生类对象 |
 | :----------: | :--------: | :--------: | :--------: |
@@ -53,7 +53,7 @@ class D2 : Base { /* ... */ };	// 默认 private 继承
 我们可以认为一个类有两种不同的用户：普通用户（user）和类的实现者（author）。普通用户编写的代码使用类的对象；类的实现者则负责编写类的成员和友元的代码。
 
 - 普通用户：不考虑继承的话，普通用户只能访问类的公有（接口）成员；考虑继承的话，普通用户仍旧只能访问派生类的公有（接口）成员。
-- 类的实现者：不考虑继承的话，类的实现者可以访问类的所有成员；考虑继承的话，派生类的实现者既可以访问派生类自定义部分的所有成员，还可以访问继承自基类部分的 `protected` 成员和 `public` 成员。（Tip: regardless of whether the members are on the same or different instances.）
+- 类的实现者：不考虑继承的话，类的实现者可以访问类的所有成员；考虑继承的话，派生类的实现者既可以访问派生类自定义部分的所有成员，还可以访问继承自基类部分的 `protected` 成员和 `public` 成员（Tip: regardless of whether the members are on the same or different instances.）。
 
 综上，类成员对于调用者来说是否可访问，我们一方面要观察当前调用者是什么类型的用户，另一方面要观察当前调用者的表达式所处的上下文环境。
 
@@ -89,6 +89,7 @@ class Derived;
 class Base
 {
 public:
+	virtual ~Base() = default;
 	void F(Base&, Derived&);
 public:
 	int public_;
@@ -186,6 +187,7 @@ int main()
 
 - [Access specifiers - cppreference.com](https://en.cppreference.com/w/cpp/language/access)
 - [Derived classes - cppreference.com](https://en.cppreference.com/w/cpp/language/derived_class)
+- [What are the access rules with private and protected inheritance?, C++ FAQ (isocpp.org)](https://isocpp.org/wiki/faq/private-inheritance#access-rules-with-priv-inherit)
 - [Member Access Control (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/member-access-control-cpp?view=msvc-170)
 - [类成员的访问范围说明符_ltimaginea的博客-CSDN博客](https://blog.csdn.net/sinat_43125576/article/details/109106282)
 - [不同派生方式下基类成员在派生类中的可访问范围属性_ltimaginea的博客-CSDN博客](https://blog.csdn.net/sinat_43125576/article/details/109250948)
