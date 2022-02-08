@@ -1,6 +1,6 @@
 # std::unique_ptr Deep Copy
 
-虽然 `std::unique_ptr` 删除了 copy constructor 和 copy assignment operator ，但其实我们可以借助移动操作变通地对 `std::unique_ptr` 进行拷贝。
+虽然 `std::unique_ptr` 删除了 copy constructor 和 copy assignment operator ，但其实我们可以借助解引用操作变通地对 `std::unique_ptr` 进行拷贝。
 
 deep copy 示例如下：
 
