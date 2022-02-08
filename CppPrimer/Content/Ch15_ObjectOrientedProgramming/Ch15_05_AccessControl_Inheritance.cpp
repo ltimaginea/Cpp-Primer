@@ -15,6 +15,7 @@ class Derived;
 class Base
 {
 public:
+	virtual ~Base() = default;
 	void F(Base&, Derived&);
 public:
 	int public_;
