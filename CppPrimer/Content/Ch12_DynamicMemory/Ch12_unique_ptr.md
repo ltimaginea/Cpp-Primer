@@ -135,10 +135,9 @@ up.reset();
 
   
 
-> ## *References*
->
-> [How to: Create and use unique_ptr instances | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/how-to-create-and-use-unique-ptr-instances?view=msvc-160)
->
-> [ make_unique |  Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/memory-functions?view=msvc-160#make_unique)
->
-> 
+## References
+
+- [How to: Create and use unique_ptr instances | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/how-to-create-and-use-unique-ptr-instances?view=msvc-160)
+- [ make_unique |  Microsoft Docs](https://docs.microsoft.com/en-us/cpp/standard-library/memory-functions?view=msvc-160#make_unique)
+- [R.37: Do not pass a pointer or reference obtained from an aliased smart pointer (C++ Core Guidelines)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-smartptrget)
+
