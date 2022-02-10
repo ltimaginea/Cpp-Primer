@@ -166,7 +166,7 @@ int main()
 
 
 
-## 解释
+## Explanation
 
 一个已声明但未定义的类型称为不完整类型。
 
@@ -180,9 +180,9 @@ Pimpl 打破了这种编译依赖；实现的改动不会导致重编译。结�
 
 
 
-![](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Images/Chapter13/Ch13_00_pimpl_gotw.png)
+![Ch13_00_pimpl_gotw.png](../../../Images/Chapter13/Ch13_00_pimpl_gotw.png)
 
-## 实现
+## Implementation
 
 优先使用 std::unique_ptr 来保存 pimpl_ 。它比使用 std::shared_ptr 更有效，并且正确表达了不应共享 pimpl_ 对象的意图。
 
@@ -210,19 +210,15 @@ Pimpl 打破了这种编译依赖；实现的改动不会导致重编译。结�
 
 
 
-![](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Images/Chapter13/Ch13_00_pimpl_unique_ptr_DefaultDeleter.png)
+![Ch13_00_pimpl_unique_ptr_DefaultDeleter.png](../../../Images/Chapter13/Ch13_00_pimpl_unique_ptr_DefaultDeleter.png)
 
 
 
-> ## *References*
->
-> [Effective-Modern-Cpp/Item22_pimpl.md at main · ltimaginea/Effective-Modern-Cpp · GitHub](https://github.com/ltimaginea/Effective-Modern-Cpp/blob/main/EffectiveModernCpp/Content/Item22_pimpl.md)
->
-> [PImpl - cppreference.com](https://en.cppreference.com/w/cpp/language/pimpl)
->
-> [GotW #100: Compilation Firewalls (Difficulty: 6/10) – Sutter’s Mill (herbsutter.com)](https://herbsutter.com/gotw/_100/)
->
-> [EffectiveModernCppChinese/item22.md at master · kelthuzadx/EffectiveModernCppChinese · GitHub](https://github.com/kelthuzadx/EffectiveModernCppChinese/blob/master/4.SmartPointers/item22.md)
->
-> 
+## References
+
+- [Effective-Modern-Cpp/Item22_pimpl.md at main · ltimaginea/Effective-Modern-Cpp · GitHub](https://github.com/ltimaginea/Effective-Modern-Cpp/blob/main/EffectiveModernCpp/Content/Item22_pimpl.md)
+- [I.27: For stable library ABI, consider the Pimpl idiom (CppCoreGuidelines)](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Ri-pimpl)
+- [PImpl - cppreference.com](https://en.cppreference.com/w/cpp/language/pimpl)
+- [GotW #100: Compilation Firewalls (Difficulty: 6/10) – Sutter’s Mill (herbsutter.com)](https://herbsutter.com/gotw/_100/)
+- [EffectiveModernCppChinese/item22.md at master · kelthuzadx/EffectiveModernCppChinese · GitHub](https://github.com/kelthuzadx/EffectiveModernCppChinese/blob/master/4.SmartPointers/item22.md)
 
