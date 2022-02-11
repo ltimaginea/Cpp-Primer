@@ -16,7 +16,7 @@
 
 拷贝构造函数在几种情况下都会被隐式地使用。因此，拷贝构造函数通常不应该是 `explicit` 的。发生隐式转换的一种情况是当我们执行拷贝形式的初始化时（使用 `=` ）。当我们用 `explicit` 关键字声明构造函数时，它将只能以直接初始化的形式使用。而且，编译器将不会在自动转换过程中使用该构造函数。原因详见《C++ Primer》7.5.4节和13.1.1 节。
 
-举例： [Ch13_02_HasPtrValueLike.cpp](./Ch13_02_HasPtrValueLike.cpp) 
+举例： [Ch13_02_HasPtrValueLike_better.cpp](./Ch13_02_HasPtrValueLike_better.cpp) 
 
 ## copy assignment operator
 
@@ -28,7 +28,7 @@
 
 Reference: (1) [Ch13_02_HasPtrValueLike.md](./Ch13_02_HasPtrValueLike.md) (2) [Assignment Operators, C++ FAQ (isocpp.org)](https://isocpp.org/wiki/faq/assignment-operators) 
 
-举例： [Ch13_02_HasPtrValueLike.cpp](./Ch13_02_HasPtrValueLike.cpp) 
+举例： [Ch13_02_HasPtrValueLike_better.cpp](./Ch13_02_HasPtrValueLike_better.cpp) 
 
 ## move semantics
 
