@@ -50,19 +50,22 @@ int&& rr1 = 42;
 
 // 错误：表达式rr1是左值
 int&& rr2 = rr1;
+// 正确：
+int&& rr3 = std::move(rr1);
 ```
 
 其实有了右值表示临时对象这一观察结果，变量是左值这一特性并不令人惊讶。毕竟，变量是持久的，直至离开作用域时才被销毁。
 
 变量是左值，因此我们不能将一个右值引用直接绑定到一个变量上，即使这个变量是右值引用类型也不行。
 
-**编译器将命名的右值引用视为左值，将未命名的右值引用视为右值。** 当我们编写一个将右值引用作为其参数的函数时，该参数在函数体中被视为左值。编译器将命名的右值引用视为左值。
+**编译器将命名的右值引用视为左值，将未命名的右值引用视为右值。** 当我们编写一个将右值引用作为其参数的函数时，该参数在函数体中被视为左值。
 
 ```cpp
-// rr 是左值，即使 rr 是右值引用类型
-void Foo(int&& rr)
+// vs 是左值，即使 vs 是右值引用类型
+void f(vector<string>&& vs)
 {
-    // ...
+	vector<string> vs2(std::move(vs));	// call move constructor
+	//...
 }
 ```
 
@@ -80,20 +83,13 @@ int&& rr3 = std::move(rr1);
 
 
 
-> ## *References*
->
-> [值类别 - cppreference.com](https://zh.cppreference.com/w/cpp/language/value_category) 
->
-> [Value categories - cppreference.com](https://en.cppreference.com/w/cpp/language/value_category)
->
-> [Value Categories: Lvalues and Rvalues (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/lvalues-and-rvalues-visual-cpp?view=msvc-160)
->
-> [Rvalue Reference Declarator: && | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/rvalue-reference-declarator-amp-amp?view=msvc-160)
->
-> [How to: Define move constructors and move assignment operators (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/move-constructors-and-move-assignment-operators-cpp?view=msvc-160)
->
-> [Temporary object lifetime - cppreference.com](https://en.cppreference.com/w/cpp/language/lifetime#Temporary_object_lifetime)
->
-> [临时延长生存期 - cppreference.com](https://zh.cppreference.com/w/cpp/language/reference_initialization#.E4.B8.B4.E6.97.B6.E9.87.8F.E7.94.9F.E5.AD.98.E6.9C.9F)
->
-> 
+## References
+
+- [值类别 - cppreference.com](https://zh.cppreference.com/w/cpp/language/value_category) 
+- [Value categories - cppreference.com](https://en.cppreference.com/w/cpp/language/value_category)
+- [Value Categories: Lvalues and Rvalues (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/lvalues-and-rvalues-visual-cpp?view=msvc-160)
+- [Rvalue Reference Declarator: && | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/rvalue-reference-declarator-amp-amp?view=msvc-160)
+- [How to: Define move constructors and move assignment operators (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/move-constructors-and-move-assignment-operators-cpp?view=msvc-160)
+- [Temporary object lifetime - cppreference.com](https://en.cppreference.com/w/cpp/language/lifetime#Temporary_object_lifetime)
+- [临时延长生存期 - cppreference.com](https://zh.cppreference.com/w/cpp/language/reference_initialization#.E4.B8.B4.E6.97.B6.E9.87.8F.E7.94.9F.E5.AD.98.E6.9C.9F)
+
