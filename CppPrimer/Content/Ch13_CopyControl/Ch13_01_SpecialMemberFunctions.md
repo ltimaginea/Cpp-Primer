@@ -20,9 +20,13 @@
 
 ## copy assignment operator
 
-拷贝赋值运算符（copy assignment operator） 接受一个本类型对象的赋值运算符版本。通常，拷贝赋值运算符的参数是一个const的引用，并返回指向本对象的引用。
+拷贝赋值运算符（copy assignment operator） 是接受一个本类型对象的赋值运算符版本。通常，拷贝赋值运算符的参数是一个const的引用，并返回指向本对象的引用。
+
+**拷贝赋值运算符既应该正确处理自赋值的情况，还应该是异常安全的**。
 
 与处理拷贝构造函数一样，如果一个类未定义自己的拷贝赋值运算符，编译器会为它生成一个合成拷贝赋值运算符（synthesized copy assignment operator）。类似拷贝构造函数，对于某些类，合成拷贝赋值运算符用来禁止该类型对象的赋值。如果拷贝赋值运算符并非出于此目的，它会将右侧运算对象的每个非 static 成员赋予左侧运算对象的对应成员，这一工作是通过成员类型的拷贝赋值运算符来完成的。对于数组类型的成员，逐个赋值数组元素。合成拷贝赋值运算符返回一个指向其左侧运算对象的引用。
+
+Reference: (1) [Ch13_02_HasPtrValueLike.md](./Ch13_02_HasPtrValueLike.md) (2) [Assignment Operators, C++ FAQ (isocpp.org)](https://isocpp.org/wiki/faq/assignment-operators) 
 
 举例： [Ch13_02_HasPtrValueLike.cpp](./Ch13_02_HasPtrValueLike.cpp) 
 
