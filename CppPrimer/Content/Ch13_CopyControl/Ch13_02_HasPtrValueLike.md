@@ -129,7 +129,7 @@ inline void Swap(Foo& lhs, Foo& rhs)
 
 **当我们编写一个赋值运算符时，一个好的模式是先将右侧运算对象拷贝到一个局部临时对象中。当拷贝完成后，销毁左侧运算对象的现有成员就是安全的了。一旦左侧运算对象的资源被销毁，就只剩下将数据从临时对象拷贝到左侧运算对象的成员中了**。
 
-**一个合格的 *copy assignment operator* 既需要可以处理自赋值的情况，也还应该是异常安全的**。
+**一个合格的 *copy assignment operator* 既应该正确处理自赋值的情况，还应该是异常安全的**。
 
 赋值运算符通常组合了构造函数和析构函数的操作。类似拷贝构造函数，赋值操作会从右侧运算对象拷贝数据。类似析构函数，赋值操作会销毁左侧运算对象的资源。但是，非常重要的一点是，这些操作是以正确的顺序执行的，即使将一个对象赋予它自身，也保证正确。而且，我们编写的赋值运算符还应该是异常安全的——当异常发生时能将左侧运算对象置于一个有意义的状态。
 
@@ -277,15 +277,15 @@ inline void Swap(HasPtr& lhs, HasPtr& rhs)
 
 
 
-> ## *References*
->
-> 1. [Move constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/move_constructor)
-> 2. [operator overloading - cppreference.com](https://en.cppreference.com/w/cpp/language/operators)
-> 3. [Copy assignment operator - cppreference.com](https://en.cppreference.com/w/cpp/language/copy_assignment)
-> 4. [Move assignment operator - cppreference.com](https://en.cppreference.com/w/cpp/language/move_assignment)
-> 5. [How to: Define move constructors and move assignment operators (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/move-constructors-and-move-assignment-operators-cpp?view=msvc-160)
-> 6. [令被移动对象遗留于合法状态](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c64-a-move-operation-should-move-and-leave-its-source-in-a-valid-state)
-> 7. [C++ 拷贝赋值运算符的规范实现应该是什么样 ？ - 知乎 (zhihu.com)](https://www.zhihu.com/question/480261834)
-> 8. [浅拷贝与深拷贝_ltimaginea的博客-CSDN博客](https://blog.csdn.net/sinat_43125576/article/details/108936177)
->
-> 
+## References
+
+- [Assignment Operators, C++ FAQ (isocpp.org)](https://isocpp.org/wiki/faq/assignment-operators)
+- [Move constructors - cppreference.com](https://en.cppreference.com/w/cpp/language/move_constructor)
+- [operator overloading - cppreference.com](https://en.cppreference.com/w/cpp/language/operators)
+- [Copy assignment operator - cppreference.com](https://en.cppreference.com/w/cpp/language/copy_assignment)
+- [Move assignment operator - cppreference.com](https://en.cppreference.com/w/cpp/language/move_assignment)
+- [How to: Define move constructors and move assignment operators (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/move-constructors-and-move-assignment-operators-cpp?view=msvc-160)
+- [令被移动对象遗留于合法状态](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c64-a-move-operation-should-move-and-leave-its-source-in-a-valid-state)
+- [C++ 拷贝赋值运算符的规范实现应该是什么样 ？ - 知乎 (zhihu.com)](https://www.zhihu.com/question/480261834)
+- [浅拷贝与深拷贝_ltimaginea的博客-CSDN博客](https://blog.csdn.net/sinat_43125576/article/details/108936177)
+
