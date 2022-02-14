@@ -10,9 +10,9 @@
 
 ### 移动构造函数
 
-如果一个构造函数的第一个参数是自身类类型的右值引用，且任何额外参数都有默认值，则此构造函数是移动构造函数。如果我们的移动构造函数不抛出任何异常，我们就应该将它标记为 noexcept 。
+如果一个构造函数的第一个参数是自身类类型的右值引用，且任何额外参数都有默认值，则此构造函数是移动构造函数。**如果我们的移动构造函数不抛出任何异常，我们就应该将它标记为 `noexcept`** 。
 
-举例： [Ch13_05_StrVec.cpp at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_05_StrVec.cpp) 
+举例： [Ch13_05_StrVec.cpp](./Ch13_05_StrVec.cpp) 
 
 ```cpp
 StrVec::StrVec(StrVec&& sv) noexcept :elements_(sv.elements_), first_free_(sv.first_free_), cap_(sv.cap_)
@@ -27,9 +27,9 @@ StrVec::StrVec(StrVec&& sv) noexcept :elements_(sv.elements_), first_free_(sv.fi
 
 ### 移动赋值运算符
 
-移动赋值运算符执行与析构函数和移动构造函数相同的工作。与移动构造函数一样，如果我们的移动赋值运算符不抛出任何异常，我们就应该将它标记为 noexcept 。类似拷贝赋值运算符，移动赋值运算符必须正确处理自赋值。
+移动赋值运算符执行与析构函数和移动构造函数相同的工作。**与移动构造函数一样，如果我们的移动赋值运算符不抛出任何异常，我们就应该将它标记为 `noexcept` 。类似拷贝赋值运算符，移动赋值运算符必须正确处理自赋值**。
 
-举例： [Ch13_05_StrVec.cpp at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_05_StrVec.cpp) 
+举例： [Ch13_05_StrVec.cpp](./Ch13_05_StrVec.cpp) 
 
 ```cpp
 StrVec& StrVec::operator=(StrVec&& sv) noexcept
@@ -73,7 +73,7 @@ StrVec& StrVec::operator=(StrVec&& sv) noexcept
 
 搞清楚为什么需要 noexcept 能帮助我们深入理解标准库是如何与我们自定义的类型交互的。我们需要指出一个移动操作不抛出异常，这是因为两个相互关联的事实：首先，虽然移动操作通常不抛出异常，但抛出异常也是允许的；其次，标准库容器能对异常发生时其自身的行为提供保障。
 
-例如，vector保证，如果我们调用push_back时发生异常，vector自身不会发生改变，即保证是异常安全的。对一个vector调用push_back可能要求为vector重新分配内存空间，当重新分配vector的内存时，vector会将元素从旧空间移动到新内存中，就像我们在 [StrVec::reallocate](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_05_StrVec.cpp) 中所做的那样。如我们所知，移动一个对象通常会改变它的值。如果重新分配过程使用了移动构造函数，且在移动了部分而不是全部元素后抛出了一个异常，就会产生问题：旧空间中的移动源元素已经被改变了，而新空间中未构造的元素可能尚不存在。在此情况下，vector将不能满足自身保持不变的要求。为了避免这种潜在问题，**除非 vector 知道元素类型的移动构造函数不会抛出异常，否则在重新分配内存的过程中，它就必须使用拷贝构造函数而不是移动构造函数**。如果希望在vector重新分配内存这类情况下对我们自定义类型的对象进行移动而不是拷贝，就必须显式地告诉标准库我们的移动构造函数可以安全使用。我们通过将移动构造函数（及移动赋值运算符）标记为 noexcept 来做到这一点。（测试示例程序见 [SynthesizedMoveConstructor_noexcept_false.cpp](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_01_default_delete/Ch13_01_SynthesizedMoveConstructor_noexcept_false.cpp) 和 [SynthesizedMoveConstructor_noexcept_true.cpp](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_01_default_delete/Ch13_01_SynthesizedMoveConstructor_noexcept_true.cpp) ）
+例如，vector保证，如果我们调用push_back时发生异常，vector自身不会发生改变，即保证是异常安全的。对一个vector调用push_back可能要求为vector重新分配内存空间，当重新分配vector的内存时，vector会将元素从旧空间移动到新内存中，就像我们在 [Ch13_05_StrVec.cpp StrVec::reallocate](./Ch13_05_StrVec.cpp) 中所做的那样。如我们所知，移动一个对象通常会改变它的值。如果重新分配过程使用了移动构造函数，且在移动了部分而不是全部元素后抛出了一个异常，就会产生问题：旧空间中的移动源元素已经被改变了，而新空间中未构造的元素可能尚不存在。在此情况下，vector将不能满足自身保持不变的要求。为了避免这种潜在问题，**除非 vector 知道元素类型的移动构造函数不会抛出异常，否则在重新分配内存的过程中，它就必须使用拷贝构造函数而不是移动构造函数**。如果希望在vector重新分配内存这类情况下对我们自定义类型的对象进行移动而不是拷贝，就必须显式地告诉标准库我们的移动构造函数可以安全使用。我们通过将移动构造函数（及移动赋值运算符）标记为 noexcept 来做到这一点。（测试示例程序见 [./Ch13_01_default_delete/Ch13_01_SynthesizedMoveConstructor_noexcept_false.cpp](./Ch13_01_default_delete/Ch13_01_SynthesizedMoveConstructor_noexcept_false.cpp) 和 [./Ch13_01_default_delete/Ch13_01_SynthesizedMoveConstructor_noexcept_true.cpp](./Ch13_01_default_delete/Ch13_01_SynthesizedMoveConstructor_noexcept_true.cpp) ）
 
 ## 合成的移动操作
 
@@ -83,7 +83,7 @@ StrVec& StrVec::operator=(StrVec&& sv) noexcept
 
 移动操作和合成的拷贝控制成员间还有最后一个相互作用关系：一个类是否定义了自己的移动操作对拷贝操作如何合成有影响。如果类定义了一个移动构造函数 和/或 一个移动赋值运算符，则该类的合成拷贝构造函数和拷贝赋值运算符 都 会被定义为删除的。
 
-详细内容参见：  [Ch13_00_CopyControl.md at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_00_CopyControl.md#合成的移动操作)
+详细内容参见：  [Ch13_00_CopyControl.md#合成的移动操作](./Ch13_00_CopyControl.md#合成的移动操作)
 
 ## 移动右值，拷贝左值
 
@@ -171,21 +171,20 @@ int main()
 
 右值引用版本的成员函数，举例： `void StrVec::push_back(std::string&& str)` ，参见：
 
-- [Cpp-Primer/Ch13_05_StrVec.cpp at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_05_StrVec.cpp)
+- [Ch13_05_StrVec.cpp](./Ch13_05_StrVec.cpp)
 
 
 
 引用限定符（Reference Qualifier） 参见：
 
--  [Cpp-Primer/Ch13_06_ReferenceQualifier.md at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_06_ReferenceQualifier.md)
--  [Cpp-Primer/Ch13_06_ReferenceQualifier.cpp at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_06_ReferenceQualifier.cpp)
+-  [Ch13_06_ReferenceQualifier.md](./Ch13_06_ReferenceQualifier.md)
+-  [Ch13_06_ReferenceQualifier.cpp](./Ch13_06_ReferenceQualifier.cpp)
 
 
 
-> ## References
->
-> [令移后源对象遗留于有效状态](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c64-a-move-operation-should-move-and-leave-its-source-in-a-valid-state)
->
-> [Ch13_00_Copy_and_Move.md at main · ltimaginea/Cpp-Primer · GitHub](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch13_CopyControl/Ch13_00_Copy_and_Move.md)
->
-> 
+## References
+
+- [令移后源对象遗留于有效状态](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#c64-a-move-operation-should-move-and-leave-its-source-in-a-valid-state)
+- [Ch13_00_Copy_and_Move.md](./Ch13_00_Copy_and_Move.md)
+- [Assignment Operators, C++ FAQ (isocpp.org)](https://isocpp.org/wiki/faq/assignment-operators)
+
