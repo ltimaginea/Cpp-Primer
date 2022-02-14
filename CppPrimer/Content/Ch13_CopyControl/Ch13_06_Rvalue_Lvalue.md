@@ -14,9 +14,9 @@
 
 在上述两个属性的四种组合形式中，有三种需要用C++语言规则精确地描述（既没有身份又不能移动的对象不重要）。我们“**用m表示可移动**”，且“**用i表示有身份**”，从而把表达式的分类表示成下图所示的形式：
 
-![](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Images/Chapter13/Ch13_06_ValueCategory0.png)
+![Ch13_06_ValueCategory0.png](../../Images/Chapter13/Ch13_06_ValueCategory0.png)
 
-从图中可知，一个经典的左值有身份但不能移动（因为我们可能会在移动后仍然使用它），而一个经典的右值是允许执行移出操作的对象。其他一些有关的术语还包括**纯右值**（prvalue，“纯 (pure)”的右值）、**泛左值**（glvalue，“泛化 (generalized)”的左值）和**特别值**（xvalue，即 extraordinary value；又称为 专家值，expert only value；又称为 亡值，“将亡 (expiring)”的值）。例如：
+从图中可知，一个典型的左值有身份但不能移动（因为我们可能会在移动后仍然使用它），而一个典型的右值是允许执行移出操作的对象。其他一些有关的术语还包括**纯右值**（prvalue，“纯 (pure)”的右值）、**泛左值**（glvalue，“泛化 (generalized)”的左值）和**特别值**（xvalue，即 extraordinary value；又称为 专家值，expert only value；又称为 亡值，“将亡 (expiring)”的值）。例如：
 
 ```cpp
 void f(vector<string>&& vs)
@@ -32,18 +32,23 @@ void f(vector<string>&& vs)
 
 
 
-> ## *References*
+> ## References
 >
-> ### [Value categories - cppreference.com](https://en.cppreference.com/w/cpp/language/value_category)
+> - ### [Value categories - cppreference.com](https://en.cppreference.com/w/cpp/language/value_category)
 >
-> ### [Value Categories: Lvalues and Rvalues (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/lvalues-and-rvalues-visual-cpp?view=msvc-160)
+> Each C++ expression (an operator with its operands, a literal, a variable name, etc.) is characterized by two independent properties: a *type* and a *value category*. Each expression has some non-reference type, and each expression  belongs to exactly one of the three primary value categories: *prvalue*, *xvalue*, and *lvalue*.
+>
+>
+> - ### [Value Categories: Lvalues and Rvalues (C++) | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/lvalues-and-rvalues-visual-cpp?view=msvc-160)
+>
 >
 > The following diagram illustrates the relationships between the categories:
 >
-> ![](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Images/Chapter13/Ch13_06_ValueCategory1.png)
+> ![Ch13_06_ValueCategory1.png](../../Images/Chapter13/Ch13_06_ValueCategory1.png)
 >
 > An **lvalue** has an address that your program can access. Examples of lvalue expressions include variable names, including **`const`** variables, array elements, function calls that return an lvalue reference, bit-fields, unions, and class members.
 >
 > A **prvalue** expression has no address that is accessible by your program. Examples of prvalue expressions include literals, function calls that return a non-reference type, and temporary objects that are created during expression evaluation but accessible only by the compiler.
 >
-> An **xvalue** expression has an address that no longer accessible by your program but can be used to initialize an rvalue reference, which provides access to the expression. Examples include function calls that return an rvalue reference (e.g., `std::move()` ), and the array subscript, member and pointer to member expressions where the array or object is an rvalue reference.
+> An **xvalue** expression has an address that no longer accessible by your program but can be used to initialize an rvalue reference, which provides access to the expression. Examples include function calls that return an rvalue reference (e.g., `std::move(x)` ), and the array subscript, member and pointer to member expressions where the array or object is an rvalue reference.
+
