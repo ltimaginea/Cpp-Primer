@@ -4,6 +4,8 @@
 
 `表达式` 由一个或多个运算对象（operand）组成，对表达式求值将得到一个结果（result）。字面值和变量是最简单的表达式（expression），其结果就是字面值和变量的值。把一个运算符（operator）和一个或多个运算对象组合起来可以生成较复杂的表达式。
 
+[Value categories - cppreference.com](https://en.cppreference.com/w/cpp/language/value_category) : Each C++ expression (an operator with its operands, a literal, a variable name, etc.) is characterized by two independent properties: a *type* and a *value category*. Each expression has some non-reference type, and each expression  belongs to exactly one of the three primary value categories: *prvalue*, *xvalue*, and *lvalue*.
+
 **左值和右值是表达式的属性，该属性会决定其可以被绑定到左值引用还是右值引用上：一个左值只能被绑定到左值引用上，一个右值可以被绑定到右值引用或者const的左值引用上**。C++的表达式要不然是右值，要不然就是左值。
 
 `左值 (lvalue)` 是指那些求值结果为对象或函数的表达式。**一个表示对象的非常量左值可以作为赋值运算符的左侧运算对象**。
