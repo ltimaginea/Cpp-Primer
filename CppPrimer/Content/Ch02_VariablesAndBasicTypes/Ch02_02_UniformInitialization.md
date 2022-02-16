@@ -1,6 +1,10 @@
 # uniform initialization
 
+Prefer the `{}`-initializer syntax. The rules for `{}` initialization are simpler, more general, less ambiguous, and safer than for other forms of initialization.
 
+Use `=` only when you are sure that there can be no narrowing conversions. For built-in arithmetic types, **use `=` only with `auto`.**
+
+Avoid `()` initialization, which allows parsing ambiguities.
 
 ## References
 
