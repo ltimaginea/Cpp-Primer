@@ -4,7 +4,7 @@ Prefer the `{}`-initializer syntax. The rules for `{}` initialization are simple
 
 Use `=` only when you are sure that there can be no narrowing conversions. For built-in arithmetic types, **use `=` only with `auto`.**
 
-Avoid `()` initialization, which allows parsing ambiguities.
+**Avoid `()` initialization, which allows parsing ambiguities, see [Ch02_02_MostVexingParse.md](./Ch02_02_MostVexingParse.md) .**
 
 ## References
 
