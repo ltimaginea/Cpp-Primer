@@ -73,7 +73,7 @@ It’s a long story, but one solution (hope you’re sitting down!) is to add an
 void yourCode()
 {
   Foo x((Bar()));
-        ↑     ↑ // These parens save the day
+        ↑     ↑ // These parenthesis save the day
   x.blah();
   ↑↑↑↑↑↑↑↑ // Ahhhh, this now works: no more error messages
   // ...
