@@ -1,6 +1,8 @@
 # Most Vexing Parse
 
-**The main reason for "Most Vexing Parse" is that between declaring an object and declaring a function, C++ grammar rules prefer to parse it as a function declaration.**
+The main reason for "Most Vexing Parse" is that `()` initialization allows parsing ambiguities. 即 `()` 风格的初始化存在解析歧义的问题：在有些场景下，会出现一条语句声明既可以解析为函数声明也可以解析为对象声明，这时 C++ 会尽可能地将其解析为函数声明，而如果我们实际所期望的是对象声明，那么就会存在问题了。
+
+"Most Vexing Parse" 的案例如下：
 
 ## [Is there any difference between List x; and List x();? (isocpp.org)](https://isocpp.org/wiki/faq/ctors#empty-parens-in-object-decl)
 
