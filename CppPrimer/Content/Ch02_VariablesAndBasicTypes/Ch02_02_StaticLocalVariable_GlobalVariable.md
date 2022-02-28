@@ -8,7 +8,7 @@ C++11起，static local variable 的初始化是线程安全的，C++11标准保
 
 > If multiple threads attempt to initialize the same static local variable concurrently, the initialization occurs exactly once.
 
-static local variable 的一个应用便是C++11起的单例模式最佳实现：[Singleton](https://github.com/ltimaginea/Design-Patterns/blob/main/DesignPatterns/Singleton/Singleton.md)
+static local variable 的一个应用便是C++11起的单例模式最佳实现：[Singleton](https://github.com/ltimaginea/Design-Patterns/blob/main/DesignPatterns/Singleton/Singleton.md) 。
 
 ## Global variable
 
@@ -16,7 +16,7 @@ C++11标准仅保证 static local variable 的初始化是线程安全的，对�
 
 static non-local variable 的异常安全的问题，具体来说是：任何措施都无法捕获 static non-local variable 的构造和析构中抛出的异常。
 
-static non-local variable 的 initialization order 的问题，具体来说是：在单个编译单元（translation unit）中，static non-local variable 的初始化始终严格以其定义出现于源代码中的顺序定序（销毁时以逆序销毁），但不同编译单元中的 static non-local variable 的初始化之间是顺序不确定的（同样，销毁顺序也是不确定的，但会是以初始化时的逆序销毁）。如果某编译单元内的某个 static non-local variable 的初始化动作使用了另一编译单元内的某个 static non-local variable ，它所用到的这个对象可能尚未被初始化，因为C++对“定义于不同编译单元内的 static non-local variable ”的初始化次序并无明确定义（同样，由于不确定的销毁顺序，可能会导致某个 static non-local variable 销毁时，其析构函数访问一个已经销毁的 static non-local variable ），详见《Effective C++》Item4 和 见：
+static non-local variable 的 initialization order 的问题，具体来说是：在单个编译单元（translation unit）中，static non-local variable 的初始化始终严格以其定义出现于源代码中的顺序定序（销毁时以逆序销毁），但不同编译单元中的 static non-local variable 的初始化之间是顺序不确定的（同样，销毁顺序也是不确定的，但会是以初始化时的逆序销毁）。如果某编译单元内的某个 static non-local variable 的初始化动作使用了另一编译单元内的某个 static non-local variable ，它所用到的这个对象可能尚未被初始化，因为C++对“定义于不同编译单元内的 static non-local variable ”的初始化次序并无明确定义（同样，由于不确定的销毁顺序，可能会导致某个 static non-local variable 销毁时，其析构函数访问一个已经销毁的 static non-local variable ）。所谓编译单元（translation unit）是指产出单一目标文件（single object file）的那些源码，基本上它是单一 .cpp 文件加上其所含入的头文件（＃include files），见 C++11 Standard Draft 2.1 节中 translation unit 的定义。详见《Effective C++》Item4 和 见：
 
 - [Initialization-Non-local_variables - cppreference.com](https://en.cppreference.com/w/cpp/language/initialization#Non-local_variables)
 
