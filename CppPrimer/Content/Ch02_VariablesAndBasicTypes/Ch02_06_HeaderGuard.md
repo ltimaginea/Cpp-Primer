@@ -35,6 +35,6 @@ There's no advantage to use of both the include guard idiom and `#pragma once` i
 ## References
 
 - [SF.8: Use #include guards for all .h files (isocpp.github.io)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rs-guards)
-- [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html#The__define_Guard)
+- [The #define Guard (Google C++ Style Guide)](https://google.github.io/styleguide/cppguide.html#The__define_Guard)
 - [pragma once | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/once?view=msvc-160)
 
