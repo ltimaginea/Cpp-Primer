@@ -1,6 +1,6 @@
 # header guard
 
-`头文件保护符 (header guard)` 使用 `#define guard` 或者 `#pragma once` 来防止头文件被某个文件重复包含。
+`头文件保护符 (header guard)` 使用 `#define guard` 或者 `#pragma once` 来防止头文件被某个文件重复包含。应该优先使用属于 C++ 标准的 `#define guard` ，而 `#pragma once` 是不属于 C++ 标准的同时也是不可移植的，所以不推荐使用 `#pragma once` 。
 
 ## The #define Guard
 
@@ -32,9 +32,9 @@ There's no advantage to use of both the include guard idiom and `#pragma once` i
 
 
 
-> ## *References*
->
-> [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html#The__define_Guard)
->
-> [pragma once | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/once?view=msvc-160)
+## References
+
+- [SF.8: Use #include guards for all .h files (isocpp.github.io)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rs-guards)
+- [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html#The__define_Guard)
+- [pragma once | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/preprocessor/once?view=msvc-160)
 
