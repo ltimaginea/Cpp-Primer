@@ -5,7 +5,7 @@
 
 int main()
 {
-	using staticmembers::Account;
+	using static_members::Account;
 
 	Account ac;
 	auto ac_ptr = std::make_unique<Account>();
