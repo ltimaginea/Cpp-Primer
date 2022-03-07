@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace staticmembers
+namespace static_members
 {
 	class Account
 	{
@@ -19,6 +19,6 @@ namespace staticmembers
 		static constexpr int period_ = 30;
 		double daily_tbl[period_];
 	};
-}
+} // namespace static_members
 
 #endif // !CPPPRIMER_CONTENT_CH07_CLASS_CH07_06_STATICMEMBERS_H_
