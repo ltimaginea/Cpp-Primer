@@ -1,6 +1,6 @@
 ﻿#include "Ch07_06_StaticMembers.h"
 
-namespace staticmembers
+namespace static_members
 {
 	void Account::SetRate(double new_rate)
 	{
@@ -17,4 +17,4 @@ namespace staticmembers
 
 	// 必须定义静态数据成员。如果在类的内部提供了一个初始值，则成员的定义不能再指定一个初始值了
 	constexpr int Account::period_;
-}
+} // namespace static_members
