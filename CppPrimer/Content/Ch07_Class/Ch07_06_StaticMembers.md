@@ -1,6 +1,6 @@
 # static members
 
-示例程序1： [Cpp-Primer/Ch07_06_StaticMembers.cpp](https://github.com/ltimaginea/Cpp-Primer/blob/main/CppPrimer/Content/Ch07_Class/Ch07_06_StaticMembers.cpp)
+示例程序1：(1) [Ch07_06_StaticMembers.h](Ch07_06_StaticMembers.h) (2) [Ch07_06_StaticMembers.cpp](Ch07_06_StaticMembers.cpp) (3) [Ch07_06_StaticMembers_main.cpp](Ch07_06_StaticMembers_main.cpp) 
 
 示例程序2： [Xinbiaozhun_cpp_Chengxusheji/StaticMember.cpp](https://github.com/ltimaginea/Xinbiaozhun_cpp_Chengxusheji/blob/master/XinBiaoZhun_Cpp/Chapter3_Constructor_Destructor/StaticMember.cpp) 
 
@@ -13,6 +13,24 @@
 类的静态成员存在于任何对象之外，对象中不包含任何与静态数据成员有关的数据。静态数据成员只有一份，被所有同类对象共享，本质上是全局变量。因此， `sizeof()` 运算符计算类对象所占的存储空间时，不会将静态数据成员计算在内。
 
 类似的，静态成员函数也不与任何对象绑定在一起，它们不包含 `this` 指针，本质上是全局函数。作为结果，静态成员函数不能声明成 `const` 的，而且我们也不能在 `static` 函数体内使用 `this` 指针。这一限制既适用于 `this` 的显式使用，也对调用非静态成员的隐式使用有效，所以静态成员函数内部不能访问非静态成员变量，也不能调用非静态成员函数。
+
+```cpp
+// file.h
+class X
+{
+public:
+	static void Foo();	// declaration (uses 'static')
+private:
+	static int n_;		// declaration (uses 'static')
+};
+
+// file.cpp
+void X::Foo()	// definition (does not use 'static')
+{
+	n_ = 2;
+}
+int X::n_ = 1;	// definition (does not use 'static')
+```
 
 ## 使用类的静态成员
 
@@ -40,7 +58,7 @@ void Calculate() { amount_ += amount_ * interest_rate_; }
 
 ## 定义静态成员
 
-和其他的成员函数一样，我们既可以在类的内部也可以在类的外部定义静态成员函数。**当在类的外部定义静态成员时，不能重复 `static` 关键字，该关键字只出现在类内部的声明语句**。如示例程序1 Account 类的 SetRate 函数的类外部定义：
+和其他的成员函数一样，我们既可以在类的内部也可以在类的外部定义静态成员函数。**定义在类内部的静态成员函数是自动 `inline` 的，不会导致重复定义的问题。当在类的外部定义静态成员时，不能重复 `static` 关键字，该关键字只出现在类内部的声明语句**。如示例程序1 Account 类的 SetRate 函数的类外部定义：
 
 ```cpp
 void Account::SetRate(double new_rate)
@@ -51,9 +69,7 @@ void Account::SetRate(double new_rate)
 
 和类的所有成员一样，当我们指向类外部的静态成员时，必须指明成员所属的类名。 `static` 关键字则只出现在类内部的声明语句中。 
 
-因为静态数据成员不属于类的任何一个对象，所以它们并不是在创建类的对象时被定义的。这意味着它们不是由类的构造函数初始化的。而且**一般来说，我们不能在类的内部初始化静态数据成员。相反的，必须在类的外部定义和初始化每个静态数据成员（即在类的实现文件中定义和初始化类的静态数据成员）**。和其他对象一样，一个静态数据成员只能定义一次。 
-
-要想确保对象只定义一次，最好的办法是把静态数据成员的定义与其他非内联函数的定义放在同一个实现文件中。
+因为静态数据成员不属于类的任何一个对象，所以它们并不是在创建类的对象时被定义的。这意味着它们不是由类的构造函数初始化的。而且**一般来说，我们不能在类的内部初始化静态数据成员。相反的，必须在类的外部定义和初始化每个静态数据成员。和其他对象一样，一个静态数据成员只能定义一次。要想确保对象只定义一次，最好的办法是把静态数据成员的定义与其他非内联函数的定义放在同一个 .cpp 实现文件中**。
 
 类似于全局变量，静态数据成员定义在任何函数之外。因此一旦它被定义，就将一直存在于程序的整个生命周期中。 
 
@@ -118,4 +134,6 @@ const char Screen::bkground_;
 - [Static_and_Global_Variables (Google C++ Style Guide)](https://google.github.io/styleguide/cppguide.html#Static_and_Global_Variables)
 - [I.2: Avoid non-const global variables (isocpp.github.io)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Ri-global)
 - [I.3: Avoid singletons (isocpp.github.io)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Ri-singleton)
+- [SF.2: A .h file must not contain object definitions or non-inline function definitions (isocpp.github.io)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rs-inline)
+- [SF.8: Use #include guards for all .h files (isocpp.github.io)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rs-guards)
 
