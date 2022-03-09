@@ -94,6 +94,8 @@ std::vector<std::string> Process()
 >
 > ### [Inside The Cpp Object Model_RVO](https://www.cnblogs.com/ltimaginea/p/15302197.html)
 >
+> ### [F.48: Don’t return std::move(local) (C++ Core Guidelines)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rf-return-move-local)
+>
 > ### [Effective Modern Cpp Chinese / Item25.md](https://github.com/kelthuzadx/EffectiveModernCppChinese/blob/master/5.RRefMovSemPerfForw/item25.md)
 >
 > ### [Why does C++ create useless deep copies of objects all over the place, such as returning by value?, C++ FAQ (isocpp.org)](https://isocpp.org/wiki/faq/myths#temporaries)
