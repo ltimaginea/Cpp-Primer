@@ -35,7 +35,7 @@ C++ Standard 指出，按值返回的函数（比如 Foo）保证有下列行为
 - 否则，如果X有一个copy构造函数，X就被copied（复制）。
 - 否则，报出一个编译期错误（compile-time error）。
 
-
+该段内容主要来自 *The C++ Standard Library - A Tutorial and Reference, 2nd Edition* 3.1.5 节和 [Effective Modern Cpp Chinese / Item25.md](https://github.com/kelthuzadx/EffectiveModernCppChinese/blob/master/5.RRefMovSemPerfForw/item25.md) 。[C++ Standard Drafts](http://www.open-std.org/JTC1/SC22/WG21/docs/standards) 中也有相关的描述，见 [Ch06_03_CopyMoveElision_CppStandardDrafts.md](./Ch06_03_CopyMoveElision_CppStandardDrafts.md) 。
 
 ## Return a reference type
 
@@ -101,6 +101,8 @@ std::vector<std::string> Process()
 > ### [Why does C++ create useless deep copies of objects all over the place, such as returning by value?, C++ FAQ (isocpp.org)](https://isocpp.org/wiki/faq/myths#temporaries)
 >
 > ### [copy elision, C++ FAQ (isocpp.org)](https://isocpp.org/wiki/faq/myths#copy-elision)
+>
+> ### [return statement - cppreference.com](https://en.cppreference.com/w/cpp/language/return)
 >
 > ### [Copy elision - cppreference.com](https://en.cppreference.com/w/cpp/language/copy_elision)
 >
