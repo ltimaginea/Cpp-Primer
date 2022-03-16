@@ -13,7 +13,7 @@
 | move assignment operator | gracefully handle self-assignment and mark `noexcept` if it doesn't throw an exception |
 | destructor               | explicitly define a `virtual` destructor in the polymorphic base class |
 
-
+Example: [Ch15_07_DerivedClassCopyControlMember.cpp](../Ch15_ObjectOrientedProgramming/Ch15_07_DerivedClassCopyControlMember.cpp) 
 
 ## copy constructor
 
