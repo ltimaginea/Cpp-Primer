@@ -1,38 +1,34 @@
+ï»¿#include "Ch13_00_pimpl_widget.h"
+
 #include <iostream>
 #include <vector>
+#include <utility>
 #include <type_traits>
-
-#include "Ch13_00_pimpl_widget.h"
 
 int main()
 {
-	// ·Ö±ğÊä³ö false	false
+	// Output: false
 	std::cout << std::boolalpha << std::is_nothrow_move_constructible<Widget>::value << std::noboolalpha << std::endl;
+	// Output: false
 	std::cout << std::boolalpha << std::is_nothrow_move_assignable<Widget>::value << std::noboolalpha << std::endl;
 
-	Widget w1(1);
-	Widget w2(w1);
-	Widget w3 = std::move(w1);
-	Widget w4(4);
-	w1 = w4;
-	Widget w5(5);
-	Widget w6(6);
-	w5 = std::move(w5);
-	w6 = w1;
-	w6 = std::move(w1);
-	w6 = w1;
-	Widget w7(w1);
-	w1 = w2;
-	w6 = w2;
-	w7 = w2;
+	Widget w0;
+	Widget w1(1), w2(2), w3(3);
+	Widget w4(w1);
+	Widget w5(std::move(w1));
+	w3 = w2;
+	w3 = std::move(w2);
 
-	w1.PrintInfo();
-	w2.PrintInfo();
+	const Widget w6(6);
+	w6.Draw(); w6.PrintInfo();
+	w5.Draw(); w5.PrintInfo();
+
+	w0.PrintInfo(); // Do nothing because a default constructed object's pimpl_ is a null pointer.
+	w1.PrintInfo(); // Do nothing because a moved-from object's pimpl_ is a null pointer.
+	w2.PrintInfo(); // Do nothing because a moved-from object's pimpl_ is a null pointer.
 	w3.PrintInfo();
 	w4.PrintInfo();
 	w5.PrintInfo();
-	w6.PrintInfo();
-	w7.PrintInfo();
 
 	{
 		Widget w1(11);
@@ -40,8 +36,9 @@ int main()
 		Widget w3(33);
 		Widget w4(44);
 		std::vector<Widget> v;
-		// ×¢ÊÍµôÏÂÃæÕâ¾ä£¬±ã¿ÉÒÔ¹Û²ìµ½vectorÖØĞÂ·ÖÅäÄÚ´æµÄ¹ı³ÌÖĞ£¬Ê¹ÓÃ¿½±´¹¹Ôìº¯Êı¸´ÖÆ¾ÉÔªËØÖÁĞÂÄÚ´æ£¬ÒòÎªÀàWidgetµÄºÏ³ÉÒÆ¶¯¹¹Ôìº¯ÊıÊÇ¿ÉÄÜÅ×Òì³£µÄ
-		//v.reserve(10);
+		// æ³¨é‡Šæ‰ä¸‹é¢è¿™å¥ï¼Œä¾¿å¯ä»¥è§‚å¯Ÿåˆ°vectoré‡æ–°åˆ†é…å†…å­˜çš„è¿‡ç¨‹ä¸­ï¼Œä½¿ç”¨äº†ç±»Widgetçš„æ‹·è´æ„é€ å‡½æ•°æ¥æŠŠæ—§å…ƒç´ å¤åˆ¶åˆ°æ–°å†…å­˜ä¸­ï¼Œè€Œå¹¶æ²¡æœ‰ä½¿ç”¨ç±»Widgetçš„ç§»åŠ¨æ„é€ å‡½æ•°æ¥æŠŠæ—§å…ƒç´ ç§»åŠ¨åˆ°æ–°å†…å­˜ä¸­ï¼Œ
+		// åŸå› æ˜¯ç±»Widgetçš„åˆæˆç§»åŠ¨æ„é€ å‡½æ•°æ²¡æœ‰æ‰¿è¯ºä¸ä¼šæŠ›å‡ºå¼‚å¸¸ï¼Œè¯¦è§ç±»Widgetçš„åˆæˆç§»åŠ¨æ„é€ å‡½æ•°çš„æ³¨é‡Šã€‚
+		// v.reserve(10);
 		v.push_back(std::move(w1));
 		v.push_back(std::move(w2));
 		v.push_back(std::move(w3));
@@ -51,15 +48,14 @@ int main()
 	return 0;
 }
 
-/*
-Outputs:
+/* Outputs:
 false
 false
+drawing a const widget 6
+6
+drawing a non-const widget 1
 1
-1
-1
-4
-5
+2
 1
 1
 */
