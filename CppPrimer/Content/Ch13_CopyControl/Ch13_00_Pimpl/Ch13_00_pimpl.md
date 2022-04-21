@@ -6,26 +6,36 @@
 
 "Pimpl" 是一种 C++ 编程技巧，它将类的实现细节从对象表示中移除，放到一个分离的类中，并以一个不透明的指针进行访问。此技巧用于构造拥有稳定 ABI 的 C++ 库接口，及减少编译时依赖。
 
-
+示例：演示有传播 const 的 Pimpl ，带有作为参数传递的回溯引用，并进行运行时空指针检查。
 
 `interface (Ch13_00_pimpl_widget.h)`
 
 ```cpp
-#pragma once
+#ifndef CPPPRIMER_CONTENT_CH13_COPYCONTROL_CH13_00_PIMPL_CH13_00_PIMPL_WIDGET_H_
+#define CPPPRIMER_CONTENT_CH13_COPYCONTROL_CH13_00_PIMPL_CH13_00_PIMPL_WIDGET_H_
+
 #include <memory>
 
 class Widget
 {
 public:
-	Widget(int i = 0);
+	// even the default constructor needs to be defined in the implementation file
+	Widget();
+	explicit Widget(int);
 	Widget(const Widget&);
 	Widget(Widget&&);
 	Widget& operator=(const Widget&);
 	Widget& operator=(Widget&&);
 	~Widget();
-public:
-	void PrintInfo();
+
+	// public API that will be forwarded to the implementation
+	void Draw();
+	void Draw() const;
+	void PrintInfo() const;
+	// public API that implementation has to call
+	bool Shown() const { return true; }
 	// ...
+
 private:
 	// things to be hidden go here
 	class Impl;
@@ -33,9 +43,8 @@ private:
 	std::unique_ptr<Impl> pimpl_;
 };
 
-// Tips:
-//	1. 对于 std::unique_ptr 而言，删除器的类型是智能指针类型的一部分
-//	2. 对于 std::shared_ptr 而言，删除器的类型并非智能指针类型的一部分
+#endif // !CPPPRIMER_CONTENT_CH13_COPYCONTROL_CH13_00_PIMPL_CH13_00_PIMPL_WIDGET_H_
+
 ```
 
 
@@ -43,20 +52,39 @@ private:
 `implementation (Ch13_00_pimpl_widget.cpp)`
 
 ```cpp
+#include "Ch13_00_pimpl_widget.h"
+
 #include <iostream>
 #include <string>
 #include <vector>
 #include <utility>
 
-#include "Ch13_00_pimpl_widget.h"
 //#include "gadget.h"
 
 class Widget::Impl
 {
 public:
-	Impl(int i = 0) : i_(i) {  }
-public:
-	int GetInfo() { return i_; }
+	Impl() : i_(0) {  }
+	explicit Impl(int i) : i_(i) {  }
+
+	void Draw(const Widget& w)
+	{
+		if (w.Shown()) // this call to public member function requires the back-reference
+		{
+			std::cout << "drawing a non-const widget " << i_ << std::endl;
+		}
+	}
+
+	void Draw(const Widget& w) const
+	{
+		if (w.Shown()) // this call to public member function requires the back-reference
+		{
+			std::cout << "drawing a const widget " << i_ << std::endl;
+		}
+	}
+
+	void PrintInfo() const { std::cout << i_ << std::endl; }
+
 private:
 	std::string name_;
 	std::vector<double> data_;
@@ -64,12 +92,18 @@ private:
 	// ...
 };
 
+Widget::Widget() = default;
+//Widget::Widget() : pimpl_(std::make_unique<Impl>(0))
+//{
+//
+//}
+
 Widget::Widget(int i) : pimpl_(std::make_unique<Impl>(i))
 {
 
 }
 
-Widget::Widget(const Widget& rp) : pimpl_(rp.pimpl_ ? std::make_unique<Impl>(*rp.pimpl_) : nullptr)
+Widget::Widget(const Widget & rhs) : pimpl_(rhs.pimpl_ ? std::make_unique<Impl>(*rhs.pimpl_) : nullptr)
 {
 
 }
@@ -79,9 +113,9 @@ Widget::Widget(const Widget& rp) : pimpl_(rp.pimpl_ ? std::make_unique<Impl>(*rp
 // 所以编译器为使移动构造函数的声明和实现的“异常说明”一致，此例的合成移动构造函数将不会是 noexcept 。这算是Pimpl技术的一个缺点吧。
 Widget::Widget(Widget&&) = default;
 
-Widget& Widget::operator=(const Widget& rp)
+Widget& Widget::operator=(const Widget & rhs)
 {
-	pimpl_ = rp.pimpl_ ? std::make_unique<Impl>(*rp.pimpl_) : nullptr;
+	pimpl_ = rhs.pimpl_ ? std::make_unique<Impl>(*rhs.pimpl_) : nullptr;
 	return *this;
 }
 
@@ -92,9 +126,36 @@ Widget& Widget::operator=(Widget&&) = default;
 
 Widget::~Widget() = default;
 
-void Widget::PrintInfo()
+void Widget::Draw()
 {
-	std::cout << pimpl_->GetInfo() << std::endl;
+	if (pimpl_) // null pointer check
+	{
+		pimpl_->Draw(*this);
+	}
+}
+
+void Widget::Draw() const
+{
+	if (pimpl_) // null pointer check
+	{
+		// explicitly add low-level constness by const_cast
+		const_cast<const Impl&>(*pimpl_).Draw(*this);
+
+		// or:
+		// const_cast<const Impl*>(pimpl_.get())->Draw(*this);
+	}
+}
+
+void Widget::PrintInfo() const
+{
+	if (pimpl_) // null pointer check
+	{
+		// explicitly add low-level constness by const_cast
+		const_cast<const Impl&>(*pimpl_).PrintInfo();
+
+		// or:
+		// const_cast<const Impl*>(pimpl_.get())->PrintInfo();
+	}
 }
 
 // Tips:
@@ -109,41 +170,37 @@ void Widget::PrintInfo()
 `user (Ch13_00_pimpl_user.cpp)`
 
 ```cpp
+#include "Ch13_00_pimpl_widget.h"
+
 #include <iostream>
 #include <vector>
+#include <utility>
 #include <type_traits>
-
-#include "Ch13_00_pimpl_widget.h"
 
 int main()
 {
-	// 分别输出 false	false
+	// Output: false
 	std::cout << std::boolalpha << std::is_nothrow_move_constructible<Widget>::value << std::noboolalpha << std::endl;
+	// Output: false
 	std::cout << std::boolalpha << std::is_nothrow_move_assignable<Widget>::value << std::noboolalpha << std::endl;
 
-	Widget w1(1);
-	Widget w2(w1);
-	Widget w3 = std::move(w1);
-	Widget w4(4);
-	w1 = w4;
-	Widget w5(5);
-	Widget w6(6);
-	w5 = std::move(w5);
-	w6 = w1;
-	w6 = std::move(w1);
-	w6 = w1;
-	Widget w7(w1);
-	w1 = w2;
-	w6 = w2;
-	w7 = w2;
+	Widget w0;
+	Widget w1(1), w2(2), w3(3);
+	Widget w4(w1);
+	Widget w5(std::move(w1));
+	w3 = w2;
+	w3 = std::move(w2);
 
-	w1.PrintInfo();
-	w2.PrintInfo();
+	const Widget w6(6);
+	w6.Draw(); w6.PrintInfo();
+	w5.Draw(); w5.PrintInfo();
+
+	w0.PrintInfo(); // Do nothing because a default constructed object's pimpl_ is a null pointer.
+	w1.PrintInfo(); // Do nothing because a moved-from object's pimpl_ is a null pointer.
+	w2.PrintInfo(); // Do nothing because a moved-from object's pimpl_ is a null pointer.
 	w3.PrintInfo();
 	w4.PrintInfo();
 	w5.PrintInfo();
-	w6.PrintInfo();
-	w7.PrintInfo();
 
 	{
 		Widget w1(11);
@@ -151,8 +208,9 @@ int main()
 		Widget w3(33);
 		Widget w4(44);
 		std::vector<Widget> v;
-		// 注释掉下面这句，便可以观察到vector重新分配内存的过程中，使用拷贝构造函数复制旧元素至新内存，因为类Widget的合成移动构造函数是可能抛异常的
-		//v.reserve(10);
+		// 注释掉下面这句，便可以观察到vector重新分配内存的过程中，使用了类Widget的拷贝构造函数来把旧元素复制到新内存中，而并没有使用类Widget的移动构造函数来把旧元素移动到新内存中，
+		// 原因是类Widget的合成移动构造函数没有承诺不会抛出异常，详见类Widget的合成移动构造函数的注释。
+		// v.reserve(10);
 		v.push_back(std::move(w1));
 		v.push_back(std::move(w2));
 		v.push_back(std::move(w3));
@@ -161,6 +219,18 @@ int main()
 
 	return 0;
 }
+
+/* Outputs:
+false
+false
+drawing a const widget 6
+6
+drawing a non-const widget 1
+1
+2
+1
+1
+*/
 
 ```
 
