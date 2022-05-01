@@ -86,7 +86,7 @@ std::unique_ptr<Derived[]> ptr4(new Derived[kSize]);
 ## References
 
 - *More Effective C++* Item3 绝对不要以多态方式处理数组
-- *C++Coding Standards:101 Rules,Guidelines,and Best Practices* 第100条 不要多态地处理数组
+- *C++ Coding Standards: 101 Rules, Guidelines, and Best Practices* 第100条 不要多态地处理数组
 - [C.152: Never assign a pointer to an array of derived class objects to a pointer to its base (C++ Core Guidelines)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rh-array)
 - [Is an array of Derived a kind-of array of Base?, C++ FAQ (isocpp.org)](https://isocpp.org/wiki/faq/proper-inheritance#array-derived-vs-base)
 - [Does array-of-Derived is-not-a-kind-of array-of-Base mean arrays are bad?, C++ FAQ (isocpp.org)](https://isocpp.org/wiki/faq/proper-inheritance#arrays-are-covariant)
