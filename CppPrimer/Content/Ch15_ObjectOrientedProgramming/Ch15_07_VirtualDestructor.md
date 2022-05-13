@@ -78,9 +78,26 @@ int main()
 
 ## [Discussion: Make base class destructors public and virtual, or protected and non-virtual (C++ Core Guidelines)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Sd-dtor)
 
-In rarer cases, such as policy classes, the class is used as a base class for convenience, not for polymorphic behavior. It is recommended to make those destructors protected and non-virtual: 
+In rarer cases, such as policy classes, the class is used as a base class for convenience, not for polymorphic behavior. **The destructors of these classes should be made protected and non-virtual.** If the destructor is protected, then calling code cannot destroy through a base class pointer and the destructor does not need to be virtual; it does need to be protected, not private, so that derived destructors can invoke it. So, in these rarer cases, destructors should be protected so that only derived classes can invoke it in their own destructors, and non-virtual since it doesn't need to behave virtually.
 
-eg: [boost/core/noncopyable.hpp - 1.78.0](https://www.boost.org/doc/libs/1_78_0/boost/core/noncopyable.hpp) and [noncopyable - 1.78.0 (boost.org)](https://www.boost.org/doc/libs/1_78_0/libs/core/doc/html/core/noncopyable.html) 
+Example1: 
+
+```cpp
+class My_policy {
+public:
+    virtual ~My_policy();      // BAD, public and virtual
+protected:
+    ~My_policy();              // GOOD, protected and non-virtual
+    // ...
+};
+
+template<class Policy>
+class customizable : Policy { /* ... */ }; // note: private inheritance
+```
+
+
+
+Example2: [boost/core/noncopyable.hpp - 1.78.0](https://www.boost.org/doc/libs/1_78_0/boost/core/noncopyable.hpp) and [noncopyable - 1.78.0 (boost.org)](https://www.boost.org/doc/libs/1_78_0/libs/core/doc/html/core/noncopyable.html) 
 
 ```cpp
 namespace noncopyable_  // protection from unintended ADL
@@ -122,27 +139,23 @@ namespace noncopyable_  // protection from unintended ADL
 }
 ```
 
+```cpp
+// noncopyable usage example
+#include <boost/core/noncopyable.hpp>
+
+class X : private boost::noncopyable	// note: private inheritance
+{
+};
+```
+
 
 
 ## References
 
 - [C.127: A class with a virtual function should have a virtual or protected destructor (C++ Core Guidelines)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rh-dtor)
-
 - [C.35: A base class destructor should be either public and virtual, or protected and non-virtual (C++ Core Guidelines)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rc-dtor-virtual)
-
 - [Discussion: Make base class destructors public and virtual, or protected and non-virtual (C++ Core Guidelines)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Sd-dtor)
-
 - [boost/core/noncopyable.hpp - 1.78.0](https://www.boost.org/doc/libs/1_78_0/boost/core/noncopyable.hpp)
-
 - [noncopyable - 1.78.0 (boost.org)](https://www.boost.org/doc/libs/1_78_0/libs/core/doc/html/core/noncopyable.html)
-
-  ```cpp
-  // noncopyable usage example
-  #include <boost/core/noncopyable.hpp>
-  
-  class X : private boost::noncopyable	// note: private inheritance
-  {
-  };
-  ```
-
-  
+- *Effective C++* Item07 Declare destructors virtual in polymorphic base classes
+- *C++ Coding Standards: 101 Rules, Guidelines, and Best Practices* Item50 Make base class destructors public and virtual, or protected and non-virtual
