@@ -9,8 +9,8 @@ public:
 	virtual ~B() = default;
 	virtual void ClassSize() { std::cout << "sizeof(B) = " << sizeof(B) << std::endl; }
 protected:
-	// Make the polymorphic base class copy/move protected to prevent the slicing, 
-	// and so that only derived classes can invoke them in their own copy/move.
+	// Make the polymorphic base class copy and move operations protected to prevent slicing, 
+	// and so that only the derived class can invoke them in its own copy and move operations.
 	B(const B&) = default;
 	B(B&&) = default;
 	B& operator=(const B&) = default;
