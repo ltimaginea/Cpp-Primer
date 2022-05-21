@@ -4,14 +4,14 @@
 
 特殊成员函数包括默认构造函数（default constructor）和五个拷贝控制成员。
 
-| Special Member Functions | Core Guidelines                                              |
+| Special Member Functions | Guidelines                                                   |
 | :----------------------- | :----------------------------------------------------------- |
 | default constructor      |                                                              |
 | copy constructor         |                                                              |
 | move constructor         | mark `noexcept` if it doesn't throw an exception             |
 | copy assignment operator | gracefully handle self-assignment and exception safety       |
 | move assignment operator | gracefully handle self-assignment and mark `noexcept` if it doesn't throw an exception |
-| destructor               | explicitly define a `virtual` destructor in the polymorphic base class |
+| destructor               | explicitly declare a public and `virtual` destructor in the polymorphic base class |
 
 Example: [Ch15_07_DerivedClassCopyControlMember.cpp](../Ch15_ObjectOrientedProgramming/Ch15_07_DerivedClassCopyControlMember.cpp) 
 
