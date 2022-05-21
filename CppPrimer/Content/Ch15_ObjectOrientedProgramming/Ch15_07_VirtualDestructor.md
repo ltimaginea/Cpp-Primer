@@ -79,7 +79,7 @@ int main()
 
 In rarer cases, such as policy classes, the class is used as a base class for convenience, not for polymorphic behavior. **The destructors of these base classes should be made protected and non-virtual.** If the destructor is protected, then calling code cannot destroy through a base class pointer and the destructor does not need to be virtual; it does need to be protected, not private, so that derived destructors can invoke it. So, in these rarer cases, destructors should be protected so that only derived classes can invoke it in their own destructors, and non-virtual since it doesn't need to behave virtually.
 
-注意：在这些稀有情况中，如上所述，我们不是为了多态，而是为了复用软件实现的便利（convenience），即 is-implemented-in-terms-of （根据某物实现出），所以我们通常是**私有继承**（inherit privately）拥有 protected 和 non-virtual 析构函数的基类。
+注意：如上所述，在极少数情况下，某个类被用作基类，但不是为了多态，而是为了复用软件实现的便利（convenience），即 is-implemented-in-terms-of （根据某物实现出），例如 policy classes ，所以我们通常是**私有继承**（inherit privately）该拥有 protected 和 non-virtual 析构函数的基类。
 
 Example1: 
 
