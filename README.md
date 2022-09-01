@@ -12,7 +12,9 @@
 - [cplusplus.com](http://www.cplusplus.com/): A site with general information about the C++ language, a reference, tutorial, and an articles section.
 - [C++ Core Guidelines (isocpp.github.io)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)
 - [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)
+- [LLVM Coding Standards](https://llvm.org/docs/CodingStandards.html)
 - [GDB online Debugger | Compiler - Code, Compile, Run, Debug online C, C++ (onlinegdb.com)](https://www.onlinegdb.com/)
+- [Compiler Explorer (godbolt.org)](https://godbolt.org/)
 
 ## Great Books for Learning C++
 
