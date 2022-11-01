@@ -71,6 +71,8 @@ class Picture
 public:
 	explicit Picture(std::unique_ptr<Shape> shape) : shape_(std::move(shape)) {  }
 
+	explicit Picture(const Shape& shape) : shape_(shape.Clone()) {  }
+
 	Picture(const Picture& rhs) : shape_(rhs.shape_->Clone()) {  }
 
 	Picture& operator=(const Picture& rhs)
@@ -91,6 +93,11 @@ public:
 		shape_ = std::move(shape);
 	}
 
+	void ChangeShape(const Shape& shape)
+	{
+		shape_ = shape.Clone();
+	}
+
 	void Draw()
 	{
 		shape_->Draw();
@@ -107,9 +114,11 @@ int main()
 	Picture picture2(std::make_unique<Square>());
 	picture2.Draw();
 
-	Picture picture3(picture1); // OK: copyable
+	// OK: The copy constructor performs a polymorphic deep copy.
+	Picture picture3(picture1);
 	picture3.Draw();
-	picture3 = picture2; // OK: copyable
+	// OK: The copy assignment operator performs a polymorphic deep copy.
+	picture3 = picture2;
 	picture3.Draw();
 
 	Picture picture4(std::move(picture1));
@@ -122,9 +131,29 @@ int main()
 	picture5.ChangeShape(std::make_unique<Square>());
 	picture5.Draw();
 
+	Circle circle;
+	Square square;
+	// a polymorphic deep copy of a given object
+	Picture picture6(circle);
+	picture6.Draw();
+	// a polymorphic deep copy of a given object
+	picture6.ChangeShape(square);
+	picture6.Draw();
+
+	// a polymorphic deep copy of a temporary object
+	Picture picture7(Circle{});
+	picture7.Draw();
+	// a polymorphic deep copy of a temporary object
+	picture7.ChangeShape(Square{});
+	picture7.Draw();
+
 	std::vector<Picture> pictures1;
 	pictures1.emplace_back(std::make_unique<Circle>());
 	pictures1.emplace_back(std::make_unique<Square>());
+	// a polymorphic deep copy of a temporary object
+	pictures1.emplace_back(Circle{});
+	// a polymorphic deep copy of a temporary object
+	pictures1.emplace_back(Square{});
 	for (auto& picture : pictures1)
 	{
 		picture.Draw();
@@ -138,10 +167,14 @@ int main()
 		shape->Draw();
 	}
 
-	std::vector<Picture> pictures2{ picture3, picture4, picture5 };
-	std::vector<Picture> pictures3(pictures1); // OK: copyable
+	// The container (pictures2) is constructed with a polymorphic deep copy of 
+	// each of the elements in the std::initializer_list.
+	std::vector<Picture> pictures2{ picture3, picture4, picture5, picture6, picture7 };
+	// OK: The copy constructor performs a polymorphic deep copy.
+	std::vector<Picture> pictures3(pictures1);
 	std::vector<Picture> pictures4(std::move(pictures1));
-	pictures3 = pictures2; // OK: copyable
+	// OK: The copy assignment operator performs a polymorphic deep copy.
+	pictures3 = pictures2;
 	pictures4 = std::move(pictures2);
 
 	std::vector<std::unique_ptr<Shape>> shapes2;
@@ -152,9 +185,11 @@ int main()
 	auto init = std::to_array<std::unique_ptr<Shape>>({ std::make_unique<Circle>(), std::make_unique<Square>() });
 	std::vector<std::unique_ptr<Shape>> shapes3(std::make_move_iterator(init.begin()), std::make_move_iterator(init.end()));
 
-	//std::vector<std::unique_ptr<Shape>> shapes4(shapes1); // Error: noncopyable
+	// Error: The std::vector<std::unique_ptr<Shape>> is not a copy constructible type.
+	//std::vector<std::unique_ptr<Shape>> shapes4(shapes1);
 	std::vector<std::unique_ptr<Shape>> shapes5(std::move(shapes1));
-	//shapes3 = shapes2; // Error: noncopyable
+	// Error: The std::vector<std::unique_ptr<Shape>> is not a copy assignable type.
+	//shapes3 = shapes2;
 	shapes5 = std::move(shapes2);
 
 	return 0;
