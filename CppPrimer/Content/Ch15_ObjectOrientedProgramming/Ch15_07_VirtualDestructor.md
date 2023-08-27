@@ -79,7 +79,7 @@ int main()
 
 In rarer cases, such as policy classes, the class is used as a base class for convenience, not for polymorphic behavior. **The destructors of these base classes should be made protected and non-virtual.** If the destructor is protected, then calling code cannot destroy through a base class pointer and the destructor does not need to be virtual; it does need to be protected, not private, so that derived destructors can invoke it. So, in these rarer cases, destructors should be protected so that only derived classes can invoke it in their own destructors, and non-virtual since it doesn't need to behave virtually.
 
-注意：如上所述，在极少数情况下，某个类被用作基类，但不是为了多态，而是为了复用软件实现的便利（convenience），即 is-implemented-in-terms-of （根据某物实现出），例如 policy classes ，所以我们通常是**私有继承**（inherit privately）该拥有 protected 和 non-virtual 析构函数的基类。
+注意：如上所述，在极少数情况下，某个类被用作基类，但不是为了多态，而是为了复用软件实现的便利（convenience），例如 policy classes ，此时应把基类的析构函数显式声明为 **protected and non-virtual** ，从而禁止 delete 一个指向派生类对象的基类指针。我们通常是**私有继承**该拥有 protected 和 non-virtual 析构函数的基类；但有时也会是**公有继承**，例如拥有 protected 和 non-virtual 析构函数的 std::enable_shared_from_this ，我们在使用时需要公有继承 std::enable_shared_from_this 。
 
 Example1: 
 
@@ -150,6 +150,10 @@ class X : private boost::noncopyable	// note: private inheritance
 ```
 
 
+
+Example3: std::enable_shared_from_this
+
+![Ch15_07_enable_shared_from_this.jpeg](../../Images/Chapter15/Ch15_07_enable_shared_from_this.jpeg) 
 
 ## References
 
