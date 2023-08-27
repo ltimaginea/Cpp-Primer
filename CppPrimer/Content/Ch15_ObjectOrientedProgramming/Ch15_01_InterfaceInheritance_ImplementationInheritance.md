@@ -67,5 +67,6 @@ public:
 
 - *Effective C++* Item31, Item34
 - [C.129: When designing a class hierarchy, distinguish between implementation inheritance and interface inheritance (C++ Core Guidelines)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rh-kind)
-- [I.25: Prefer empty abstract classes as interfaces to class hierarchies (C++ Core Guidelines)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Ri-abstract)
+- [I.25: Prefer empty abstract classes as interfaces to class hierarchies (C++ Core Guidelines)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Ri-abstract) 
+- [Inheritance (Google C++ Style Guide)](https://google.github.io/styleguide/cppguide.html#Inheritance) 
 
