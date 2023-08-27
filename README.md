@@ -16,7 +16,8 @@
 - [LLVM Coding Standards](https://llvm.org/docs/CodingStandards.html)
 - [GDB online Debugger](https://www.onlinegdb.com)
 - [Compiler Explorer (godbolt.org)](https://godbolt.org/)
-- [C++ Insights](https://cppinsights.io)
+- [C++ Insights](https://cppinsights.io) 
+- [C++ Team Blog (microsoft.com)](https://devblogs.microsoft.com/cppblog/) 
 
 ## Great Books for Learning C++
 
