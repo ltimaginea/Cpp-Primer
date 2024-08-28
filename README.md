@@ -8,12 +8,14 @@
 
 - [Standard C++ (isocpp.org)](https://isocpp.org/)
 - [C++ Standard Drafts (open-std.org)](http://www.open-std.org/JTC1/SC22/WG21/docs/standards)
+- [cxxdraft-htmlgen](https://eel.is/c++draft/)
 - [C++ Reference](http://en.cppreference.com/w/): A site with its main focus on a complete Standard Template Library reference, the Technical Specifications, and a list of selected non-ANSI/ISO libraries. An [offline archive](http://en.cppreference.com/w/Cppreference:Archives) is available.
 - [cplusplus.com](http://www.cplusplus.com/): A site with general information about the C++ language, a reference, tutorial, and an articles section.
 - [C++ docs - get started, tutorials, reference. | Microsoft Learn](https://learn.microsoft.com/en-us/cpp/cpp/) 
 - [C++ Core Guidelines (isocpp.github.io)](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)
 - [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html)
 - [LLVM Coding Standards](https://llvm.org/docs/CodingStandards.html) 
+- [Code quality — Firefox Source Docs documentation (mozilla.org)](https://firefox-source-docs.mozilla.org/code-quality/index.html) 
 - [abseil / C++ Tips of the Week](https://abseil.io/tips/) 
 - [GDB online Debugger](https://www.onlinegdb.com)
 - [Compiler Explorer (godbolt.org)](https://godbolt.org/)
