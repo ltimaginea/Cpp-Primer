@@ -5,7 +5,7 @@
 - 如果查找到一个匹配的 catch 子句，异常从它的抛出点开始“向上”传递到匹配的 catch 子句。异常传递过程中，当退出了某些作用域时，该作用域内异常发生前创建的局部对象会被销毁，按照与创建时相反的顺序依次销毁，对于类对象，销毁时会调用它的析构函数。上述过程称为**栈展开**（stack unwinding）。示例程序见 [Ch18_01_StackUnwinding.cpp](./Ch18_01_StackUnwinding.cpp) 。
 - 如果没有查找到匹配的 catch 子句，即异常没有被捕获，程序将调用标准库函数 [std::terminate](https://en.cppreference.com/w/cpp/error/terminate) ，它将终止当前的程序。默认情况下，  [std::terminate](https://en.cppreference.com/w/cpp/error/terminate) 会调用 [std::abort](https://en.cppreference.com/w/cpp/utility/program/abort) 。出于底层操作系统方面的原因，当调用 [std::terminate](https://en.cppreference.com/w/cpp/error/terminate) 时局部变量的析构函数是否会被调用是由具体C++实现所决定的。**所以当程序因未捕获的异常而终止时，是否调用异常发生前创建的局部对象的析构函数是依赖于具体实现的**（一方面，经过测试，对于 GNU g++ 9.3.0 ，执行和 gdb 调试时都不会调用析构函数；对于 Visual Studio 2022 MSVC ，“`Ctrl+F5`执行(不调试)”时不会调用析构函数，但在“`F5`调试”时，当报错“未经处理的异常”时，选择“`F5`继续”，结果会调用析构函数；另一方面，如果我们使用 [std::set_terminate](https://en.cppreference.com/w/cpp/error/set_terminate) 为 [std::terminate](https://en.cppreference.com/w/cpp/error/terminate) 安装新的 [std::terminate_handler](https://en.cppreference.com/w/cpp/error/terminate_handler) ，那么就有可能调用析构函数了，比如以 [std::exit](https://en.cppreference.com/w/cpp/utility/program/exit) 替换默认的 [std::abort](https://en.cppreference.com/w/cpp/utility/program/abort) 作为新的 [std::terminate_handler](https://en.cppreference.com/w/cpp/error/terminate_handler) ，同时如果异常发生前创建的局部变量是 `static` 的，那么程序因未捕获的异常而终止时就会调用局部 `static` 变量的析构函数了，示例程序见 [Ch18_01_set_terminate.cpp](./Ch18_01_set_terminate.cpp) ）。
 
-**因此如果需要一定发生栈展开，则必须捕获异常。**
+**因此若需明确发生栈展开，则必须捕获异常**。
 
 为了能够快速处理异常，编译器应该会做一定的记录工作：在每一个 try 语句块的进入点记录对应的 catch 子句能够处理的异常类型。如果发生异常，程序在运行期便可以根据记录的数据来快速查找（look up）是否存在与异常匹配的 catch 子句，从而快速处理异常。不同的编译器的具体策略会有所不同。
 
