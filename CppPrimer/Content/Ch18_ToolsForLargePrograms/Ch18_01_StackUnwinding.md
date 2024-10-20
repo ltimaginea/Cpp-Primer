@@ -3,7 +3,7 @@
 当程序抛出一个异常时，程序暂停当前函数的执行过程并立即开始查找（look up）最邻近的与异常匹配的 catch 子句。
 
 - 如果查找到一个匹配的 catch 子句，异常从它的抛出点开始“向上”传递到匹配的 catch 子句。异常传递过程中，当退出了某些作用域时，该作用域内异常发生前创建的局部对象会被销毁，按照与创建时相反的顺序依次销毁，对于类对象，销毁时会调用它的析构函数。上述过程称为**栈展开**（stack unwinding）。示例程序见 [Ch18_01_StackUnwinding.cpp](./Ch18_01_StackUnwinding.cpp) 。
-- 如果没有查找到匹配的 catch 子句，即异常没有被捕获，程序将调用标准库函数 [std::terminate](https://en.cppreference.com/w/cpp/error/terminate) ，它将终止当前的程序。默认情况下，  [std::terminate](https://en.cppreference.com/w/cpp/error/terminate) 会调用 [std::abort](https://en.cppreference.com/w/cpp/utility/program/abort) 。**当程序因未捕获的异常而终止时，是否发生栈展开是依赖于具体实现的**。See also: N4971: 14.4 Handling an exception: If no matching handler is found, the function std::terminate is invoked; **whether or not the stack is unwound before this invocation of std::terminate is implementation-defined**. （多数实现是不会进行栈展开的，经过测试，至少 Visual Studio 2022 MSVC 和 Ubuntu 22.04 GCC 11.4.0 分别基于 C++20 标准测试，对于未捕获的异常，都不会发生栈展开。）
+- 如果没有查找到匹配的 catch 子句，即异常没有被捕获，程序将调用标准库函数 [std::terminate](https://en.cppreference.com/w/cpp/error/terminate) ，它将终止当前的程序。默认情况下，  [std::terminate](https://en.cppreference.com/w/cpp/error/terminate) 会调用 [std::abort](https://en.cppreference.com/w/cpp/utility/program/abort) 。**当程序因未捕获的异常而终止时，是否发生栈展开是依赖于具体实现的**。See also: N4971: 14.4 Handling an exception: If no matching handler is found, the function std::terminate is invoked; **whether or not the stack is unwound before this invocation of std::terminate is implementation-defined**. （多数实现是不会进行栈展开的，经过测试，至少 Visual Studio 2022 版本 17.11.5 MSVC C/C++ 编译器版本 19.41.34123 和 Ubuntu 22.04 GCC 11.4.0 分别基于 C++20 标准测试，对于未捕获的异常，都不会发生栈展开。）
 
 **因此若需明确发生栈展开，则必须捕获异常**。
 
