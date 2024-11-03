@@ -36,6 +36,7 @@ In the C++ exception mechanism, control moves from the throw statement to the fi
 - Bjarne Stroustroup's [*The C++ Programming Language*](http://www.amazon.com/The-Programming-Language-4th-Edition/dp/0321563840/) ,Chapter 13
 - [Exceptions and stack unwinding in C++ | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/exceptions-and-stack-unwinding-in-cpp?view=msvc-170)
 - [Unhandled C++ exceptions | Microsoft Docs](https://docs.microsoft.com/en-us/cpp/cpp/unhandled-cpp-exceptions?view=msvc-170)
+- [/EH (Exception handling model) | Microsoft Learn](https://learn.microsoft.com/en-us/cpp/build/reference/eh-exception-handling-model?view=msvc-170)
 - [try-block - cppreference.com](https://en.cppreference.com/w/cpp/language/try_catch)
 - [throw expression - cppreference.com](https://en.cppreference.com/w/cpp/language/throw)
 -  [std::terminate - cppreference.com](https://en.cppreference.com/w/cpp/error/terminate)
